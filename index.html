@@ -167,11 +167,7 @@
       var el = document.getElementById('inputRich');
       if (!el) return;
       
-      el.addEventListener('paste', function(e) {
-        e.preventDefault();
-        var text = (e.clipboardData || window.clipboardData).getData('text/plain');
-        document.execCommand('insertText', false, text);
-      });
+      // 由 converter.js 统一处理粘贴逻辑，避免重复插入
 
       el.addEventListener('input', function() {
         var walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, null);
