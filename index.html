@@ -251,21 +251,24 @@
           ta.value = plain;
           document.body.appendChild(ta);
           ta.select();
-          try { document.execCommand('copy'); } catch (_) {}
+          try { window.__allowCopyOnce = true; document.execCommand('copy'); } catch (_) {}
           document.body.removeChild(ta);
         }
       }
 
       var copyBtn = document.getElementById('copyBtn');
       if (copyBtn){
+        // 捕获阶段拦截，防止其它监听（如 converter.js）覆盖剪贴板为纯文本
         copyBtn.addEventListener('click', function(ev){
           ev.preventDefault();
+          ev.stopPropagation();
+          if (ev.stopImmediatePropagation) ev.stopImmediatePropagation();
           copyOutput();
           // 闪烁反馈（无提示词）
           copyBtn.classList.remove('btn-blink');
           void copyBtn.offsetWidth; // 重新触发动画
           copyBtn.classList.add('btn-blink');
-        });
+        }, true);
       }
       var clearBtn = document.getElementById('clearBtn');
       if (clearBtn){
