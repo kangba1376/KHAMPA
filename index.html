@@ -1,17 +1,260 @@
 <!DOCTYPE html>
 <html lang="bo">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KHAMPA</title>
-    <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #f4f4f4; }
-        h1 { color: #333; font-size: 3rem; }
-        p { color: #666; }
-    </style>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <title>ཧི་མ་ལ་ཡ། >> པཎྜི་ཏ།</title>
+  <style>
+    @font-face { font-family: 'BZDHT'; src: url('./BZDHT.ttf') format('truetype'); }
+    @font-face { font-family: 'WildYak'; src: url('./TibetWildYak.ttf') format('truetype'); }
+
+    :root { --primary-red: #8B0000; --bg: #f2f2f7; --card: #ffffff; --radius: 20px; }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); overflow: hidden; }
+
+    body {
+      font-family: 'WildYak', -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+      padding: env(safe-area-inset-top) 12px calc(env(safe-area-inset-bottom) + 25px);
+      gap: 6px;
+    }
+
+    .title-area { flex: 0 0 auto; padding: 2px 0; text-align: center; }
+    .title-area h1 { font-size: clamp(14px, 4.5vw, 22px); color: var(--primary-red); margin: 0; font-family: 'WildYak'; }
+
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      gap: 6px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid #d1d1d6;
+      border-top: 6px solid var(--primary-red);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 8px;
+    }
+
+    .main-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    .areas { display: grid; grid-template-rows: 1fr 1fr; grid-template-columns: 1fr; gap: 6px; flex: 1; min-height: 0; height: 100%; align-items: stretch; }
+    .area { min-height: 0; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
+    .area h2 { font-size: 11px; color: var(--primary-red); margin: 0 0 2px 0; font-family: 'WildYak'; }
+
+    .preview {
+      flex: 1;
+      width: 100%;
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid #e5e5ea;
+      background: #ffffff;
+      line-height: 1.28;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    #inputRich { font-family: 'WildYak', sans-serif !important; font-size: 22px; line-height: 1.664 !important; }
+    #preview { line-height: 2.05; }
+    /* 输出分段字体：汉字与标点用黑体，其它（映射藏文等）用 BZDHT */
+    #preview .seg-cn { font-family: "Heiti SC","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif !important; }
+    #preview .seg-bz, 
+    #preview .seg-ti { font-family: 'BZDHT', sans-serif !important; }
+
+    /* 统一提示文字（Placeholder）的大小和样式 */
+    .preview[data-placeholder]:empty::before {
+      content: attr(data-placeholder);
+      color: #8e8e93;
+      font-family: 'WildYak', serif !important;
+      font-size: 18px !important; /* 统一大小 */
+      font-style: normal;
+      pointer-events: none;
+    }
+    .preview[contenteditable][data-placeholder]:focus::before { content: none; }
+
+    .toolbar-card { flex: 0 0 auto; display: flex; justify-content: center; gap: 15px; padding: 4px 0; }
+    .btn { padding: 6px 20px; border-radius: 10px; border: none; font-size: 16px; font-weight: 600; font-family: 'WildYak'; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+    .btn-clear { background: #e5e5ea; color: #3a3a3c; }
+    .btn-copy { background: var(--primary-red); color: white; }
+    .btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+    .footer-area {
+      flex: 0 0 auto;
+      text-align: center;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 12px;
+      border: 1px solid rgba(209, 209, 214, 0.4);
+      margin-bottom: 5px;
+    }
+
+    .footer-area .disclaimer { color: var(--primary-red); font-size: 9px; line-height: 1.3; margin-bottom: 2px; font-family: sans-serif; }
+    .footer-area .copyright { color: #007AFF; font-size: 9px; font-family: 'WildYak', serif; font-weight: bold; }
+
+    @media (orientation: landscape) {
+      .areas { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; height: 100%; }
+      .title-area h1 { font-size: 14px; }
+    }
+  </style>
 </head>
-<body>
-    <h1>ཁམས་པ་ཚང་།</h1>
-    <p>康巴仓的新网站正在建设中...</p>
+<body class="mode-h2b">
+  <div class="app">
+    <div class="title-area">
+      <h1>ཁམས་པ་ཚང་བོད་ཡིག་ཨང་བསྒྱུར། • ཧི་མ་ལ་ཡ། >> པཎྜི་ཏ།</h1>
+    </div>
+
+    <div class="main-container">
+      <div class="card main-card">
+        <div class="areas">
+          <section class="area">
+            <h2 id="labelInput">འགོད་འཇུག་ཁུལ།（ཧི་མ་ལ་ཡ།）</h2>
+            <div id="inputRich" class="preview" contenteditable="true" aria-label="input" data-placeholder="འདི་ན་ནང་དོན་འགོད་འཇུག་གནང་རོགས།..."></div>
+          </section>
+          <section class="area">
+            <h2 id="labelOutput">མཇུག་འབྲས་ཁུལ།（པཎྚི་ཏ།）</h2>
+            <div id="preview" class="preview" tabindex="0" data-placeholder="བསྒྱུར་ཟིན་པཎྚི་ཏ་འདི་ནས་འཆར་འོང་།"></div>
+          </section>
+        </div>
+      </div>
+
+      <div class="card toolbar-card">
+        <button id="clearBtn" class="btn btn-clear" onclick="document.getElementById('inputRich').innerHTML='';document.getElementById('preview').textContent='';">
+          གཙང་སེལ་བཟོ།
+          <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        </button>
+        <button id="copyBtn" class="btn btn-copy">
+          ཆ་ཚང་བཤུ།
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="footer-area">
+      <div class="disclaimer">免责声明：本软件按“现状”（AS IS）提供，仅限班智达到喜马拉雅藏文的编码转换。开发者不提供任何明示或暗示担保，亦不承担因使用本工具产生的任何直接或间接法律责任。</div>
+      <div class="copyright">© ༢༠༢༦ ཁམས་པ་ཚང་། KHAM PA TSANG ༡༧༧༡༡༩༥༥༥༥༤</div>
+    </div>
+  </div>
+  <script src="./rules_data.js" defer></script>
+  <script src="./converter.js" defer></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var el = document.getElementById('inputRich');
+      if (!el) return;
+      
+      el.addEventListener('paste', function(e) {
+        e.preventDefault();
+        var text = (e.clipboardData || window.clipboardData).getData('text/plain');
+        document.execCommand('insertText', false, text);
+      });
+
+      el.addEventListener('input', function() {
+        var walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, null);
+        var nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(function(n) {
+          n.removeAttribute('style');
+          if (n.nodeName === 'FONT') {
+            while (n.firstChild) n.parentNode.insertBefore(n.firstChild, n);
+            n.parentNode.removeChild(n);
+          }
+        });
+      });
+
+      function inlineEssentialStyles(root) {
+        var walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null);
+        var nodeList = [root];
+        while (walker.nextNode()) nodeList.push(walker.currentNode);
+        nodeList.forEach(function(node) {
+          var cs = window.getComputedStyle(node);
+          var styles = [];
+          if (cs.whiteSpace) styles.push('white-space:' + cs.whiteSpace);
+          if (cs.fontFamily) styles.push('font-family:' + cs.fontFamily);
+          if (cs.fontSize) styles.push('font-size:' + cs.fontSize);
+          if (cs.lineHeight) styles.push('line-height:' + cs.lineHeight);
+          if (cs.fontWeight) styles.push('font-weight:' + cs.fontWeight);
+          if (cs.textAlign && cs.textAlign !== 'start') styles.push('text-align:' + cs.textAlign);
+          if (styles.length) node.setAttribute('style', styles.join(';'));
+        });
+      }
+
+      function copyOutput() {
+        var preview = document.getElementById('preview');
+        if (!preview) return;
+        var clone = preview.cloneNode(true);
+        inlineEssentialStyles(clone);
+        var html = '<div>' + clone.innerHTML + '</div>';
+        var plain = preview.textContent;
+        if (navigator.clipboard && window.ClipboardItem) {
+          var item = new ClipboardItem({
+            'text/plain': new Blob([plain], { type: 'text/plain' }),
+            'text/html': new Blob([html], { type: 'text/html' })
+          });
+          navigator.clipboard.write([item]).catch(function() {
+            navigator.clipboard.writeText(plain);
+          });
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(plain);
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = plain;
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch (_) {}
+          document.body.removeChild(ta);
+        }
+      }
+
+      var copyBtn = document.getElementById('copyBtn');
+      if (copyBtn) copyBtn.addEventListener('click', copyOutput);
+
+      function selectAllIn(el) {
+        if (!el) return;
+        var sel = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+
+      var previewEl = document.getElementById('preview');
+      if (previewEl) {
+        previewEl.addEventListener('keydown', function(e) {
+          if ((e.metaKey || e.ctrlKey) && (e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            selectAllIn(previewEl);
+          }
+        });
+        previewEl.addEventListener('dblclick', function() {
+          selectAllIn(previewEl);
+        });
+      }
+    });
+  </script>
 </body>
 </html>
