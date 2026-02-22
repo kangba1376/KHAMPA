@@ -101,6 +101,18 @@
     .btn-clear { background: #e5e5ea; color: #3a3a3c; }
     .btn-copy { background: var(--primary-red); color: white; }
     .btn svg { width: 18px; height: 18px; fill: currentColor; }
+    /* 只允许输入/输出区域可选中复制 */
+    body, .app { -webkit-user-select: none; user-select: none; }
+    #inputRich, #preview { -webkit-user-select: text; user-select: text; }
+    /* 按钮闪烁反馈动画 */
+    .btn-blink { animation: btnBlink 450ms ease-in-out 1; }
+    @keyframes btnBlink {
+      0% { box-shadow: 0 0 0 0 rgba(139,0,0,0); transform: translateY(0); }
+      30% { box-shadow: 0 0 0 4px rgba(139,0,0,0.25); transform: translateY(1px); }
+      100% { box-shadow: 0 0 0 0 rgba(139,0,0,0); transform: translateY(0); }
+    }
+    /* 移除输入区聚焦蓝色边框 */
+    #inputRich:focus, #inputRich:focus-visible { outline: none !important; box-shadow: none !important; -webkit-box-shadow: none !important; }
 
     .footer-area {
       flex: 0 0 auto;
@@ -167,7 +179,24 @@
       var el = document.getElementById('inputRich');
       if (!el) return;
       
-      // 由 converter.js 统一处理粘贴逻辑，避免重复插入
+      el.addEventListener('paste', function(e) {
+        e.preventDefault();
+        var text = (e.clipboardData || window.clipboardData).getData('text/plain') || '';
+        var sel = window.getSelection();
+        if (sel && sel.rangeCount > 0) {
+          var range = sel.getRangeAt(0);
+          range.deleteContents();
+          var node = document.createTextNode(text);
+          range.insertNode(node);
+          range.setStartAfter(node);
+          range.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        } else {
+          el.appendChild(document.createTextNode(text));
+        }
+        if (window.__runConvert) window.__runConvert();
+      });
 
       el.addEventListener('input', function() {
         var walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, null);
@@ -180,6 +209,7 @@
             n.parentNode.removeChild(n);
           }
         });
+        if (window.__runConvert) window.__runConvert();
       });
 
       function inlineEssentialStyles(root) {
@@ -227,7 +257,25 @@
       }
 
       var copyBtn = document.getElementById('copyBtn');
-      if (copyBtn) copyBtn.addEventListener('click', copyOutput);
+      if (copyBtn){
+        copyBtn.addEventListener('click', function(ev){
+          ev.preventDefault();
+          copyOutput();
+          // 闪烁反馈（无提示词）
+          copyBtn.classList.remove('btn-blink');
+          void copyBtn.offsetWidth; // 重新触发动画
+          copyBtn.classList.add('btn-blink');
+        });
+      }
+      var clearBtn = document.getElementById('clearBtn');
+      if (clearBtn){
+        clearBtn.addEventListener('click', function(){
+          // 仅闪烁反馈，不影响剪贴板
+          clearBtn.classList.remove('btn-blink');
+          void clearBtn.offsetWidth;
+          clearBtn.classList.add('btn-blink');
+        });
+      }
 
       function selectAllIn(el) {
         if (!el) return;
@@ -250,7 +298,61 @@
           selectAllIn(previewEl);
         });
       }
+      // 不允许复制输入/输出以外的内容
+      function within(node, container){
+        if (!node || !container) return false;
+        if (node === container) return true;
+        var elNode = (node.nodeType === 1) ? node : node.parentNode;
+        return container.contains(elNode);
+      }
+      function selectionAllowed(){
+        var sel = window.getSelection();
+        if (!sel || sel.rangeCount===0) return false;
+        var ir = document.getElementById('inputRich');
+        var pv = document.getElementById('preview');
+        for (var i=0;i<sel.rangeCount;i++){
+          var r = sel.getRangeAt(i);
+          var sc = r.startContainer;
+          var ec = r.endContainer;
+          var inInput = within(sc, ir) && within(ec, ir);
+          var inPreview = within(sc, pv) && within(ec, pv);
+          if (!(inInput || inPreview)) return false;
+        }
+        return true;
+      }
+      document.addEventListener('copy', function(e){
+        if (window.__allowCopyOnce){ window.__allowCopyOnce = false; return; }
+        if (!selectionAllowed()){
+          e.preventDefault();
+          if (e.clipboardData){
+            try{ e.clipboardData.setData('text/plain',''); }catch(_){}
+          }
+        }
+      }, true);
+      if (window.__runConvert) window.__runConvert();
     });
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').then(function(reg){
+        if (reg.waiting) { reg.waiting.postMessage({type:'SKIP_WAITING'}); }
+        reg.addEventListener('updatefound', function(){
+          var nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', function(){
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              if (reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+            }
+          });
+        });
+      });
+      var refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function(){
+        if (refreshing) return;
+        refreshing = true;
+        location.reload();
+      });
+    }
   </script>
 </body>
 </html>
