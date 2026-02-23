@@ -78,8 +78,9 @@
       overflow-y: auto;
     }
 
-    #inputRich { font-family: 'WildYak', sans-serif !important; font-size: 22px; line-height: 1.664 !important; }
-    #preview { line-height: 2.05; }
+    #inputRich { font-family: 'WildYak', sans-serif !important; font-size: 18.8px; line-height: 1.664 !important; }
+    #preview { font-size: 13.5px; line-height: 2.05; }
+    #labelInput, #labelOutput { -webkit-user-select: none; user-select: none; }
     #preview .seg-cn { font-family: "Heiti SC","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif !important; }
     #preview .seg-bz, 
     #preview .seg-ti { font-family: 'BZDHT', sans-serif !important; }
@@ -99,8 +100,8 @@
     .btn-clear { background: #e5e5ea; color: #3a3a3c; }
     .btn-copy { background: var(--primary-red); color: white; }
     .btn svg { width: 18px; height: 18px; fill: currentColor; }
-    body, .app { -webkit-user-select: none; user-select: none; }
-    #inputRich, #preview { -webkit-user-select: text; user-select: text; }
+    .title-area, .toolbar-card, .footer-area { -webkit-user-select: none; user-select: none; }
+    #inputRich, #preview { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; touch-action: manipulation; }
     .btn-blink { animation: btnBlink 450ms ease-in-out 1; }
     @keyframes btnBlink {
       0% { box-shadow: 0 0 0 0 rgba(139,0,0,0); transform: translateY(0); }
@@ -242,18 +243,39 @@
             'text/html': new Blob([html], { type: 'text/html' })
           });
           navigator.clipboard.write([item]).catch(function() {
-            navigator.clipboard.writeText(plain);
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(plain);
+            }
           });
         } else if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(plain);
         } else {
-          var ta = document.createElement('textarea');
-          ta.value = plain;
-          ta.style.position = 'fixed';
-          document.body.appendChild(ta);
-          ta.select();
-          try { window.__allowCopyOnce = true; document.execCommand('copy'); } catch (_) {}
-          document.body.removeChild(ta);
+          // 选择复制回退：更兼容安卓/华为浏览器
+          var didCopy = false;
+          try {
+            var sel0 = window.getSelection();
+            var saved = [];
+            if (sel0 && sel0.rangeCount){ for (var i=0;i<sel0.rangeCount;i++){ saved.push(sel0.getRangeAt(i).cloneRange()); } }
+            var r0 = document.createRange();
+            r0.selectNodeContents(preview);
+            sel0.removeAllRanges();
+            sel0.addRange(r0);
+            window.__allowCopyOnce = true;
+            didCopy = document.execCommand('copy');
+            sel0.removeAllRanges();
+            if (saved.length){ saved.forEach(function(rr){ sel0.addRange(rr); }); }
+          } catch(_) {}
+          if (!didCopy) {
+            var ta = document.createElement('textarea');
+            ta.setAttribute('readonly','readonly');
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            ta.value = plain;
+            document.body.appendChild(ta);
+            ta.select();
+            try { window.__allowCopyOnce = true; document.execCommand('copy'); } catch (_) {}
+            document.body.removeChild(ta);
+          }
         }
       }
 
@@ -320,6 +342,46 @@
         }
         return true;
       }
+      (function(){
+        var adjusting = false;
+        document.addEventListener('selectionchange', function(){
+          if (adjusting) return;
+          var sel = window.getSelection();
+          if (!sel || sel.rangeCount===0) return;
+          var ir = document.getElementById('inputRich');
+          var pv = document.getElementById('preview');
+          var cross = false;
+          for (var i=0;i<sel.rangeCount;i++){
+            var r = sel.getRangeAt(i);
+            var sc = r.startContainer;
+            var ec = r.endContainer;
+            var scEl = (sc && sc.nodeType===1) ? sc : (sc ? sc.parentNode : null);
+            var ecEl = (ec && ec.nodeType===1) ? ec : (ec ? ec.parentNode : null);
+            var inInput = scEl && ecEl && ir.contains(scEl) && ir.contains(ecEl);
+            var inPreview = scEl && ecEl && pv.contains(scEl) && pv.contains(ecEl);
+            if (!(inInput || inPreview)) { cross = true; break; }
+          }
+          if (!cross) return;
+          adjusting = true;
+          try {
+            var an = sel.anchorNode;
+            var anEl = (an && an.nodeType===1) ? an : (an ? an.parentNode : null);
+            var target = null;
+            if (anEl && ir.contains(anEl)) target = ir;
+            else if (anEl && pv.contains(anEl)) target = pv;
+            if (target){
+              var range = document.createRange();
+              range.selectNodeContents(target);
+              sel.removeAllRanges();
+              sel.addRange(range);
+            } else {
+              sel.removeAllRanges();
+            }
+          } finally {
+            adjusting = false;
+          }
+        });
+      })();
       document.addEventListener('copy', function(e){
         if (window.__allowCopyOnce){ window.__allowCopyOnce = false; return; }
         if (!selectionAllowed()){
