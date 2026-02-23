@@ -80,17 +80,15 @@
 
     #inputRich { font-family: 'WildYak', sans-serif !important; font-size: 22px; line-height: 1.664 !important; }
     #preview { line-height: 2.05; }
-    /* 输出分段字体：汉字与标点用黑体，其它（映射藏文等）用 BZDHT */
     #preview .seg-cn { font-family: "Heiti SC","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif !important; }
     #preview .seg-bz, 
     #preview .seg-ti { font-family: 'BZDHT', sans-serif !important; }
 
-    /* 统一提示文字（Placeholder）的大小和样式 */
     .preview[data-placeholder]:empty::before {
       content: attr(data-placeholder);
       color: #8e8e93;
       font-family: 'WildYak', serif !important;
-      font-size: 18px !important; /* 统一大小 */
+      font-size: 18px !important;
       font-style: normal;
       pointer-events: none;
     }
@@ -101,17 +99,14 @@
     .btn-clear { background: #e5e5ea; color: #3a3a3c; }
     .btn-copy { background: var(--primary-red); color: white; }
     .btn svg { width: 18px; height: 18px; fill: currentColor; }
-    /* 只允许输入/输出区域可选中复制 */
     body, .app { -webkit-user-select: none; user-select: none; }
     #inputRich, #preview { -webkit-user-select: text; user-select: text; }
-    /* 按钮闪烁反馈动画 */
     .btn-blink { animation: btnBlink 450ms ease-in-out 1; }
     @keyframes btnBlink {
       0% { box-shadow: 0 0 0 0 rgba(139,0,0,0); transform: translateY(0); }
       30% { box-shadow: 0 0 0 4px rgba(139,0,0,0.25); transform: translateY(1px); }
       100% { box-shadow: 0 0 0 0 rgba(139,0,0,0); transform: translateY(0); }
     }
-    /* 移除输入区聚焦蓝色边框 */
     #inputRich:focus, #inputRich:focus-visible { outline: none !important; box-shadow: none !important; -webkit-box-shadow: none !important; }
 
     .footer-area {
@@ -232,10 +227,15 @@
       function copyOutput() {
         var preview = document.getElementById('preview');
         if (!preview) return;
+
+        // 核心修复：清除选中，防止安卓系统干扰
+        window.getSelection().removeAllRanges();
+
         var clone = preview.cloneNode(true);
         inlineEssentialStyles(clone);
         var html = '<div>' + clone.innerHTML + '</div>';
         var plain = preview.textContent;
+
         if (navigator.clipboard && window.ClipboardItem) {
           var item = new ClipboardItem({
             'text/plain': new Blob([plain], { type: 'text/plain' }),
@@ -249,6 +249,7 @@
         } else {
           var ta = document.createElement('textarea');
           ta.value = plain;
+          ta.style.position = 'fixed';
           document.body.appendChild(ta);
           ta.select();
           try { window.__allowCopyOnce = true; document.execCommand('copy'); } catch (_) {}
@@ -258,22 +259,19 @@
 
       var copyBtn = document.getElementById('copyBtn');
       if (copyBtn){
-        // 捕获阶段拦截，防止其它监听（如 converter.js）覆盖剪贴板为纯文本
         copyBtn.addEventListener('click', function(ev){
           ev.preventDefault();
           ev.stopPropagation();
           if (ev.stopImmediatePropagation) ev.stopImmediatePropagation();
           copyOutput();
-          // 闪烁反馈（无提示词）
           copyBtn.classList.remove('btn-blink');
-          void copyBtn.offsetWidth; // 重新触发动画
+          void copyBtn.offsetWidth; 
           copyBtn.classList.add('btn-blink');
         }, true);
       }
       var clearBtn = document.getElementById('clearBtn');
       if (clearBtn){
         clearBtn.addEventListener('click', function(){
-          // 仅闪烁反馈，不影响剪贴板
           clearBtn.classList.remove('btn-blink');
           void clearBtn.offsetWidth;
           clearBtn.classList.add('btn-blink');
@@ -301,7 +299,6 @@
           selectAllIn(previewEl);
         });
       }
-      // 不允许复制输入/输出以外的内容
       function within(node, container){
         if (!node || !container) return false;
         if (node === container) return true;
@@ -327,9 +324,6 @@
         if (window.__allowCopyOnce){ window.__allowCopyOnce = false; return; }
         if (!selectionAllowed()){
           e.preventDefault();
-          if (e.clipboardData){
-            try{ e.clipboardData.setData('text/plain',''); }catch(_){}
-          }
         }
       }, true);
       if (window.__runConvert) window.__runConvert();
