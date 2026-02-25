@@ -6,7 +6,7 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
-  <title>པཎྜི་ཏ། >> ཧི་མ་ལ་ཡ།</title>
+  <title>ཧི་མ་ལ་ཡ། >> པཎྜི་ཏ།</title>
   <style>
     @font-face { font-family: 'BZDHT'; src: url('./BZDHT.ttf') format('truetype'); }
     @font-face { font-family: 'WildYak'; src: url('./TibetWildYak.ttf') format('truetype'); }
@@ -20,14 +20,6 @@
       font-family: 'WildYak', -apple-system, sans-serif;
       display: flex;
       flex-direction: column;
-      -webkit-user-select: none;
-      user-select: none;
-      -webkit-touch-callout: none;
-    }
-    .title-area, .toolbar-card, .footer-area {
-      -webkit-user-select: none !important;
-      user-select: none !important;
-      -webkit-touch-callout: none !important;
     }
 
     .app {
@@ -65,100 +57,58 @@
       flex-direction: column;
       gap: 6px;
       min-height: 0;
-      overflow: hidden;
+      overflow-y: auto;
     }
 
-    .areas { display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 0; }
-    .area { flex: 1 1 0; display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+    .areas { display: grid; grid-template-rows: 1fr 1fr; grid-template-columns: 1fr; gap: 6px; flex: 1; min-height: 0; height: 100%; align-items: stretch; }
+    .area { min-height: 0; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
     .area h2 { font-size: 11px; color: var(--primary-red); margin: 0 0 2px 0; font-family: 'WildYak'; }
 
-    .view-common {
-      flex: 1; width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e5e5ea;
-      outline: none; white-space: pre-wrap; word-wrap: break-word; overflow-y: auto; 
-      min-height: 0; -webkit-overflow-scrolling: touch; position: relative;
-    }
-
-    #inputView { 
-      background: #fafafa;
-      font-size: 12.8px; 
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Noto Sans CJK SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
-      line-height: 2.53; 
-      -webkit-user-select: text !important;
-      user-select: text !important;
-      -moz-user-select: text !important;
-      -ms-user-select: text !important;
-      -webkit-touch-callout: default !important;
-      touch-action: auto;
-    }
-    #inputView .bzd { font-family: 'BZDHT', sans-serif !important; }
-    #inputView .han { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Noto Sans CJK SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif !important; }
-    #inputView .other { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Noto Sans CJK SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif !important; }
-    
-    #inputView:empty:before { 
-      content: attr(data-placeholder); 
-      color: #999; 
-      font-family: 'WildYak', serif; 
-      font-size: 18px; 
-      position: absolute;
-      pointer-events: none;
-    }
-    #inputView:focus:empty:before { display: none; }
-
-    #outputView { 
-      background: #ffffff;
-      font-family: 'WildYak', sans-serif !important; 
-      font-size: 18.8px; 
-      line-height: 1.782;
-      color: #000;
-      user-select: text !important;
-      -webkit-user-select: text !important;
-      -moz-user-select: text !important;
-      -ms-user-select: text !important;
-      -webkit-touch-callout: default !important;
-      touch-action: auto;
-      pointer-events: auto;
-      cursor: text;
-    }
-
-    #outputView:empty:before { 
-      content: attr(data-placeholder); 
-      color: #999; 
-      font-family: 'WildYak', serif; 
-      font-size: 18px; 
-      position: absolute;
-      pointer-events: none;
-    }
-
-    .toolbar-card { 
-      flex: 0 0 auto; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center;
-      gap: 15px; 
-      padding: 8px 0; 
+    .preview {
+      flex: 1;
       width: 100%;
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid #e5e5ea;
+      background: #ffffff;
+      line-height: 1.28;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 0;
+      overflow-y: auto;
     }
-    .toolbar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-      margin: 0 auto;
-      width: max-content;
-      max-width: 100%;
+
+    #inputRich { font-family: 'WildYak', sans-serif !important; font-size: 18.8px; line-height: 1.664 !important; }
+    #preview { font-size: 13.5px; line-height: 2.05; }
+    #labelInput, #labelOutput { -webkit-user-select: none; user-select: none; }
+    #preview .seg-cn { font-family: "Heiti SC","PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif !important; }
+    #preview .seg-bz, 
+    #preview .seg-ti { font-family: 'BZDHT', sans-serif !important; }
+
+    .preview[data-placeholder]:empty::before {
+      content: attr(data-placeholder);
+      color: #8e8e93;
+      font-family: 'WildYak', serif !important;
+      font-size: 18px !important;
+      font-style: normal;
+      pointer-events: none;
     }
+    .preview[contenteditable][data-placeholder]:focus::before { content: none; }
+
+    .toolbar-card { flex: 0 0 auto; display: flex; justify-content: center; gap: 15px; padding: 4px 0; }
     .btn { padding: 6px 20px; border-radius: 10px; border: none; font-size: 16px; font-weight: 600; font-family: 'WildYak'; cursor: pointer; display: flex; align-items: center; gap: 6px; }
     .btn-clear { background: #e5e5ea; color: #3a3a3c; }
     .btn-copy { background: var(--primary-red); color: white; }
     .btn svg { width: 18px; height: 18px; fill: currentColor; }
-    /* 按钮闪烁反馈 */
-    .btn.flash { animation: btnFlash .35s ease; }
-    @keyframes btnFlash {
-      0% { filter: none; transform: none; }
-      30% { filter: brightness(1.35); transform: translateY(0.5px); }
-      60% { filter: brightness(1.0); transform: none; }
-      100% { filter: none; transform: none; }
+    .title-area, .toolbar-card, .footer-area { -webkit-user-select: none; user-select: none; }
+    #inputRich, #preview { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; touch-action: manipulation; }
+    .btn-blink { animation: btnBlink 450ms ease-in-out 1; }
+    @keyframes btnBlink {
+      0% { box-shadow: 0 0 0 0 rgba(139,0,0,0); transform: translateY(0); }
+      30% { box-shadow: 0 0 0 4px rgba(139,0,0,0.25); transform: translateY(1px); }
+      100% { box-shadow: 0 0 0 0 rgba(139,0,0,0); transform: translateY(0); }
     }
+    #inputRich:focus, #inputRich:focus-visible { outline: none !important; box-shadow: none !important; -webkit-box-shadow: none !important; }
 
     .footer-area {
       flex: 0 0 auto;
@@ -176,386 +126,290 @@
     .footer-area .copyright { color: #007AFF; font-size: 9px; font-family: 'WildYak', serif; font-weight: bold; }
 
     @media (orientation: landscape) {
-      .areas { flex-direction: row; }
+      .areas { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; height: 100%; }
       .title-area h1 { font-size: 14px; }
     }
   </style>
 </head>
-<body>
+<body class="mode-h2b">
   <div class="app">
     <div class="title-area">
-      <h1>ཁམས་པ་ཚངབོད་ཡིག་ཨང་བསྒྱུར། • པཎྜི་ཏ། >> ཧི་མ་ལ་ཡ།</h1>
+      <h1>ཁམས་པ་ཚང་བོད་ཡིག་ཨང་བསྒྱུར། • ཧི་མ་ལ་ཡ། >> པཎྜི་ཏ།</h1>
     </div>
 
     <div class="main-container">
       <div class="card main-card">
         <div class="areas">
           <section class="area">
-            <h2>འགོད་འཇུག་ཁུལ།（པཎྜི་ཏ།）</h2>
-            <textarea id="input" style="display:none !important;"></textarea>
-            <div id="inputView" class="view-common" contenteditable="true" data-placeholder="པཎྜི་ཏའི་ནང་དོན་འདི་ན་འགོད་རོགས།..."></div>
+            <h2 id="labelInput">འགོད་འཇུག་ཁུལ།（ཧི་མ་ལ་ཡ།）</h2>
+            <div id="inputRich" class="preview" contenteditable="true" aria-label="input" data-placeholder="ཧི་ཡིག་ནང་དོན་འདི་ན་འགོད་རོགས།..."></div>
           </section>
           <section class="area">
-            <h2>མཇུག་འབྲས་ཁུལ།（ཧི་མ་ལ་ཡ།）</h2>
-            <textarea id="output" style="display:none !important;"></textarea>
-            <div id="outputView" class="view-common" data-placeholder="བསྒྱུར་ཟིན་ཧི་ཡིག་འདི་ནས་འཆར་འོང་།"></div>
+            <h2 id="labelOutput">མཇུག་འབྲས་ཁུལ།（པཎྚི་ཏ།）</h2>
+            <div id="preview" class="preview" tabindex="0" data-placeholder="བསྒྱུར་ཟིན་པཎྚི་ཏ་འདི་ནས་འཆར་འོང་།"></div>
           </section>
         </div>
       </div>
 
       <div class="card toolbar-card">
-        <div class="toolbar-inner">
-          <button id="clearBtn" class="btn btn-clear">
-            གཙང་སེལ་བཟོ།
-            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-          </button>
-          <button id="copyBtn" class="btn btn-copy">
-            ཆ་ཚང་བཤུ།
-            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-          </button>
-        </div>
+        <button id="clearBtn" class="btn btn-clear" onclick="document.getElementById('inputRich').innerHTML='';document.getElementById('preview').textContent='';">
+          གཙང་སེལ་བཟོ།
+          <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        </button>
+        <button id="copyBtn" class="btn btn-copy">
+          ཆ་ཚང་བཤུ།
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        </button>
       </div>
     </div>
 
     <div class="footer-area">
-      <div class="disclaimer">
-        免责声明：本软件按“现状”（AS IS）提供，仅限班智达与喜马拉雅藏文的编码转换。开发者不提供任何明示或暗示担保，亦不承担因使用本工具产生的任何直接或间接损失及法律责任。<br>
-        <span style="color: #ff3b30; font-weight: bold;">⚠️ 注意：班智达原文中不得夹杂中文，否则会导致乱码！</span>
-      </div>
+      <div class="disclaimer">免责声明：本软件按“现状”（AS IS）提供，仅限喜马拉雅与班智达藏文的编码转换。开发者不提供任何明示或暗示担保，亦不承担因使用本工具产生的任何直接或间接损失及法律责任。</div>
       <div class="copyright">© ༢༠༢༦ ཁམས་པ་ཚང་། KHAM PA TSANG ༡༧༧༡༡༩༥༥༥༥༤</div>
     </div>
   </div>
-
-  <script src="./rules_data.js"></script>
-  <script src="./converter.js?v=202602222055"></script>
-  
+  <script src="./rules_data.js" defer></script>
+  <script src="./converter.js" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const el = document.getElementById('inputView');
-      const hiddenInput = document.getElementById('input');
-      const hiddenOutput = document.getElementById('output');
-      const viewOutput = document.getElementById('outputView');
-      const allowAreas = [el, viewOutput];
-      let allowProgrammaticCopy = false;
+      var el = document.getElementById('inputRich');
+      if (!el) return;
       
-      let isComposing = false;
-
-      function syncOutput() {
-        if (!(hiddenOutput && viewOutput)) return;
-        const nextText = hiddenOutput.value || '';
-        const nowText = viewOutput.innerText || '';
-        if (nowText === nextText) return;
-        // 若当前选区在输出区内，暂不刷新，避免打断选择
-        try {
-          const sel = window.getSelection && window.getSelection();
-          if (sel && sel.rangeCount > 0) {
-            const within = (node) => {
-              let n = (node && node.nodeType === 3) ? node.parentNode : node;
-              while (n) { if (n === viewOutput) return true; n = n.parentNode; }
-              return false;
-            };
-            for (let i = 0; i < sel.rangeCount; i++) {
-              const r = sel.getRangeAt(i);
-              if (within(r.startContainer) || within(r.endContainer)) return;
-            }
-          }
-        } catch(_) {}
-        viewOutput.innerText = nextText;
-      }
-      function rootAllowed(node){
-        let n = (node.nodeType === 3) ? node.parentNode : node;
-        while (n) {
-          if (allowAreas.includes(n)) return n;
-          n = n.parentNode;
-        }
-        return null;
-      }
-      function rangeWithinAllowed(range){
-        const sr = rootAllowed(range.startContainer);
-        const er = rootAllowed(range.endContainer);
-        return !!(sr && er && sr === er);
-      }
-      document.addEventListener('copy', (e) => {
-        if (allowProgrammaticCopy) { allowProgrammaticCopy = false; return; }
-        const sel = window.getSelection && window.getSelection();
-        let ok = false;
+      el.addEventListener('paste', function(e) {
+        e.preventDefault();
+        var text = (e.clipboardData || window.clipboardData).getData('text/plain') || '';
+        var sel = window.getSelection();
         if (sel && sel.rangeCount > 0) {
-          ok = true;
-          for (let i = 0; i < sel.rangeCount; i++) {
-            if (!rangeWithinAllowed(sel.getRangeAt(i))) { ok = false; break; }
-          }
+          var range = sel.getRangeAt(0);
+          range.deleteContents();
+          var node = document.createTextNode(text);
+          range.insertNode(node);
+          range.setStartAfter(node);
+          range.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        } else {
+          el.appendChild(document.createTextNode(text));
         }
-        if (!ok) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      }, true);
+        if (window.__runConvert) window.__runConvert();
+      });
 
-      function getCaretOffset(container){
-        const sel = window.getSelection();
-        if (!sel || sel.rangeCount===0) return 0;
-        const range = sel.getRangeAt(0);
-        const pre = range.cloneRange();
-        pre.selectNodeContents(container);
-        pre.setEnd(range.endContainer, range.endOffset);
-        return pre.toString().length;
-      }
-      function setCaretOffset(container, offset){
-        const sel = window.getSelection();
-        const range = document.createRange();
-        let current = 0;
-        const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
-        let node;
-        while ((node = walker.nextNode())) {
-          const next = current + node.nodeValue.length;
-          if (offset <= next) {
-            range.setStart(node, Math.max(0, offset - current));
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
-            return;
+      el.addEventListener('input', function() {
+        var walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, null);
+        var nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(function(n) {
+          n.removeAttribute('style');
+          if (n.nodeName === 'FONT') {
+            while (n.firstChild) n.parentNode.insertBefore(n.firstChild, n);
+            n.parentNode.removeChild(n);
           }
-          current = next;
+        });
+        if (window.__runConvert) window.__runConvert();
+      });
+
+      function inlineEssentialStyles(root) {
+        var walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null);
+        var nodeList = [root];
+        while (walker.nextNode()) nodeList.push(walker.currentNode);
+        nodeList.forEach(function(node) {
+          var cs = window.getComputedStyle(node);
+          var styles = [];
+          if (cs.whiteSpace) styles.push('white-space:' + cs.whiteSpace);
+          if (cs.fontFamily) styles.push('font-family:' + cs.fontFamily);
+          if (cs.fontSize) styles.push('font-size:' + cs.fontSize);
+          if (cs.lineHeight) styles.push('line-height:' + cs.lineHeight);
+          if (cs.fontWeight) styles.push('font-weight:' + cs.fontWeight);
+          if (cs.textAlign && cs.textAlign !== 'start') styles.push('text-align:' + cs.textAlign);
+          if (styles.length) node.setAttribute('style', styles.join(';'));
+        });
+      }
+
+      function copyOutput() {
+        var preview = document.getElementById('preview');
+        if (!preview) return;
+
+        // 核心修复：清除选中，防止安卓系统干扰
+        window.getSelection().removeAllRanges();
+
+        var clone = preview.cloneNode(true);
+        inlineEssentialStyles(clone);
+        var html = '<div>' + clone.innerHTML + '</div>';
+        var plain = preview.textContent;
+
+        if (navigator.clipboard && window.ClipboardItem) {
+          var item = new ClipboardItem({
+            'text/plain': new Blob([plain], { type: 'text/plain' }),
+            'text/html': new Blob([html], { type: 'text/html' })
+          });
+          navigator.clipboard.write([item]).catch(function() {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(plain);
+            }
+          });
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(plain);
+        } else {
+          // 选择复制回退：更兼容安卓/华为浏览器
+          var didCopy = false;
+          try {
+            var sel0 = window.getSelection();
+            var saved = [];
+            if (sel0 && sel0.rangeCount){ for (var i=0;i<sel0.rangeCount;i++){ saved.push(sel0.getRangeAt(i).cloneRange()); } }
+            var r0 = document.createRange();
+            r0.selectNodeContents(preview);
+            sel0.removeAllRanges();
+            sel0.addRange(r0);
+            window.__allowCopyOnce = true;
+            didCopy = document.execCommand('copy');
+            sel0.removeAllRanges();
+            if (saved.length){ saved.forEach(function(rr){ sel0.addRange(rr); }); }
+          } catch(_) {}
+          if (!didCopy) {
+            var ta = document.createElement('textarea');
+            ta.setAttribute('readonly','readonly');
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            ta.value = plain;
+            document.body.appendChild(ta);
+            ta.select();
+            try { window.__allowCopyOnce = true; document.execCommand('copy'); } catch (_) {}
+            document.body.removeChild(ta);
+          }
         }
-        range.selectNodeContents(container);
-        range.collapse(false);
+      }
+
+      var copyBtn = document.getElementById('copyBtn');
+      if (copyBtn){
+        copyBtn.addEventListener('click', function(ev){
+          ev.preventDefault();
+          ev.stopPropagation();
+          if (ev.stopImmediatePropagation) ev.stopImmediatePropagation();
+          copyOutput();
+          copyBtn.classList.remove('btn-blink');
+          void copyBtn.offsetWidth; 
+          copyBtn.classList.add('btn-blink');
+        }, true);
+      }
+      var clearBtn = document.getElementById('clearBtn');
+      if (clearBtn){
+        clearBtn.addEventListener('click', function(){
+          clearBtn.classList.remove('btn-blink');
+          void clearBtn.offsetWidth;
+          clearBtn.classList.add('btn-blink');
+        });
+      }
+
+      function selectAllIn(el) {
+        if (!el) return;
+        var sel = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(el);
         sel.removeAllRanges();
         sel.addRange(range);
       }
-      function decorateText(text, whiteList){
-        let html = '';
-        let runCls = null;
-        let runBuf = '';
-        const flush = () => {
-          if (!runBuf) return;
-          if (runCls === 'br') { html += '<br>'; }
-          else {
-            html += '<span class="'+runCls+'">'+runBuf.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span>';
+
+      var previewEl = document.getElementById('preview');
+      if (previewEl) {
+        previewEl.addEventListener('keydown', function(e) {
+          if ((e.metaKey || e.ctrlKey) && (e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            selectAllIn(previewEl);
           }
-          runBuf = ''; runCls = null;
-        };
-        for (const ch of text){
-          if (ch === '\\n'){ flush(); runCls = 'br'; runBuf = '\\n'; flush(); continue; }
-          const isMapped = Object.prototype.hasOwnProperty.call(whiteList, ch);
-          const cp = ch.codePointAt(0);
-          const isCJK = cp && ((cp>=0x4E00 && cp<=0x9FFF) || (cp>=0x3400 && cp<=0x4DBF));
-          const cls = isMapped ? 'bzd' : (isCJK ? 'han' : 'other');
-          if (cls !== runCls) { flush(); runCls = cls; runBuf = ch; }
-          else { runBuf += ch; }
-        }
-        flush();
-        return html;
+        });
+        previewEl.addEventListener('dblclick', function() {
+          selectAllIn(previewEl);
+        });
       }
-      function handleInput() {
-        if (isComposing) return;
-        const whiteList = (window.RULES_DATA && window.RULES_DATA.rules) ? window.RULES_DATA.rules : {};
-        const caret = getCaretOffset(el);
-        const originalText = el.innerText;
-        let resultText = "";
-        for (let char of originalText) {
-          const code = char.charCodeAt(0);
-          if (code >= 0x4E00 && code <= 0x9FA5) {
-            if (Object.prototype.hasOwnProperty.call(whiteList, char)) {
-              resultText += char;
+      function within(node, container){
+        if (!node || !container) return false;
+        if (node === container) return true;
+        var elNode = (node.nodeType === 1) ? node : node.parentNode;
+        return container.contains(elNode);
+      }
+      function selectionAllowed(){
+        var sel = window.getSelection();
+        if (!sel || sel.rangeCount===0) return false;
+        var ir = document.getElementById('inputRich');
+        var pv = document.getElementById('preview');
+        for (var i=0;i<sel.rangeCount;i++){
+          var r = sel.getRangeAt(i);
+          var sc = r.startContainer;
+          var ec = r.endContainer;
+          var inInput = within(sc, ir) && within(ec, ir);
+          var inPreview = within(sc, pv) && within(ec, pv);
+          if (!(inInput || inPreview)) return false;
+        }
+        return true;
+      }
+      (function(){
+        var adjusting = false;
+        document.addEventListener('selectionchange', function(){
+          if (adjusting) return;
+          var sel = window.getSelection();
+          if (!sel || sel.rangeCount===0) return;
+          var ir = document.getElementById('inputRich');
+          var pv = document.getElementById('preview');
+          var cross = false;
+          for (var i=0;i<sel.rangeCount;i++){
+            var r = sel.getRangeAt(i);
+            var sc = r.startContainer;
+            var ec = r.endContainer;
+            var scEl = (sc && sc.nodeType===1) ? sc : (sc ? sc.parentNode : null);
+            var ecEl = (ec && ec.nodeType===1) ? ec : (ec ? ec.parentNode : null);
+            var inInput = scEl && ecEl && ir.contains(scEl) && ir.contains(ecEl);
+            var inPreview = scEl && ecEl && pv.contains(scEl) && pv.contains(ecEl);
+            if (!(inInput || inPreview)) { cross = true; break; }
+          }
+          if (!cross) return;
+          adjusting = true;
+          try {
+            var an = sel.anchorNode;
+            var anEl = (an && an.nodeType===1) ? an : (an ? an.parentNode : null);
+            var target = null;
+            if (anEl && ir.contains(anEl)) target = ir;
+            else if (anEl && pv.contains(anEl)) target = pv;
+            if (target){
+              var range = document.createRange();
+              range.selectNodeContents(target);
+              sel.removeAllRanges();
+              sel.addRange(range);
+            } else {
+              sel.removeAllRanges();
             }
-          } else {
-            resultText += char;
+          } finally {
+            adjusting = false;
           }
-        }
-        el.innerHTML = decorateText(resultText, whiteList);
-        setCaretOffset(el, Math.min(caret, resultText.length));
-        if (hiddenInput) {
-          hiddenInput.value = resultText;
-          hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
-          if (window.__runConvert) { window.__runConvert(); }
-        }
-        setTimeout(()=>{ syncOutput(); }, 20);
-      }
-
-      el.addEventListener('compositionstart', () => { isComposing = true; });
-      el.addEventListener('compositionend', () => { 
-        isComposing = false; 
-        handleInput(); 
-      });
-
-      el.addEventListener('input', handleInput);
-
-      el.addEventListener('paste', (e) => {
-        e.preventDefault();
-        const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-        const whiteList = (window.RULES_DATA && window.RULES_DATA.rules) ? window.RULES_DATA.rules : {};
-        let cleanText = "";
-        for (let char of text) {
-          const code = char.charCodeAt(0);
-          if (code >= 0x4E00 && code <= 0x9FA5) {
-            if (Object.prototype.hasOwnProperty.call(whiteList, char)) cleanText += char;
-          } else { cleanText += char; }
-        }
-        document.execCommand('insertText', false, cleanText);
-        requestAnimationFrame(handleInput);
-      });
-
-      setInterval(syncOutput, 100);
-
-      // 复制按钮：修复安卓/华为设备复制错位问题
-      const copyBtn = document.getElementById('copyBtn');
-      copyBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (e.stopPropagation) e.stopPropagation();
-        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-
-        // 忽略当前选区，只复制输出区内容
-        try { const sel0 = window.getSelection(); if (sel0) sel0.removeAllRanges(); } catch(_) {}
-
-        const pv = viewOutput;
-        const html = (pv && pv.innerHTML) || '';
-        const text = (pv && pv.innerText) || '';
-        const animate = () => { copyBtn.classList.add('flash'); setTimeout(()=>copyBtn.classList.remove('flash'), 280); };
-        
-        try {
-          if (navigator.clipboard && window.ClipboardItem) {
-            const data = { 'text/plain': new Blob([text], { type: 'text/plain' }) };
-            if (html) data['text/html'] = new Blob([html], { type: 'text/html' });
-            const item = new ClipboardItem(data);
-            navigator.clipboard.write([item]).then(animate).catch(() => {
-              if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(animate).catch(() => {
-                  // 退化一：选中输出区 + execCommand('copy')（有机会保留 HTML）
-                  try {
-                    const sel = window.getSelection();
-                    const saved = [];
-                    if (sel && sel.rangeCount) { for (let i=0;i<sel.rangeCount;i++) saved.push(sel.getRangeAt(i).cloneRange()); }
-                    const r = document.createRange();
-                    r.selectNodeContents(pv);
-                    sel.removeAllRanges();
-                    sel.addRange(r);
-                    pv.focus();
-                    allowProgrammaticCopy = true;
-                    document.execCommand('copy');
-                    allowProgrammaticCopy = false;
-                    sel.removeAllRanges();
-                    for (const rr of saved) sel.addRange(rr);
-                    animate();
-                  } catch(_) {
-                    // 退化二：隐藏文本域 + execCommand('copy')
-                    const ta = document.createElement('textarea');
-                    ta.value = text;
-                    ta.setAttribute('readonly','');
-                    ta.style.position = 'fixed';
-                    ta.style.left = '-9999px';
-                    document.body.appendChild(ta);
-                    ta.select();
-                    allowProgrammaticCopy = true;
-                    try { document.execCommand('copy'); } catch(_) {} finally { allowProgrammaticCopy = false; }
-                    document.body.removeChild(ta);
-                    animate();
-                  }
-                });
-              } else {
-                // 无 writeText：直接尝试选中输出区复制
-                try {
-                  const sel = window.getSelection();
-                  const saved = [];
-                  if (sel && sel.rangeCount) { for (let i=0;i<sel.rangeCount;i++) saved.push(sel.getRangeAt(i).cloneRange()); }
-                  const r = document.createRange();
-                  r.selectNodeContents(pv);
-                  sel.removeAllRanges();
-                  sel.addRange(r);
-                  pv.focus();
-                  allowProgrammaticCopy = true;
-                  document.execCommand('copy');
-                  allowProgrammaticCopy = false;
-                  sel.removeAllRanges();
-                  for (const rr of saved) sel.addRange(rr);
-                  animate();
-                } catch(_) {
-                  const ta = document.createElement('textarea');
-                  ta.value = text;
-                  ta.setAttribute('readonly','');
-                  ta.style.position = 'fixed';
-                  ta.style.left = '-9999px';
-                  document.body.appendChild(ta);
-                  ta.select();
-                  allowProgrammaticCopy = true;
-                  try { document.execCommand('copy'); } catch(_) {} finally { allowProgrammaticCopy = false; }
-                  document.body.removeChild(ta);
-                  animate();
-                }
-              }
-            });
-          } else if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(animate).catch(() => {
-              // 退化一：选中输出区 + execCommand('copy')
-              try {
-                const sel = window.getSelection();
-                const saved = [];
-                if (sel && sel.rangeCount) { for (let i=0;i<sel.rangeCount;i++) saved.push(sel.getRangeAt(i).cloneRange()); }
-                const r = document.createRange();
-                r.selectNodeContents(pv);
-                sel.removeAllRanges();
-                sel.addRange(r);
-                pv.focus();
-                allowProgrammaticCopy = true;
-                document.execCommand('copy');
-                allowProgrammaticCopy = false;
-                sel.removeAllRanges();
-                for (const rr of saved) sel.addRange(rr);
-                animate();
-              } catch(_) {
-                // 退化二：隐藏文本域 + execCommand('copy')
-                const ta = document.createElement('textarea');
-                ta.value = text;
-                ta.setAttribute('readonly','');
-                ta.style.position = 'fixed';
-                ta.style.left = '-9999px';
-                document.body.appendChild(ta);
-                ta.select();
-                allowProgrammaticCopy = true;
-                try { document.execCommand('copy'); } catch(_) {} finally { allowProgrammaticCopy = false; }
-                document.body.removeChild(ta);
-                animate();
-              }
-            });
-          } else {
-            // 最后退化：一次性 oncopy 写入 text/html 与 text/plain
-            const onCopy = (ev) => {
-              if (allowProgrammaticCopy && ev && ev.clipboardData) {
-                ev.clipboardData.setData('text/plain', text);
-                if (html) ev.clipboardData.setData('text/html', html);
-                ev.preventDefault();
-              }
-            };
-            document.addEventListener('copy', onCopy, true);
-            allowProgrammaticCopy = true;
-            try { document.execCommand('copy'); } catch(_) {} finally { allowProgrammaticCopy = false; document.removeEventListener('copy', onCopy, true); }
-            animate();
-          }
-        } catch(_) {
-          animate();
+        });
+      })();
+      document.addEventListener('copy', function(e){
+        if (window.__allowCopyOnce){ window.__allowCopyOnce = false; return; }
+        if (!selectionAllowed()){
+          e.preventDefault();
         }
       }, true);
-      
-      const clearBtn = document.getElementById('clearBtn');
-      clearBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (hiddenInput) hiddenInput.value = '';
-        if (hiddenOutput) hiddenOutput.value = '';
-        if (viewOutput) viewOutput.innerText = '';
-        el.innerHTML = '';
-        el.focus();
-        setCaretOffset(el, 0);
-        clearBtn.classList.add('flash');
-        setTimeout(()=>clearBtn.classList.remove('flash'), 280);
-      });
+      if (window.__runConvert) window.__runConvert();
     });
   </script>
   <script>
-    // 康巴仓，这是启动 PWA 桌面图标的关键脚本
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('SW registered'))
-          .catch(err => console.log('SW failed', err));
+      navigator.serviceWorker.register('./sw.js').then(function(reg){
+        if (reg.waiting) { reg.waiting.postMessage({type:'SKIP_WAITING'}); }
+        reg.addEventListener('updatefound', function(){
+          var nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', function(){
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              if (reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+            }
+          });
+        });
+      });
+      var refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function(){
+        if (refreshing) return;
+        refreshing = true;
+        location.reload();
       });
     }
   </script>
