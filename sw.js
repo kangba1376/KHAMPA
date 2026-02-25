@@ -1,9 +1,8 @@
-const CACHE_NAME = 'soul-day-2026-02-23-21:48';
+const CACHE_NAME = 'soul-day-2026-02-25-11:55';
 const ASSETS = [
   './',
   './index.html',
   './BZDHT.ttf',
-  './喜马拉雅字体/himalaya.ttf',
   './TibetWildYak.ttf',
   './converter.js',
   './rules_data.js',
