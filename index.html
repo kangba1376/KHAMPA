@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
   <title>ཧི་མ་ལ་ཡ། >> པཎྜི་ཏ།</title>
   <style>
-    @font-face { font-family: 'BZDHT'; src: url('./BZDHT.ttf') format('truetype'); }
+    @font-face { font-family: 'BZDHT'; src: url('./bzdht.ttf') format('truetype'); }
     @font-face { font-family: 'WildYak'; src: url('./TibetWildYak.ttf') format('truetype'); }
 
     :root { --primary-red: #8B0000; --bg: #f2f2f7; --card: #ffffff; --radius: 20px; }
@@ -136,6 +136,15 @@
     .ctx-item.disabled{opacity:.45;pointer-events:none}
     .ctx-divider{height:1px;background:#e5e5ea;margin:4px 0}
   </style>
+  <script>
+    if ('FontFace' in window) {
+      var bzdFont = new FontFace('BZDHT', 'url(./bzdht.ttf)');
+      bzdFont.load().then(function(loaded) {
+        document.fonts.add(loaded);
+        document.documentElement.classList.add('bzd-loaded');
+      }).catch(function(e) { console.error('Font load failed:', e); });
+    }
+  </script>
 </head>
 <body class="mode-h2b">
   <div class="app">
@@ -250,53 +259,78 @@
         var preview = document.getElementById('preview');
         if (!preview) return;
 
-        // 核心修复：清除选中，防止安卓系统干扰
-        window.getSelection().removeAllRanges();
+        // 1. Clear selection first
+        try { window.getSelection().removeAllRanges(); } catch(_) {}
 
         var clone = preview.cloneNode(true);
         inlineEssentialStyles(clone);
         var html = '<div>' + clone.innerHTML + '</div>';
-        var plain = preview.textContent;
+        var plain = preview.innerText || preview.textContent;
 
-        if (navigator.clipboard && window.ClipboardItem) {
-          var item = new ClipboardItem({
-            'text/plain': new Blob([plain], { type: 'text/plain' }),
-            'text/html': new Blob([html], { type: 'text/html' })
-          });
-          navigator.clipboard.write([item]).catch(function() {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(plain);
-            }
-          });
-        } else if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(plain);
-        } else {
-          // 选择复制回退：更兼容安卓/华为浏览器
+        var animate = function() {
+          var btn = document.getElementById('copyBtn');
+          if(btn) {
+            btn.classList.remove('btn-blink');
+            void btn.offsetWidth;
+            btn.classList.add('btn-blink');
+          }
+        };
+
+        var doExecCommand = function() {
           var didCopy = false;
           try {
-            var sel0 = window.getSelection();
-            var saved = [];
-            if (sel0 && sel0.rangeCount){ for (var i=0;i<sel0.rangeCount;i++){ saved.push(sel0.getRangeAt(i).cloneRange()); } }
-            var r0 = document.createRange();
-            r0.selectNodeContents(preview);
-            sel0.removeAllRanges();
-            sel0.addRange(r0);
+            var sel = window.getSelection();
+            var range = document.createRange();
+            range.selectNodeContents(preview);
+            sel.removeAllRanges();
+            sel.addRange(range);
             window.__allowCopyOnce = true;
             didCopy = document.execCommand('copy');
-            sel0.removeAllRanges();
-            if (saved.length){ saved.forEach(function(rr){ sel0.addRange(rr); }); }
-          } catch(_) {}
+            sel.removeAllRanges();
+          } catch(e) {}
+          
           if (!didCopy) {
             var ta = document.createElement('textarea');
-            ta.setAttribute('readonly','readonly');
+            ta.value = plain;
+            ta.setAttribute('readonly', '');
             ta.style.position = 'fixed';
             ta.style.left = '-9999px';
-            ta.value = plain;
             document.body.appendChild(ta);
             ta.select();
-            try { window.__allowCopyOnce = true; document.execCommand('copy'); } catch (_) {}
+            ta.setSelectionRange(0, plain.length);
+            try {
+              window.__allowCopyOnce = true;
+              document.execCommand('copy');
+            } catch(e) {}
             document.body.removeChild(ta);
           }
+          animate();
+        };
+
+        if (navigator.clipboard && window.ClipboardItem) {
+          try {
+            var item = new ClipboardItem({
+              'text/plain': new Blob([plain], { type: 'text/plain' }),
+              'text/html': new Blob([html], { type: 'text/html' })
+            });
+            navigator.clipboard.write([item]).then(animate).catch(function() {
+              if (navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(plain).then(animate).catch(doExecCommand);
+              } else {
+                doExecCommand();
+              }
+            });
+          } catch(e) {
+            if (navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(plain).then(animate).catch(doExecCommand);
+            } else {
+              doExecCommand();
+            }
+          }
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(plain).then(animate).catch(doExecCommand);
+        } else {
+          doExecCommand();
         }
       }
 
@@ -306,10 +340,10 @@
           ev.preventDefault();
           ev.stopPropagation();
           if (ev.stopImmediatePropagation) ev.stopImmediatePropagation();
+          
           copyOutput();
-          copyBtn.classList.remove('btn-blink');
-          void copyBtn.offsetWidth; 
-          copyBtn.classList.add('btn-blink');
+          
+          // 动画已移至 copyOutput 内部，确保成功后才闪烁
         }, true);
       }
       var clearBtn = document.getElementById('clearBtn');
