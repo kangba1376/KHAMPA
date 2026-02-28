@@ -205,25 +205,10 @@
           activeTarget = t;
         });
       });
-      el.addEventListener('paste', function(e) {
-        e.preventDefault();
-        var text = (e.clipboardData || window.clipboardData).getData('text/plain') || '';
-        var sel = window.getSelection();
-        if (sel && sel.rangeCount > 0) {
-          var range = sel.getRangeAt(0);
-          range.deleteContents();
-          var node = document.createTextNode(text);
-          range.insertNode(node);
-          range.setStartAfter(node);
-          range.collapse(true);
-          sel.removeAllRanges();
-          sel.addRange(range);
-        } else {
-          el.appendChild(document.createTextNode(text));
-        }
-        if (window.__runConvert) window.__runConvert();
-      });
-
+      // 彻底移除所有自定义粘贴监听，只保留浏览器原生行为
+      // el.addEventListener('paste', function(e) { ... }); 
+      
+      // 如果需要处理粘贴后的内容，使用 input 事件即可
       el.addEventListener('input', function() {
         var walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, null);
         var nodes = [];
