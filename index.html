@@ -196,8 +196,10 @@
           }).catch(function(){});
         }
       } catch(_) {}
+
       var el = document.getElementById('inputRich');
       if (!el) return;
+
       ['inputRich','preview'].forEach(function(id){
         var t = document.getElementById(id);
         if (!t) return;
@@ -205,10 +207,41 @@
           activeTarget = t;
         });
       });
-      // 彻底移除所有自定义粘贴监听，只保留浏览器原生行为
-      // el.addEventListener('paste', function(e) { ... }); 
-      
-      // 如果需要处理粘贴后的内容，使用 input 事件即可
+
+      // 终极拦截：彻底切断浏览器默认粘贴的所有路径
+      function handleUniversalPaste(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var txt = "";
+        if (e.clipboardData) { txt = e.clipboardData.getData('text/plain'); }
+        else if (window.clipboardData) { txt = window.clipboardData.getData('Text'); }
+        
+        if (txt) {
+          var cleanTxt = txt.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+          var html = cleanTxt.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                             .replace(/\n/g, '<br>');
+          document.execCommand('insertHTML', false, html);
+          if (window.__runConvert) window.__runConvert();
+        }
+      }
+
+      // 1. 拦截标准粘贴事件
+      el.addEventListener('paste', handleUniversalPaste, true);
+
+      // 2. 拦截现代浏览器的 beforeinput 事件
+      el.addEventListener('beforeinput', function(e) {
+        if (e.inputType === 'insertFromPaste') {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, true);
+
+      // 3. 拦截老式 WebKit 的 textInput 事件
+      el.addEventListener('textInput', function(e) {
+      }, true);
+
+      // 修复语法错误：正确的 input 监听器，无嵌套
       el.addEventListener('input', function() {
         var walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, null);
         var nodes = [];
@@ -240,97 +273,46 @@
         });
       }
 
-      function copyOutput() {
-        var preview = document.getElementById('preview');
-        if (!preview) return;
-
-        // 1. Clear selection first
-        try { window.getSelection().removeAllRanges(); } catch(_) {}
-
-        var clone = preview.cloneNode(true);
-        inlineEssentialStyles(clone);
-        var html = '<div>' + clone.innerHTML + '</div>';
-        var plain = preview.innerText || preview.textContent;
-
-        var animate = function() {
-          var btn = document.getElementById('copyBtn');
-          if(btn) {
-            btn.classList.remove('btn-blink');
-            void btn.offsetWidth;
-            btn.classList.add('btn-blink');
-          }
-        };
-
-        var doExecCommand = function() {
-          var didCopy = false;
-          try {
-            var sel = window.getSelection();
-            var range = document.createRange();
-            range.selectNodeContents(preview);
-            sel.removeAllRanges();
-            sel.addRange(range);
-            window.__allowCopyOnce = true;
-            didCopy = document.execCommand('copy');
-            sel.removeAllRanges();
-          } catch(e) {}
+      // 复制按钮：优先使用 navigator.clipboard.writeText
+      const copyBtn = document.getElementById('copyBtn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', (e) => {
+          const pv = document.getElementById('preview');
+          const text = pv.innerText || pv.textContent;
           
-          if (!didCopy) {
-            var ta = document.createElement('textarea');
-            ta.value = plain;
-            ta.setAttribute('readonly', '');
-            ta.style.position = 'fixed';
-            ta.style.left = '-9999px';
-            document.body.appendChild(ta);
-            ta.select();
-            ta.setSelectionRange(0, plain.length);
-            try {
-              window.__allowCopyOnce = true;
-              document.execCommand('copy');
-            } catch(e) {}
-            document.body.removeChild(ta);
-          }
-          animate();
-        };
+          const animate = () => {
+            copyBtn.classList.remove('btn-blink');
+            void copyBtn.offsetWidth;
+            copyBtn.classList.add('btn-blink');
+          };
 
-        if (navigator.clipboard && window.ClipboardItem) {
-          try {
-            var item = new ClipboardItem({
-              'text/plain': new Blob([plain], { type: 'text/plain' }),
-              'text/html': new Blob([html], { type: 'text/html' })
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(animate).catch((err) => {
+              console.error('Clipboard API failed:', err);
+              fallbackCopy(text, animate);
             });
-            navigator.clipboard.write([item]).then(animate).catch(function() {
-              if (navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(plain).then(animate).catch(doExecCommand);
-              } else {
-                doExecCommand();
-              }
-            });
-          } catch(e) {
-            if (navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(plain).then(animate).catch(doExecCommand);
-            } else {
-              doExecCommand();
-            }
+          } else {
+            fallbackCopy(text, animate);
           }
-        } else if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(plain).then(animate).catch(doExecCommand);
-        } else {
-          doExecCommand();
+        });
+      }
+
+      function fallbackCopy(text, callback) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          if (callback) callback();
+        } catch (err) {
+          console.error('Fallback copy failed:', err);
         }
+        document.body.removeChild(ta);
       }
 
-      var copyBtn = document.getElementById('copyBtn');
-      if (copyBtn){
-        copyBtn.addEventListener('click', function(ev){
-          ev.preventDefault();
-          ev.stopPropagation();
-          if (ev.stopImmediatePropagation) ev.stopImmediatePropagation();
-          
-          copyOutput();
-          
-          // 动画已移至 copyOutput 内部，确保成功后才闪烁
-        }, true);
-      }
       var clearBtn = document.getElementById('clearBtn');
       if (clearBtn){
         clearBtn.addEventListener('click', function(){
@@ -361,12 +343,14 @@
           selectAllIn(previewEl);
         });
       }
+
       function within(node, container){
         if (!node || !container) return false;
         if (node === container) return true;
         var elNode = (node.nodeType === 1) ? node : node.parentNode;
         return container.contains(elNode);
       }
+
       function selectionAllowed(){
         var sel = window.getSelection();
         if (!sel || sel.rangeCount===0) return false;
@@ -382,6 +366,7 @@
         }
         return true;
       }
+
       (function(){
         var adjusting = false;
         document.addEventListener('selectionchange', function(){
@@ -422,12 +407,10 @@
           }
         });
       })();
-      document.addEventListener('copy', function(e){
-        if (window.__allowCopyOnce){ window.__allowCopyOnce = false; return; }
-        if (!selectionAllowed()){
-          e.preventDefault();
-        }
-      }, true);
+
+      // 全局 copy 拦截已注释，避免干扰
+      // document.addEventListener('copy', ...);
+
       if (window.__runConvert) window.__runConvert();
       
       var menu = document.createElement('div');
@@ -517,6 +500,7 @@
       function insertPlain(txt){
         var target = getPasteTarget();
         if (!target) return;
+        target.focus();
         var sel = window.getSelection();
         if (!sel || sel.rangeCount===0 || !selectionWithinNode(target)){
           var r0 = document.createRange();
@@ -593,44 +577,8 @@
           return;
         }
         if (id==='paste'){
-          var target = getPasteTarget();
-          if (!target || !target.isContentEditable) return;
-          var tryExecPaste = function(){
-            try {
-              if (!selectionWithinNode(target)) selectAllInNode(target);
-              target.focus();
-              document.execCommand('paste');
-              hideMenu();
-              if (window.__runConvert) window.__runConvert();
-            } catch(_){}
-          };
-          var pastedHTML = '', pastedText = '';
-          var tmp = document.createElement('div');
-          tmp.contentEditable = 'true';
-          tmp.style.position = 'fixed';
-          tmp.style.left = '-9999px';
-          tmp.style.opacity = '0';
-          document.body.appendChild(tmp);
-          try {
-            tmp.focus();
-            document.execCommand('paste');
-            pastedHTML = tmp.innerHTML || '';
-            pastedText = tmp.textContent || '';
-          } catch(_){}
-          document.body.removeChild(tmp);
-          if (pastedHTML && pastedHTML.trim().length){
-            if (!selectionWithinNode(target)) selectAllInNode(target);
-            document.execCommand('insertHTML', false, pastedHTML);
-            hideMenu();
-            if (window.__runConvert) window.__runConvert();
-            return;
-          }
-          if (pastedText && pastedText.trim().length){
-            insertPlain(pastedText);
-            hideMenu();
-            return;
-          }
-          tryExecPaste();
+          showPasteOverlay();
+          hideMenu();
         }
       });
     });

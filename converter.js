@@ -7929,7 +7929,7 @@ function bindActions(){
     if (MODE==='b2h' && els.input){ els.input.focus(); }
     else if (MODE!=='b2h' && els.inputRich){ els.inputRich.focus(); }
   });
-  els.copyBtn.addEventListener("click", async ()=>{ try{ const txt = els.preview ? els.preview.textContent : ''; await navigator.clipboard.writeText(txt); setStatus(true, "已复制"); setTimeout(()=>setStatus(true, "映射已内置"), 1200) }catch(_){} });
+  els.copyBtn.addEventListener("click", async ()=>{ try{ await navigator.clipboard.writeText(els.output.value); setStatus(true, "已复制"); setTimeout(()=>setStatus(true, "映射已内置"), 1200) }catch(_){} });
   if (els.btnB2H) els.btnB2H.addEventListener("click", ()=>setMode('b2h'));
   if (els.btnH2B) els.btnH2B.addEventListener("click", ()=>setMode('h2b'));
 }
