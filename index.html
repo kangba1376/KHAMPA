@@ -129,12 +129,7 @@
       .areas { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; height: 100%; }
       .title-area h1 { font-size: 14px; }
     }
-    .ctx-menu{position:fixed;z-index:9999;background:#fff;border:1px solid #d1d1d6;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.12);min-width:140px;display:none;overflow:hidden}
-    .ctx-menu.show{display:block}
-    .ctx-item{padding:8px 12px;font-size:14px;color:#1c1c1e;cursor:pointer;display:flex;align-items:center;gap:8px}
-    .ctx-item:hover{background:#f2f2f7}
-    .ctx-item.disabled{opacity:.45;pointer-events:none}
-    .ctx-divider{height:1px;background:#e5e5ea;margin:4px 0}
+
   </style>
   <script>
     if ('FontFace' in window) {
@@ -199,14 +194,6 @@
 
       var el = document.getElementById('inputRich');
       if (!el) return;
-
-      ['inputRich','preview'].forEach(function(id){
-        var t = document.getElementById(id);
-        if (!t) return;
-        t.addEventListener('contextmenu', function(e){
-          activeTarget = t;
-        });
-      });
 
       // 终极拦截：彻底切断浏览器默认粘贴的所有路径
       function handleUniversalPaste(e) {
@@ -412,175 +399,6 @@
       // document.addEventListener('copy', ...);
 
       if (window.__runConvert) window.__runConvert();
-      
-      var menu = document.createElement('div');
-      menu.className = 'ctx-menu';
-      function mk(text,id){ var d=document.createElement('div'); d.className='ctx-item'; d.textContent=text; d.dataset.id=id; return d; }
-      var itemPaste = mk('粘贴','paste');
-      var itemCopy = mk('复制','copy');
-      var itemCut = mk('剪切','cut');
-      var itemSelAll = mk('全选','select_all');
-      var divLine = document.createElement('div'); divLine.className='ctx-divider';
-      menu.appendChild(itemPaste); menu.appendChild(itemCopy); menu.appendChild(itemCut); menu.appendChild(divLine); menu.appendChild(itemSelAll);
-      document.body.appendChild(menu);
-      var activeTarget = null;
-      var lastMenuX = 0, lastMenuY = 0;
-      function showMenu(x,y,t){
-        activeTarget = t; lastMenuX=x; lastMenuY=y;
-        var editable = !!(t && t.isContentEditable);
-        itemCut.classList.toggle('disabled', !editable);
-        itemPaste.classList.toggle('disabled', !editable);
-        var vw = window.innerWidth, vh = window.innerHeight;
-        menu.style.left = Math.min(x, vw - menu.offsetWidth - 4) + 'px';
-        menu.style.top  = Math.min(y, vh - menu.offsetHeight - 4) + 'px';
-        menu.classList.add('show');
-      }
-      function hideMenu(){ menu.classList.remove('show'); activeTarget=null; }
-      function selectAllInNode(node){
-        if (!node) return;
-        var sel = window.getSelection();
-        var range = document.createRange();
-        range.selectNodeContents(node);
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-      function selectionWithinNode(node){
-        var sel = window.getSelection();
-        if (!sel || sel.rangeCount===0) return false;
-        for (var i=0;i<sel.rangeCount;i++){
-          var r = sel.getRangeAt(i);
-          var sc = r.startContainer.nodeType===1 ? r.startContainer : r.startContainer.parentNode;
-          var ec = r.endContainer.nodeType===1 ? r.endContainer : r.endContainer.parentNode;
-          if (!(node.contains(sc) && node.contains(ec))) return false;
-        }
-        return true;
-      }
-      function getPasteTarget(){
-        var t = activeTarget;
-        if (!t || !(t.nodeType)) {
-          t = document.getElementById('inputRich');
-          if (!t || !t.isContentEditable) t = document.getElementById('preview');
-          if (!t || !t.isContentEditable) t = document.activeElement;
-        }
-        return t && t.nodeType ? t : null;
-      }
-      
-      document.addEventListener('click', hideMenu);
-      document.addEventListener('scroll', hideMenu, true);
-      var pasteOverlay = document.createElement('div');
-      pasteOverlay.style.position = 'fixed';
-      pasteOverlay.style.zIndex = '10000';
-      pasteOverlay.style.background = '#fff';
-      pasteOverlay.style.border = '1px solid #d1d1d6';
-      pasteOverlay.style.borderRadius = '8px';
-      pasteOverlay.style.boxShadow = '0 6px 20px rgba(0,0,0,.12)';
-      pasteOverlay.style.padding = '6px';
-      pasteOverlay.style.display = 'none';
-      var pasteBox = document.createElement('div');
-      pasteBox.contentEditable = 'true';
-      pasteBox.style.minWidth = '160px';
-      pasteBox.style.minHeight = '24px';
-      pasteBox.style.outline = 'none';
-      var ctrl = document.createElement('div');
-      ctrl.style.display = 'flex';
-      ctrl.style.justifyContent = 'flex-end';
-      ctrl.style.gap = '8px';
-      ctrl.style.marginTop = '6px';
-      var btnPaste = document.createElement('button');
-      btnPaste.textContent = '粘贴';
-      btnPaste.className = 'btn btn-copy';
-      var btnCancel = document.createElement('button');
-      btnCancel.textContent = '取消';
-      btnCancel.className = 'btn btn-clear';
-      pasteOverlay.appendChild(pasteBox);
-      pasteOverlay.appendChild(ctrl);
-      ctrl.appendChild(btnCancel);
-      ctrl.appendChild(btnPaste);
-      document.body.appendChild(pasteOverlay);
-      function insertPlain(txt){
-        var target = getPasteTarget();
-        if (!target) return;
-        target.focus();
-        var sel = window.getSelection();
-        if (!sel || sel.rangeCount===0 || !selectionWithinNode(target)){
-          var r0 = document.createRange();
-          r0.selectNodeContents(target);
-          r0.collapse(false);
-          sel.removeAllRanges();
-          sel.addRange(r0);
-        }
-        document.execCommand('insertText', false, txt);
-        hidePasteOverlay();
-        hideMenu();
-        if (window.__runConvert) window.__runConvert();
-      }
-      function showPasteOverlay(){
-        pasteOverlay.style.left = Math.min(lastMenuX, window.innerWidth - 200) + 'px';
-        pasteOverlay.style.top  = Math.min(lastMenuY, window.innerHeight - 80) + 'px';
-        pasteOverlay.style.display = 'block';
-        pasteBox.textContent = '';
-        pasteBox.focus();
-        if (clipboardGranted && navigator.clipboard && navigator.clipboard.readText){
-          navigator.clipboard.readText().then(function(txt){ if (txt) insertPlain(txt); }).catch(function(){});
-        }
-        try { document.execCommand('paste'); } catch(_){}
-      }
-      function hidePasteOverlay(){ pasteOverlay.style.display = 'none'; }
-      btnCancel.addEventListener('click', function(){ hidePasteOverlay(); hideMenu(); });
-      btnPaste.addEventListener('click', function(){
-        var attemptFromBox = function(){
-          var txt = pasteBox.textContent || '';
-          if (txt) { insertPlain(txt); return true; }
-          return false;
-        };
-        if (clipboardGranted && navigator.clipboard && navigator.clipboard.readText){
-          navigator.clipboard.readText().then(function(txt){ if (txt) insertPlain(txt); else { pasteBox.focus(); setTimeout(function(){ attemptFromBox(); }, 50); } }).catch(function(){ pasteBox.focus(); try{ document.execCommand('paste'); }catch(_){} setTimeout(function(){ attemptFromBox(); }, 50); });
-        } else {
-          pasteBox.focus();
-          try { document.execCommand('paste'); } catch(_){}
-          setTimeout(function(){ attemptFromBox(); }, 50);
-        }
-      });
-      pasteBox.addEventListener('paste', function(e){
-        e.preventDefault();
-        var txt = (e.clipboardData || window.clipboardData).getData('text/plain') || '';
-        if (txt) insertPlain(txt);
-      });
-      pasteBox.addEventListener('input', function(){
-        var txt = pasteBox.textContent || '';
-        if (txt) insertPlain(txt);
-      });
-      pasteBox.addEventListener('beforeinput', function(e){
-        if (e.inputType==='insertFromPaste'){
-          var txt = e.data || '';
-          if (txt) insertPlain(txt);
-          e.preventDefault();
-        }
-      });
-      document.addEventListener('keydown', function(ev){ if (ev.key==='Escape') hidePasteOverlay(); }, true);
-      menu.addEventListener('click', function(e){
-        var id = e.target && e.target.dataset ? e.target.dataset.id : null;
-        if (!id || !activeTarget) return;
-        if (id==='select_all'){ selectAllInNode(activeTarget); hideMenu(); return; }
-        if (id==='copy'){
-          if (!selectionWithinNode(activeTarget)) selectAllInNode(activeTarget);
-          try { window.__allowCopyOnce = true; document.execCommand('copy'); } catch(_) {}
-          hideMenu();
-          return;
-        }
-        if (id==='cut'){
-          if (!activeTarget.isContentEditable) return;
-          if (!selectionWithinNode(activeTarget)) selectAllInNode(activeTarget);
-          try { document.execCommand('cut'); } catch(_) {}
-          hideMenu();
-          if (activeTarget.id==='inputRich'){ if (window.__runConvert) window.__runConvert(); }
-          return;
-        }
-        if (id==='paste'){
-          showPasteOverlay();
-          hideMenu();
-        }
-      });
     });
   </script>
   <script>
