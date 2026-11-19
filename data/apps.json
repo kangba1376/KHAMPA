@@ -1,4 +1,24 @@
 {
-  "updated": "",
-  "apps": []
+  "updated": "2026-11-19T03:02:02.931Z",
+  "apps": [
+    {
+      "id": "appmwmys1p7",
+      "name_tb": "བོད་ཡིག་ཨང་བསྒྱུར་ཆེན་མོ།",
+      "name_zh": "藏文转换大师",
+      "logo": "data/uploads/appmwmys1p7-logo.png",
+      "screens": [
+        "data/uploads/appmwmys1p7-shot-1.jpg"
+      ],
+      "desc_tb": "ཕབ་ལེན་གསང་ཨང་། 8888",
+      "desc_zh": "提取密码：8888",
+      "platforms": [
+        {
+          "platform": "win",
+          "version": "3.0",
+          "url": "https://khampa.lanzoue.com/iGKZW4gkbori"
+        }
+      ],
+      "updated": "2026-11-19T03:01:56.251Z"
+    }
+  ]
 }
