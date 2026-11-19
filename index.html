@@ -278,6 +278,7 @@
         .app-list-item .meta small { display: block; color: #999; margin-top: 2px; }
         .app-list-item .del { border: none; background: none; color: #c0392b; cursor: pointer; font-family: inherit; font-size: .86em; }
         .app-list-item .del:hover { text-decoration: underline; }
+        .app-list-item .del.restore { color: #1f7a4d; }
         .res-tag { flex: 0 0 auto; padding: 2px 8px; border-radius: 999px; background: #f4f7f6; border: 1px solid #e3e8e6; color: #0b3b8a; font-size: .75em; }
         .resource-list .res-empty { grid-column: 1 / -1; color: #999; font-size: .85em; padding: 6px 2px; }
 
@@ -320,7 +321,7 @@
 
     <div id="home-content" style="display: block;">
         <div class="home-apps" id="homeApps">
-            <details class="home-app">
+            <details class="home-app" data-app="khamvert">
                 <summary>
                     <span class="home-app-summary">
                         <img class="home-app-icon" src="KHAMvert.PNG" alt="KHAMvert">
@@ -344,7 +345,7 @@
                 </div>
             </details>
 
-            <details class="home-app">
+            <details class="home-app" data-app="soulday">
                 <summary>
                     <span class="home-app-summary">
                         <img class="home-app-icon" src="Soul%20Day.PNG" alt="Soul Day">
@@ -785,6 +786,10 @@
             var allCards = document.querySelectorAll('.platform-card');
             for (var j = 0; j < allCards.length; j++) {
                 var card = allCards[j];
+                if (card.getAttribute('data-hidden') === '1') {
+                    card.style.display = 'none';
+                    continue;
+                }
                 if (platform === 'all') {
                     card.style.display = 'none';
                 } else {
@@ -859,20 +864,49 @@
         }
 
         /* ---------- 首页 / 分类页渲染 ---------- */
+        var SITE_DATA = null;
+        var BUILTIN_APPS = [
+            { id: 'khamvert', name: 'KHAMvert ཨང་བསྒྱུར།', logo: 'KHAMvert.PNG' },
+            { id: 'soulday',  name: 'Soul Day བླ་གཟའ།',     logo: 'Soul Day.PNG' }
+        ];
+
         function loadApps() {
             fetch('data/apps.json?t=' + Date.now(), { cache: 'no-store' })
                 .then(function (r) { return r.ok ? r.json() : null; })
                 .catch(function () { return null; })
-                .then(function (remote) {
-                    var apps = (remote && Array.isArray(remote.apps)) ? remote.apps.slice() : [];
-                    readLocalApps().forEach(function (a) {
-                        var dup = false;
-                        apps.forEach(function (x) { if (x && x.id === a.id) dup = true; });
-                        if (!dup) apps.push(a);
-                    });
-                    renderApps(apps);
-                    renderResources(remote);
-                });
+                .then(function (remote) { applySiteData(remote); });
+        }
+
+        function applySiteData(data) {
+            SITE_DATA = (data && typeof data === 'object') ? data : { apps: [] };
+            var hidden = Array.isArray(SITE_DATA.hidden) ? SITE_DATA.hidden : [];
+            var apps = Array.isArray(SITE_DATA.apps) ? SITE_DATA.apps.slice() : [];
+
+            readLocalApps().forEach(function (a) {
+                var dup = false;
+                apps.forEach(function (x) { if (x && x.id === a.id) dup = true; });
+                if (!dup) apps.push(a);
+            });
+            apps = apps.filter(function (a) { return a && hidden.indexOf(a.id) === -1; });
+
+            renderApps(apps);
+            applyHiddenToStatic(hidden);
+            renderResources(SITE_DATA);
+        }
+
+        function applyHiddenToStatic(hidden) {
+            var nodes = document.querySelectorAll('[data-app]');
+            for (var i = 0; i < nodes.length; i++) {
+                var n = nodes[i];
+                if (n.getAttribute('data-dynamic') === '1') continue;
+                if (hidden.indexOf(n.getAttribute('data-app')) >= 0) {
+                    n.setAttribute('data-hidden', '1');
+                    n.style.display = 'none';
+                } else {
+                    n.removeAttribute('data-hidden');
+                    n.style.display = '';
+                }
+            }
         }
 
         /* ---------- 字体 / 电子书 渲染 ---------- */
@@ -1373,21 +1407,65 @@
                 } catch (e2) { data = null; }
             }
             var apps = (data && Array.isArray(data.apps)) ? data.apps : [];
-            if (!apps.length) {
-                box.innerHTML = '<p class="admin-hint">还没有通过后台上传的软件。</p>';
-                return;
-            }
-            box.innerHTML = apps.map(function (a) {
+            var hidden = (data && Array.isArray(data.hidden)) ? data.hidden : [];
+            var rows = [];
+
+            BUILTIN_APPS.forEach(function (b) {
+                var isHidden = hidden.indexOf(b.id) >= 0;
+                rows.push(
+                    '<div class="app-list-item">' +
+                    '<img src="' + esc(b.logo) + '" alt="">' +
+                    '<div class="meta"><b>' + esc(b.name) + '</b><small>内置软件' + (isHidden ? ' · 已从网站删除' : '') + '</small></div>' +
+                    (isHidden
+                        ? '<button class="del restore" type="button" onclick="toggleBuiltin(\'' + b.id + '\', false)">恢复</button>'
+                        : '<button class="del" type="button" onclick="toggleBuiltin(\'' + b.id + '\', true)">删除</button>') +
+                    '</div>'
+                );
+            });
+
+            apps.forEach(function (a) {
+                if (!a) return;
                 var plats = (a.platforms || []).map(function (p) {
                     var m = PLATFORM_META[p.platform];
                     return (m ? m.zh : p.platform) + (p.version ? ' ' + p.version : '');
                 }).join(' / ');
-                return '<div class="app-list-item">' +
+                rows.push(
+                    '<div class="app-list-item">' +
                     '<img src="' + esc(a.logo || 'favicon.ico') + '" alt="">' +
                     '<div class="meta"><b>' + esc(a.name_zh || a.name_tb || a.id) + '</b><small>' + esc(plats) + '</small></div>' +
                     '<button class="del" type="button" onclick="deleteApp(\'' + esc(a.id) + '\')">删除</button>' +
-                    '</div>';
-            }).join('');
+                    '</div>'
+                );
+            });
+
+            box.innerHTML = rows.length ? rows.join('') : '<p class="admin-hint">还没有软件。</p>';
+        }
+
+        async function toggleBuiltin(id, hide) {
+            try {
+                var cfg = getGhCfg();
+                if (!cfg.token) throw new Error('删除/恢复需要先填写 GitHub Token。');
+                if (hide && !confirm('确定要从网站删除这个内置软件吗？（之后可在同一列表点“恢复”）')) return;
+
+                var file = await ghGetFile('data/apps.json');
+                var data = (file.json && typeof file.json === 'object') ? file.json : {};
+                if (!Array.isArray(data.hidden)) data.hidden = [];
+                if (hide) {
+                    if (data.hidden.indexOf(id) === -1) data.hidden.push(id);
+                } else {
+                    data.hidden = data.hidden.filter(function (x) { return x !== id; });
+                }
+                data.updated = new Date().toISOString();
+
+                await ghPut('data/apps.json', utf8ToB64(JSON.stringify(data, null, 2)),
+                    (hide ? '删除内置软件：' : '恢复内置软件：') + id, file.sha);
+
+                applySiteData(data);
+                renderPublishedList();
+                setStatus(hide ? '已删除，约 1 分钟后全站生效。' : '已恢复显示。', false);
+            } catch (e) {
+                setStatus(e.message, true);
+            }
         }
 
         async function deleteApp(id) {
@@ -1403,7 +1481,7 @@
                 await ghPut('data/apps.json', utf8ToB64(JSON.stringify(data, null, 2)),
                     '删除软件：' + id, file.sha);
                 setStatus('已删除，约 1 分钟后全站生效。', false);
-                renderApps(data.apps);
+                applySiteData(data);
                 renderPublishedList();
             } catch (e) {
                 setStatus(e.message, true);
