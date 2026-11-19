@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T11:44:12.643Z",
+  "updated": "2026-11-19T11:46:41.004Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -135,7 +135,7 @@
       "name_zh": "提取码：8888",
       "platforms": {
         "android": {
-          "label": "པཎྜི་ཏ། ⇌ ཧི་མ་ལ་ཡ།",
+          "label": "ཕབ་ལེན། / 下载",
           "url": "https://khampa.lanzoue.com/i0fTZ4caq4wj"
         },
         "mac": {
