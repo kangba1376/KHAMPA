@@ -278,6 +278,8 @@
         .app-list-item .meta small { display: block; color: #999; margin-top: 2px; }
         .app-list-item .del { border: none; background: none; color: #c0392b; cursor: pointer; font-family: inherit; font-size: .86em; }
         .app-list-item .del:hover { text-decoration: underline; }
+        .res-tag { flex: 0 0 auto; padding: 2px 8px; border-radius: 999px; background: #f4f7f6; border: 1px solid #e3e8e6; color: #0b3b8a; font-size: .75em; }
+        .resource-list .res-empty { grid-column: 1 / -1; color: #999; font-size: .85em; padding: 6px 2px; }
 
         .dyn-name-zh { font-size: .85em; color: #7f8c8d; margin-top: 2px; }
         .dyn-desc { font-size: .86em; color: #555; line-height: 1.75; margin-top: 10px; }
@@ -706,6 +708,36 @@
                     <div id="pubList" class="app-list"><p class="admin-hint">加载中…</p></div>
                 </div>
 
+                <div class="admin-sec">
+                    <div class="admin-sec-title">字体 / 电子书上传</div>
+                    <div class="admin-row">
+                        <div class="admin-field">
+                            <label>类型</label>
+                            <select id="resType" class="admin-input">
+                                <option value="fonts">བོད་ཡིག་ཡིག་གཟུགས། 字体</option>
+                                <option value="ebooks">བོད་ཡིག་འཕྲུལ་དེབ། 电子书</option>
+                            </select>
+                        </div>
+                        <div class="admin-field">
+                            <label>名称（藏文）</label>
+                            <input id="resNameTb" class="admin-input" type="text" placeholder="例：ཧི་མ་ལ་ཡའི་ཡིག་གཟུགས།">
+                        </div>
+                        <div class="admin-field">
+                            <label>中文名称（可选）</label>
+                            <input id="resNameZh" class="admin-input" type="text" placeholder="例：喜马拉雅字体">
+                        </div>
+                        <div class="admin-field">
+                            <label>下载链接</label>
+                            <input id="resUrl" class="admin-input" type="url" placeholder="https://www.123684.com/...">
+                        </div>
+                    </div>
+                    <div class="admin-actions">
+                        <button class="admin-btn primary" type="button" id="btnAddRes" onclick="addResource()">添加并发布</button>
+                    </div>
+                    <div id="resStatus" class="admin-ok"></div>
+                    <div id="resList" class="app-list"><p class="admin-hint">加载中…</p></div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -839,7 +871,30 @@
                         if (!dup) apps.push(a);
                     });
                     renderApps(apps);
+                    renderResources(remote);
                 });
+        }
+
+        /* ---------- 字体 / 电子书 渲染 ---------- */
+        function renderResources(data) {
+            var fUl = document.querySelector('#resourceFonts .resource-list');
+            var eUl = document.querySelector('#resourceEbooks .resource-list');
+            if (!fUl || !eUl) return;
+            if (!data) return;
+            fUl.innerHTML = buildResItems(data.fonts, '暂无字体');
+            eUl.innerHTML = buildResItems(data.ebooks, '暂无电子书');
+        }
+
+        function buildResItems(list, emptyText) {
+            if (!Array.isArray(list) || !list.length) {
+                return '<li class="res-empty">' + esc(emptyText) + '</li>';
+            }
+            return list.map(function (r) {
+                if (!r) return '';
+                var label = [r.name_tb, r.name_zh].filter(Boolean).join(' · ');
+                return '<li><a href="' + esc(r.url || '#') + '" target="_blank" rel="noopener">' +
+                    esc(label || '下载') + '</a></li>';
+            }).join('');
         }
 
         function readLocalApps() {
@@ -954,6 +1009,7 @@
             renderPlatGrid();
             renderThumbs();
             renderPublishedList();
+            renderResourceList();
         }
 
         function adminClosePanel() {
@@ -1223,7 +1279,8 @@
 
                 setStatus('正在写入软件列表…');
                 var file = await ghGetFile('data/apps.json');
-                var data = (file.json && Array.isArray(file.json.apps)) ? file.json : { apps: [] };
+                var data = (file.json && typeof file.json === 'object') ? file.json : {};
+                if (!Array.isArray(data.apps)) data.apps = [];
                 var idx = -1;
                 for (var j = 0; j < data.apps.length; j++) {
                     if (data.apps[j] && data.apps[j].id === app.id) idx = j;
@@ -1339,7 +1396,8 @@
                 var cfg = getGhCfg();
                 if (!cfg.token) throw new Error('删除需要先填写 GitHub Token。');
                 var file = await ghGetFile('data/apps.json');
-                var data = (file.json && Array.isArray(file.json.apps)) ? file.json : { apps: [] };
+                var data = (file.json && typeof file.json === 'object') ? file.json : {};
+                if (!Array.isArray(data.apps)) data.apps = [];
                 data.apps = data.apps.filter(function (a) { return a && a.id !== id; });
                 data.updated = new Date().toISOString();
                 await ghPut('data/apps.json', utf8ToB64(JSON.stringify(data, null, 2)),
@@ -1349,6 +1407,112 @@
                 renderPublishedList();
             } catch (e) {
                 setStatus(e.message, true);
+            }
+        }
+
+        /* ---------- 后台：字体 / 电子书 ---------- */
+        function setResStatus(msg, isErr) {
+            var el = document.getElementById('resStatus');
+            if (!el) return;
+            el.textContent = msg || '';
+            el.style.color = isErr ? '#c0392b' : '#1f7a4d';
+        }
+
+        async function fetchSiteData() {
+            try {
+                var f = await ghGetFile('data/apps.json');
+                if (f.json && typeof f.json === 'object') return f.json;
+            } catch (e) {}
+            try {
+                var r = await fetch('data/apps.json?t=' + Date.now(), { cache: 'no-store' });
+                if (r.ok) return await r.json();
+            } catch (e) {}
+            return { apps: [], fonts: [], ebooks: [] };
+        }
+
+        function renderResourceListFrom(data) {
+            var box = document.getElementById('resList');
+            if (!box) return;
+            var rows = [];
+            [['fonts', '字体'], ['ebooks', '电子书']].forEach(function (pair) {
+                (Array.isArray(data[pair[0]]) ? data[pair[0]] : []).forEach(function (r) {
+                    if (!r) return;
+                    rows.push(
+                        '<div class="app-list-item">' +
+                        '<span class="res-tag">' + pair[1] + '</span>' +
+                        '<div class="meta"><b>' + esc(r.name_zh || r.name_tb || '未命名') + '</b><small>' + esc(r.url || '') + '</small></div>' +
+                        '<button class="del" type="button" onclick="deleteResource(\'' + pair[0] + '\', \'' + esc(r.id) + '\')">删除</button>' +
+                        '</div>'
+                    );
+                });
+            });
+            box.innerHTML = rows.length ? rows.join('') : '<p class="admin-hint">暂无字体 / 电子书资源。</p>';
+        }
+
+        async function renderResourceList() {
+            var data = await fetchSiteData();
+            renderResourceListFrom(data);
+        }
+
+        async function addResource() {
+            var btn = document.getElementById('btnAddRes');
+            try {
+                var cfg = saveGhCfg(false);
+                if (!cfg.token) throw new Error('请先在“GitHub 发布设置”填写 Token。');
+
+                var type = document.getElementById('resType').value;
+                var nameTb = document.getElementById('resNameTb').value.trim();
+                var nameZh = document.getElementById('resNameZh').value.trim();
+                var url = document.getElementById('resUrl').value.trim();
+                if (!nameTb && !nameZh) throw new Error('请填写资源名称。');
+                if (!url) throw new Error('请填写下载链接。');
+
+                btn.disabled = true;
+                setResStatus('正在发布…');
+
+                var file = await ghGetFile('data/apps.json');
+                var data = (file.json && typeof file.json === 'object') ? file.json : {};
+                if (!Array.isArray(data.apps)) data.apps = [];
+                if (!Array.isArray(data.fonts)) data.fonts = [];
+                if (!Array.isArray(data.ebooks)) data.ebooks = [];
+                if (!Array.isArray(data[type])) data[type] = [];
+
+                data[type].push({ id: 'r' + Date.now().toString(36), name_tb: nameTb, name_zh: nameZh, url: url });
+                data.updated = new Date().toISOString();
+
+                await ghPut('data/apps.json', utf8ToB64(JSON.stringify(data, null, 2)),
+                    '新增资源：' + (nameZh || nameTb), file.sha);
+
+                document.getElementById('resNameTb').value = '';
+                document.getElementById('resNameZh').value = '';
+                document.getElementById('resUrl').value = '';
+                renderResources(data);
+                renderResourceListFrom(data);
+                setResStatus('已发布，约 1 分钟后全站生效。', false);
+            } catch (e) {
+                setResStatus(e.message, true);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function deleteResource(type, id) {
+            if (!confirm('确定要删除这个资源吗？')) return;
+            try {
+                var cfg = getGhCfg();
+                if (!cfg.token) throw new Error('删除需要先填写 GitHub Token。');
+                var file = await ghGetFile('data/apps.json');
+                var data = (file.json && typeof file.json === 'object') ? file.json : {};
+                if (!Array.isArray(data[type])) throw new Error('没有找到这类资源。');
+                data[type] = data[type].filter(function (x) { return x && x.id !== id; });
+                data.updated = new Date().toISOString();
+                await ghPut('data/apps.json', utf8ToB64(JSON.stringify(data, null, 2)),
+                    '删除资源：' + id, file.sha);
+                renderResources(data);
+                renderResourceListFrom(data);
+                setResStatus('已删除，约 1 分钟后全站生效。', false);
+            } catch (e) {
+                setResStatus(e.message, true);
             }
         }
 
