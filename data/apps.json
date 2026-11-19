@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T11:43:24.123Z",
+  "updated": "2026-11-19T11:44:12.643Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -145,6 +145,16 @@
         "win": {
           "label": "པཎྜི་ཏ། ⇌ ཧི་མ་ལ་ཡ།",
           "url": "https://khampa.lanzoue.com/iCz5y4gm1vni"
+        }
+      }
+    },
+    "soulday": {
+      "name_tb": "Soul Day བླ་གཟའ།",
+      "name_zh": "提取码：8888",
+      "platforms": {
+        "android": {
+          "label": "བླ་གཟའ་སོགས་བལྟ་བྱེད།",
+          "url": "https://www.123684.com/s/wu2Kvd-BuaoH"
         }
       }
     }
