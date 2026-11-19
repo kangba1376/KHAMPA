@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T04:41:29.614Z",
+  "updated": "2026-11-19T05:12:26.337Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -128,5 +128,25 @@
       "name_zh": "",
       "url": "https://khampa.lanzoue.com/i7wgp4gkuhbe"
     }
-  ]
+  ],
+  "overrides": {
+    "khamvert": {
+      "name_tb": "KHAMvert ཨང་བསྒྱུར།",
+      "name_zh": "",
+      "platforms": {
+        "android": {
+          "label": "པཎྜི་ཏ། ⇌ ཧི་མ་ལ་ཡ།",
+          "url": "https://www.123865.com/s/wu2Kvd-j8aoH"
+        },
+        "mac": {
+          "label": "པཎྜི་ཏ། ⇌ ཧི་མ་ལ་ཡ།",
+          "url": "https://www.123865.com/s/wu2Kvd-V8aoH"
+        },
+        "win": {
+          "label": "པཎྜི་ཏ། ⇌ ཧི་མ་ལ་ཡ།",
+          "url": "https://www.123865.com/s/wu2Kvd-68aoH"
+        }
+      }
+    }
+  }
 }
