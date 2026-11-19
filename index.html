@@ -279,6 +279,8 @@
         .app-list-item .del { border: none; background: none; color: #c0392b; cursor: pointer; font-family: inherit; font-size: .86em; }
         .app-list-item .del:hover { text-decoration: underline; }
         .app-list-item .del.restore { color: #1f7a4d; }
+        .app-list-item .del.edit { color: #0b3b8a; }
+        .edit-sub { margin: 14px 0 6px; font-size: .85em; font-weight: 700; color: #0b3b8a; border-top: 1px dashed #e3e8e6; padding-top: 10px; }
         .res-tag { flex: 0 0 auto; padding: 2px 8px; border-radius: 999px; background: #f4f7f6; border: 1px solid #e3e8e6; color: #0b3b8a; font-size: .75em; }
         .resource-list .res-empty { grid-column: 1 / -1; color: #999; font-size: .85em; padding: 6px 2px; }
 
@@ -387,7 +389,7 @@
     </div>
 
     <div id="download-content" class="card-container" style="display: none;">
-            <div class="card platform-card filter-android" data-app="khamvert">
+            <div class="card platform-card filter-android" data-app="khamvert" data-platform="android">
                 <div class="platform-top-icon"><img src="KHAMvert.PNG" alt="KHAMvert" width="62" height="62"></div>
         <span class="tibet-header">ཨན་དྲོལ་ཁ་པར་ནང་སྤྱོད་ཆོག་པའི་མཉེན་ཆས། (Android)</span>
         <div class="btn-group">
@@ -424,7 +426,7 @@
         </details>
     </div>
 
-    <div class="card platform-card filter-mac" data-app="khamvert">
+    <div class="card platform-card filter-mac" data-app="khamvert" data-platform="mac">
         <div class="platform-top-icon"><img src="KHAMvert.PNG" alt="KHAMvert" width="62" height="62"></div>
         <span class="tibet-header">Apple ཀུ་ཤུ་གློག་ཀླད་ནང་སྤྱོད་ཆོག་པའི་མཉེན་ཆས། (macOS)</span>
         <div class="btn-group">
@@ -464,7 +466,7 @@
         </details>
     </div>
 
-    <div class="card platform-card filter-win" data-app="khamvert">
+    <div class="card platform-card filter-win" data-app="khamvert" data-platform="win">
         <div class="platform-top-icon"><img src="KHAMvert.PNG" alt="KHAMvert" width="62" height="62"></div>
         <span class="tibet-header">Windows སྐར་ཁུང་མ་ལག་སྟེང་སྤྱོད་ཆོག་པའི་མཉེན་ཆས། </span>
         <div class="btn-group">
@@ -496,7 +498,7 @@
             </div>
         </details>
     </div>
-    <div class="card platform-card android-special filter-android" data-app="soulday">
+    <div class="card platform-card android-special filter-android" data-app="soulday" data-platform="android">
         <div class="platform-top-icon"><img src="Soul%20Day.PNG" alt="Soul Day" width="62" height="62"></div>
         <span class="tibet-header">ཨན་དྲོལ་ཁ་པར་ནང་སྤྱོད་ཆོག་པའི་མཉེན་ཆས། (Android)</span></span>
         <div class="btn-group">
@@ -743,6 +745,23 @@
         </div>
     </div>
 
+    <div id="editDlg" class="modal-backdrop" role="dialog" aria-modal="true">
+        <div class="modal admin-modal" style="max-width:560px;">
+            <div class="modal-header">
+                <div class="modal-title" id="editTitle">编辑</div>
+                <button class="modal-close" type="button" onclick="closeEdit()">✕</button>
+            </div>
+            <div class="modal-body admin-body">
+                <div id="editFields"></div>
+                <div class="admin-actions">
+                    <button class="admin-btn primary" type="button" id="btnSaveEdit" onclick="saveEdit()">保存修改</button>
+                    <button class="admin-btn" type="button" onclick="closeEdit()">取消</button>
+                </div>
+                <div id="editStatus" class="admin-ok"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function navigateTo(platform, appId) {
             var link = document.querySelector('.nav-link[data-platform="' + platform + '"]');
@@ -891,7 +910,48 @@
 
             renderApps(apps);
             applyHiddenToStatic(hidden);
+            applyOverrides(SITE_DATA.overrides);
             renderResources(SITE_DATA);
+        }
+
+        function applyOverrides(ov) {
+            if (!ov || typeof ov !== 'object') return;
+            Object.keys(ov).forEach(function (id) {
+                var o = ov[id];
+                if (!o) return;
+
+                var home = document.querySelector('.home-app[data-app="' + id + '"]');
+                if (home) {
+                    var tb = home.querySelector('.home-app-title-tb');
+                    if (tb && o.name_tb) tb.textContent = o.name_tb;
+                    var zh = home.querySelector('.home-app-title-zh');
+                    if (o.name_zh) {
+                        if (!zh) {
+                            zh = document.createElement('span');
+                            zh.className = 'home-app-title-zh';
+                            var titles = home.querySelector('.home-app-titles');
+                            if (titles) titles.appendChild(zh);
+                        }
+                        zh.textContent = o.name_zh;
+                    } else if (zh) {
+                        zh.textContent = '';
+                    }
+                }
+
+                var plats = o.platforms || {};
+                Object.keys(plats).forEach(function (p) {
+                    var cfg = plats[p] || {};
+                    var card = document.querySelector('.platform-card[data-app="' + id + '"][data-platform="' + p + '"]');
+                    if (!card) return;
+                    var a = card.querySelector('a.btn');
+                    if (!a) return;
+                    if (cfg.url) a.setAttribute('href', cfg.url);
+                    if (cfg.label) {
+                        var span = a.querySelector('span');
+                        if (span) span.textContent = cfg.label;
+                    }
+                });
+            });
         }
 
         function applyHiddenToStatic(hidden) {
@@ -1394,17 +1454,19 @@
             }
         }
 
-        async function renderPublishedList() {
+        async function renderPublishedList(dataOverride) {
             var box = document.getElementById('pubList');
             if (!box) return;
-            var data = null;
-            try {
-                data = (await ghGetFile('data/apps.json')).json;
-            } catch (e) {
+            var data = (dataOverride && typeof dataOverride === 'object') ? dataOverride : null;
+            if (!data) {
                 try {
-                    var r = await fetch('data/apps.json?t=' + Date.now(), { cache: 'no-store' });
-                    data = r.ok ? await r.json() : null;
-                } catch (e2) { data = null; }
+                    data = (await ghGetFile('data/apps.json')).json;
+                } catch (e) {
+                    try {
+                        var r = await fetch('data/apps.json?t=' + Date.now(), { cache: 'no-store' });
+                        data = r.ok ? await r.json() : null;
+                    } catch (e2) { data = null; }
+                }
             }
             var apps = (data && Array.isArray(data.apps)) ? data.apps : [];
             var hidden = (data && Array.isArray(data.hidden)) ? data.hidden : [];
@@ -1416,6 +1478,7 @@
                     '<div class="app-list-item">' +
                     '<img src="' + esc(b.logo) + '" alt="">' +
                     '<div class="meta"><b>' + esc(b.name) + '</b><small>内置软件' + (isHidden ? ' · 已从网站删除' : '') + '</small></div>' +
+                    '<button class="del edit" type="button" onclick="openEdit(\'builtin\', \'\', \'' + b.id + '\')">编辑</button>' +
                     (isHidden
                         ? '<button class="del restore" type="button" onclick="toggleBuiltin(\'' + b.id + '\', false)">恢复</button>'
                         : '<button class="del" type="button" onclick="toggleBuiltin(\'' + b.id + '\', true)">删除</button>') +
@@ -1433,6 +1496,7 @@
                     '<div class="app-list-item">' +
                     '<img src="' + esc(a.logo || 'favicon.ico') + '" alt="">' +
                     '<div class="meta"><b>' + esc(a.name_zh || a.name_tb || a.id) + '</b><small>' + esc(plats) + '</small></div>' +
+                    '<button class="del edit" type="button" onclick="openEdit(\'app\', \'\', \'' + esc(a.id) + '\')">编辑</button>' +
                     '<button class="del" type="button" onclick="deleteApp(\'' + esc(a.id) + '\')">删除</button>' +
                     '</div>'
                 );
@@ -1519,6 +1583,7 @@
                         '<div class="app-list-item">' +
                         '<span class="res-tag">' + pair[1] + '</span>' +
                         '<div class="meta"><b>' + esc(r.name_zh || r.name_tb || '未命名') + '</b><small>' + esc(r.url || '') + '</small></div>' +
+                        '<button class="del edit" type="button" onclick="openEdit(\'res\', \'' + pair[0] + '\', \'' + esc(r.id) + '\')">编辑</button>' +
                         '<button class="del" type="button" onclick="deleteResource(\'' + pair[0] + '\', \'' + esc(r.id) + '\')">删除</button>' +
                         '</div>'
                     );
@@ -1591,6 +1656,160 @@
                 setResStatus('已删除，约 1 分钟后全站生效。', false);
             } catch (e) {
                 setResStatus(e.message, true);
+            }
+        }
+
+        /* ---------- 后台：编辑 ---------- */
+        var EDITING = null;
+
+        function editField(label, id, value, type) {
+            var v = esc(value == null ? '' : String(value));
+            var input = (type === 'textarea')
+                ? '<textarea id="' + id + '" class="admin-input" rows="3">' + v + '</textarea>'
+                : '<input id="' + id + '" class="admin-input" type="' + (type || 'text') + '" value="' + v + '">';
+            return '<div class="admin-field" style="margin-bottom:10px;"><label>' + esc(label) + '</label>' + input + '</div>';
+        }
+
+        function setEditStatus(msg, isErr) {
+            var el = document.getElementById('editStatus');
+            if (!el) return;
+            el.textContent = msg || '';
+            el.style.color = isErr ? '#c0392b' : '#1f7a4d';
+        }
+
+        function closeEdit() {
+            document.getElementById('editDlg').style.display = 'none';
+            EDITING = null;
+            setEditStatus('');
+        }
+
+        async function openEdit(kind, type, id) {
+            var data = SITE_DATA || await fetchSiteData();
+            var fields = document.getElementById('editFields');
+            var title = document.getElementById('editTitle');
+            var html = '';
+            setEditStatus('');
+            EDITING = { kind: kind, type: type, id: id };
+
+            if (kind === 'res') {
+                var item = (Array.isArray(data[type]) ? data[type] : []).filter(function (x) { return x && x.id === id; })[0];
+                if (!item) { setEditStatus('没有找到这个资源。', true); return; }
+                title.textContent = (type === 'fonts' ? '编辑字体' : '编辑电子书');
+                html += editField('名称（藏文）', 'eNameTb', item.name_tb, 'text');
+                html += editField('中文名称（可选）', 'eNameZh', item.name_zh, 'text');
+                html += editField('下载链接', 'eUrl', item.url, 'url');
+            } else if (kind === 'app') {
+                var app = (Array.isArray(data.apps) ? data.apps : []).filter(function (x) { return x && x.id === id; })[0];
+                if (!app) { setEditStatus('没有找到这个软件。', true); return; }
+                title.textContent = '编辑软件';
+                html += editField('藏文名称', 'eNameTb', app.name_tb, 'text');
+                html += editField('中文 / 英文名称', 'eNameZh', app.name_zh, 'text');
+                html += editField('藏文说明', 'eDescTb', app.desc_tb, 'textarea');
+                html += editField('中文说明', 'eDescZh', app.desc_zh, 'textarea');
+                (app.platforms || []).forEach(function (p) {
+                    if (!p || !p.platform) return;
+                    var m = PLATFORM_META[p.platform] || { zh: p.platform };
+                    html += '<div class="edit-sub">' + esc(m.zh) + '</div>';
+                    html += editField(m.zh + ' 版本号', 'eVer_' + p.platform, p.version, 'text');
+                    html += editField(m.zh + ' 下载链接', 'eUrl_' + p.platform, p.url, 'url');
+                });
+            } else {
+                title.textContent = '编辑内置软件';
+                var ov = (data.overrides && data.overrides[id]) || {};
+                var home = document.querySelector('.home-app[data-app="' + id + '"]');
+                var tbEl = home ? home.querySelector('.home-app-title-tb') : null;
+                var zhEl = home ? home.querySelector('.home-app-title-zh') : null;
+                html += editField('藏文名称', 'eNameTb', ov.name_tb || (tbEl ? tbEl.textContent : ''), 'text');
+                html += editField('中文名称', 'eNameZh', ov.name_zh || (zhEl ? zhEl.textContent : ''), 'text');
+                var cards = document.querySelectorAll('.platform-card[data-app="' + id + '"][data-platform]');
+                for (var i = 0; i < cards.length; i++) {
+                    var card = cards[i];
+                    var p = card.getAttribute('data-platform');
+                    var m2 = PLATFORM_META[p] || { zh: p };
+                    var a = card.querySelector('a.btn');
+                    var span = a ? a.querySelector('span') : null;
+                    var cur = (ov.platforms && ov.platforms[p]) || {};
+                    html += '<div class="edit-sub">' + esc(m2.zh) + '</div>';
+                    html += editField(m2.zh + ' 按钮文字', 'eLabel_' + p, cur.label || (span ? span.textContent : ''), 'text');
+                    html += editField(m2.zh + ' 下载链接', 'eUrl_' + p, cur.url || (a ? a.getAttribute('href') : ''), 'url');
+                }
+            }
+
+            fields.innerHTML = html;
+            document.getElementById('editDlg').style.display = 'flex';
+        }
+
+        async function saveEdit() {
+            var btn = document.getElementById('btnSaveEdit');
+            try {
+                if (!EDITING) throw new Error('没有正在编辑的项目。');
+                var cfg = getGhCfg();
+                if (!cfg.token) throw new Error('保存修改需要先在“GitHub 发布设置”填写 Token。');
+                btn.disabled = true;
+                setEditStatus('正在保存…');
+
+                var file = await ghGetFile('data/apps.json');
+                var data = (file.json && typeof file.json === 'object') ? file.json : {};
+                var val = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+
+                if (EDITING.kind === 'res') {
+                    if (!Array.isArray(data[EDITING.type])) throw new Error('没有找到这类资源。');
+                    var it = data[EDITING.type].filter(function (x) { return x && x.id === EDITING.id; })[0];
+                    if (!it) throw new Error('没有找到这个资源。');
+                    it.name_tb = val('eNameTb');
+                    it.name_zh = val('eNameZh');
+                    it.url = val('eUrl');
+                    if (!it.url) throw new Error('下载链接不能为空。');
+                } else if (EDITING.kind === 'app') {
+                    var app = (Array.isArray(data.apps) ? data.apps : []).filter(function (x) { return x && x.id === EDITING.id; })[0];
+                    if (!app) throw new Error('没有找到这个软件。');
+                    app.name_tb = val('eNameTb');
+                    app.name_zh = val('eNameZh');
+                    app.desc_tb = val('eDescTb');
+                    app.desc_zh = val('eDescZh');
+                    (app.platforms || []).forEach(function (p) {
+                        if (!p || !p.platform) return;
+                        var v = val('eVer_' + p.platform);
+                        var u = val('eUrl_' + p.platform);
+                        if (v) p.version = v;
+                        if (u) p.url = u;
+                    });
+                } else {
+                    data.overrides = data.overrides || {};
+                    var ov = data.overrides[EDITING.id] || {};
+                    ov.name_tb = val('eNameTb');
+                    ov.name_zh = val('eNameZh');
+                    ov.platforms = ov.platforms || {};
+                    var cards = document.querySelectorAll('.platform-card[data-app="' + EDITING.id + '"][data-platform]');
+                    for (var i = 0; i < cards.length; i++) {
+                        var p = cards[i].getAttribute('data-platform');
+                        var o = ov.platforms[p] || {};
+                        var lb = val('eLabel_' + p);
+                        var u = val('eUrl_' + p);
+                        if (lb) o.label = lb;
+                        if (u) o.url = u;
+                        ov.platforms[p] = o;
+                    }
+                    data.overrides[EDITING.id] = ov;
+                    for (var k = 0; k < BUILTIN_APPS.length; k++) {
+                        if (BUILTIN_APPS[k].id === EDITING.id) {
+                            BUILTIN_APPS[k].name = ov.name_zh || ov.name_tb || BUILTIN_APPS[k].name;
+                        }
+                    }
+                }
+
+                data.updated = new Date().toISOString();
+                await ghPut('data/apps.json', utf8ToB64(JSON.stringify(data, null, 2)),
+                    '编辑：' + (EDITING.id || EDITING.type || ''), file.sha);
+
+                applySiteData(data);
+                renderPublishedList(data);
+                renderResourceListFrom(data);
+                setEditStatus('已保存，约 1 分钟后全站生效。', false);
+            } catch (e) {
+                setEditStatus(e.message, true);
+            } finally {
+                btn.disabled = false;
             }
         }
 
