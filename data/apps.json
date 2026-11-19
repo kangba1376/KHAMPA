@@ -1,24 +1,25 @@
 {
-  "updated": "2026-11-19T03:02:02.931Z",
-  "apps": [
-    {
-      "id": "appmwmys1p7",
-      "name_tb": "བོད་ཡིག་ཨང་བསྒྱུར་ཆེན་མོ།",
-      "name_zh": "藏文转换大师",
-      "logo": "data/uploads/appmwmys1p7-logo.png",
-      "screens": [
-        "data/uploads/appmwmys1p7-shot-1.jpg"
-      ],
-      "desc_tb": "ཕབ་ལེན་གསང་ཨང་། 8888",
-      "desc_zh": "提取密码：8888",
-      "platforms": [
-        {
-          "platform": "win",
-          "version": "3.0",
-          "url": "https://khampa.lanzoue.com/iGKZW4gkbori"
-        }
-      ],
-      "updated": "2026-11-19T03:01:56.251Z"
-    }
+  "updated": "2026-11-19T00:00:00Z",
+  "apps": [],
+  "fonts": [
+    { "id": "f1", "name_tb": "ཧི་མ་ལ་ཡའི་ཡིག་གཟུགས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-KUaoH" },
+    { "id": "f2", "name_tb": "སྨོན་ལམ་ཡིག་གཟུགས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-UUaoH" },
+    { "id": "f3", "name_tb": "པཎྜི་ཏའི་ཡིག་གཟུགས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-5UaoH" },
+    { "id": "f4", "name_tb": "དོན་ཡོད་ཡིག་གཟུགས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-7UaoH" },
+    { "id": "f5", "name_tb": "སཾ་བྷོ་ཊའི་ཡིག་གཟུགས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-bUaoH" },
+    { "id": "f6", "name_tb": "དབྱངས་ཅན་ཡིག་གཟུགས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-qUaoH" },
+    { "id": "f7", "name_tb": "ཧྥང་ཀྲིན་ཡིག་གཟུགས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-cUaoH" },
+    { "id": "f8", "name_tb": "རྨི་ལམ་ཡིག་གཟུགས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-tUaoH" },
+    { "id": "f9", "name_tb": "ཡིག་གཟུགས་སྣ་འཛོམས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-LUaoH" }
+  ],
+  "ebooks": [
+    { "id": "e1", "name_tb": "གདོང་ཀོང་སྤྲུལ་སྐུའི་རང་རྣམ།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-6UaoH" },
+    { "id": "e2", "name_tb": "སྡོམ་གསུམ་རྣམ་བཞག་མདོར་བསྡུས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-yUaoH" },
+    { "id": "e3", "name_tb": "བོད་ཀྱི་གསོ་བ་རིག་པའི་བྱུང་བ་མདོར་བསྡུས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-VUaoH" },
+    { "id": "e4", "name_tb": "དར་བཤད་འབེལ་གཏམ་པད་དཀར་ཕྲེང་བ།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-jUaoH" },
+    { "id": "e5", "name_tb": "ཆོས་ལུགས་ནས་བཤད་པའི་དུས་ཆེན་ནམ་དུས་བཟང་ངོས་འཛིན།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-TSaoH" },
+    { "id": "e6", "name_tb": "གསོ་སྦྱོང་དང་དབྱར་ཁས་ལེན་དགག་དབྱེ་བཅས་ཀྱི་དགོས་པ་དང་བྱ་ཚུལ།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-vSaoH" },
+    { "id": "e7", "name_tb": "བྲག་གཡབ་གདོང་ཀོང་སྤྲུལ་སྐུ་སྐུ་ཕྲེང་རིམ་བྱོན་གྱི་མཚན་ཐོ་དང་མཛད་རྣམ་མདོར་བསྡུས།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-dSaoH" },
+    { "id": "e8", "name_tb": "སུམ་ཅུ་པའི་བརྗོད་བྱའི་ཚིག་ཕྲད་ནང་གསེས་དང་བཅས་པ་དཔེ་གཞི་གཅིག་ཐོག་གི་དཔེར་བརྗོད།", "name_zh": "", "url": "https://www.123684.com/s/wu2Kvd-hSaoH" }
   ]
 }
