@@ -214,6 +214,83 @@
         #home-disclaimer { background: transparent; color: #9e9e9e; font-size: 0.62em; line-height: 1.7; padding: 14px 16px; border-top: 1px solid #eee; margin: 0 auto; text-align: left; max-width: 900px; }
         #home-disclaimer strong { color: #9e9e9e; font-weight: bold; }
         #home-disclaimer .copyright { margin-top: 10px; text-align: center; }
+
+        /* ================= 后台管理 & 动态软件 ================= */
+        .admin-fab {
+            position: fixed; right: 18px; bottom: 18px; z-index: 9000;
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 10px 16px; border-radius: 999px;
+            border: 1px solid #660000; background: #8B0000; color: #FFD700;
+            font-family: inherit; font-size: 14px; font-weight: bold; line-height: 1;
+            cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.28);
+            transition: background .2s, transform .2s;
+        }
+        .admin-fab:hover { background: #660000; transform: translateY(-2px); }
+
+        .admin-modal { width: min(1000px, 100%); max-height: min(92vh, 920px); }
+        .admin-body { padding: 16px 18px 22px; }
+        .admin-sec { border: 1px solid #eee; border-radius: 12px; padding: 14px; margin-bottom: 16px; background: #fcfcfc; }
+        .admin-sec-title { font-weight: bold; color: #8B0000; margin-bottom: 12px; font-size: .95em; }
+        .admin-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px; }
+        .admin-row.one { grid-template-columns: 1fr; }
+        .admin-field { display: flex; flex-direction: column; gap: 6px; }
+        .admin-field > label { font-size: .78em; color: #777; }
+        .admin-input {
+            width: 100%; box-sizing: border-box; padding: 9px 10px;
+            border: 1px solid #ddd; border-radius: 8px; background: #fff;
+            font-family: inherit; font-size: .9em; color: #333;
+        }
+        .admin-input:focus { outline: none; border-color: #8B0000; box-shadow: 0 0 0 3px rgba(139,0,0,.08); }
+        textarea.admin-input { min-height: 82px; resize: vertical; line-height: 1.6; }
+        .admin-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .admin-btn {
+            appearance: none; border: 1px solid #8B0000; background: #fff; color: #8B0000;
+            padding: 9px 16px; border-radius: 9px; cursor: pointer;
+            font-family: inherit; font-weight: bold; font-size: .86em;
+        }
+        .admin-btn:hover { background: #fbf1f1; }
+        .admin-btn.primary { background: #8B0000; color: #fff; }
+        .admin-btn.primary:hover { background: #660000; }
+        .admin-btn:disabled { opacity: .45; cursor: not-allowed; }
+        .admin-err { color: #c0392b; font-size: .8em; min-height: 18px; margin-top: 8px; }
+        .admin-ok { color: #1f7a4d; font-size: .8em; min-height: 18px; line-height: 1.6; }
+        .admin-hint { font-size: .8em; color: #777; line-height: 1.7; margin: 0 0 10px; }
+        .upload-trigger {
+            display: inline-flex; align-items: center; gap: 6px;
+            border: 1px dashed #8B0000; color: #8B0000; background: #fff;
+            padding: 8px 14px; border-radius: 9px; cursor: pointer; font-size: .82em;
+        }
+        .upload-trigger:hover { background: #fbf1f1; }
+        .thumb-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .thumb { position: relative; width: 92px; height: 92px; border: 1px solid #e3e3e3; border-radius: 10px; background: #fff; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .thumb img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .thumb button { position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; padding: 0; border: none; border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; font-size: 12px; line-height: 1; cursor: pointer; }
+        .plat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        .plat-item { border: 1px solid #e6e6e6; border-radius: 10px; padding: 10px; background: #fff; }
+        .plat-head { display: flex; align-items: center; gap: 8px; font-size: .85em; font-weight: bold; color: #0b3b8a; margin-bottom: 6px; }
+        .plat-item .admin-input { margin-top: 6px; }
+        .admin-token-note { font-size: .74em; color: #999; line-height: 1.7; margin: 10px 0 0; }
+        .app-list { margin-top: 6px; }
+        .app-list-item { display: flex; align-items: center; gap: 10px; padding: 9px 2px; border-bottom: 1px solid #f1f1f1; font-size: .84em; }
+        .app-list-item img { width: 32px; height: 32px; object-fit: contain; border: 1px solid #eee; border-radius: 6px; background: #fff; }
+        .app-list-item .meta { flex: 1; min-width: 0; }
+        .app-list-item .meta b { color: #0b3b8a; }
+        .app-list-item .meta small { display: block; color: #999; margin-top: 2px; }
+        .app-list-item .del { border: none; background: none; color: #c0392b; cursor: pointer; font-family: inherit; font-size: .86em; }
+        .app-list-item .del:hover { text-decoration: underline; }
+
+        .dyn-name-zh { font-size: .85em; color: #7f8c8d; margin-top: 2px; }
+        .dyn-desc { font-size: .86em; color: #555; line-height: 1.75; margin-top: 10px; }
+        .dyn-desc .tb { display: block; font-family: 'TibetWildYak'; color: #2980b9; margin-bottom: 8px; line-height: 1.8; }
+        .dyn-shots { display: flex; gap: 10px; overflow-x: auto; padding: 12px 0 4px; margin-top: 8px; }
+        .dyn-shots img { height: 152px; flex: 0 0 auto; object-fit: contain; background: #fff; border: 1px solid #eee; border-radius: 10px; cursor: zoom-in; }
+        .shot-lightbox { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,.84); cursor: zoom-out; }
+        .shot-lightbox img { max-width: 96vw; max-height: 92vh; object-fit: contain; border-radius: 8px; }
+
+        @media (max-width: 640px) {
+            .admin-row, .plat-grid { grid-template-columns: 1fr; }
+            .dyn-shots img { height: 118px; }
+        }
     </style>
 </head>
 <body>
@@ -240,7 +317,7 @@
     </div>
 
     <div id="home-content" style="display: block;">
-        <div class="home-apps">
+        <div class="home-apps" id="homeApps">
             <details class="home-app">
                 <summary>
                     <span class="home-app-summary">
@@ -509,6 +586,130 @@
         </div>
     </div>
 
+    <button id="adminFab" class="admin-fab" type="button" title="后台上传" onclick="adminOpen()">⚙ 后台上传</button>
+
+    <div id="shotLightbox" class="shot-lightbox" onclick="this.style.display='none'">
+        <img id="shotLightboxImg" alt="界面截图">
+    </div>
+
+    <div id="adminGate" class="modal-backdrop" role="dialog" aria-modal="true">
+        <div class="modal admin-modal" style="max-width:440px;">
+            <div class="modal-header">
+                <div class="modal-title">后台管理 / སྒྲིག་སྒྲིག་ཁུལ།</div>
+                <button class="modal-close" type="button" onclick="adminCloseGate()">✕</button>
+            </div>
+            <div class="modal-body admin-body">
+                <p class="admin-hint">请输入管理密码后进入上传后台。</p>
+                <div class="admin-field">
+                    <label>管理密码</label>
+                    <input id="adminPass" class="admin-input" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter'){adminLogin()}">
+                </div>
+                <div id="adminPassErr" class="admin-err"></div>
+                <div class="admin-actions">
+                    <button class="admin-btn primary" type="button" onclick="adminLogin()">进入后台</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminPanel" class="modal-backdrop" role="dialog" aria-modal="true">
+        <div class="modal admin-modal">
+            <div class="modal-header">
+                <div class="modal-title">上传软件 / མཉེན་ཆས་སྤེལ་སྒྲིག</div>
+                <button class="modal-close" type="button" onclick="adminClosePanel()">✕</button>
+            </div>
+            <div class="modal-body admin-body">
+
+                <div class="admin-sec">
+                    <div class="admin-sec-title">1. 软件基本信息</div>
+                    <div class="admin-row">
+                        <div class="admin-field">
+                            <label>藏文名称</label>
+                            <input id="fNameTb" class="admin-input" type="text" placeholder="例：KHAMvert ཨང་བསྒྱུར།">
+                        </div>
+                        <div class="admin-field">
+                            <label>中文 / 英文名称</label>
+                            <input id="fNameZh" class="admin-input" type="text" placeholder="例：KHAMvert 藏文输入法">
+                        </div>
+                    </div>
+                    <div class="admin-row" style="margin-top:12px;">
+                        <div class="admin-field">
+                            <label>软件 ID（可选，英文/数字；与已有 ID 相同则覆盖旧版本）</label>
+                            <input id="fId" class="admin-input" type="text" placeholder="留空自动生成，如 khamvert">
+                        </div>
+                        <div class="admin-field">
+                            <label>软件 Logo（1 张，建议正方形）</label>
+                            <label class="upload-trigger" for="fLogo">＋ 选择图片</label>
+                            <input id="fLogo" type="file" accept="image/*" style="display:none" onchange="onPickLogo(this)">
+                        </div>
+                    </div>
+                    <div class="thumb-grid" id="logoThumb"></div>
+                </div>
+
+                <div class="admin-sec">
+                    <div class="admin-sec-title">2. 功能界面截图（可多张）</div>
+                    <label class="upload-trigger" for="fScreens">＋ 添加界面截图</label>
+                    <input id="fScreens" type="file" accept="image/*" multiple style="display:none" onchange="onPickScreens(this)">
+                    <div class="thumb-grid" id="screenThumbs"></div>
+                </div>
+
+                <div class="admin-sec">
+                    <div class="admin-sec-title">3. 软件说明</div>
+                    <div class="admin-row one">
+                        <div class="admin-field">
+                            <label>藏文说明</label>
+                            <textarea id="fDescTb" class="admin-input" placeholder="བོད་ཡིག་གི་ངོ་སྤྲོད།"></textarea>
+                        </div>
+                        <div class="admin-field">
+                            <label>中文说明</label>
+                            <textarea id="fDescZh" class="admin-input" placeholder="软件功能、使用方法等介绍"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-sec">
+                    <div class="admin-sec-title">4. 版本与平台</div>
+                    <p class="admin-hint">勾选要发布的平台，填写版本号与下载链接（123 网盘、GitHub Release 等均可）。</p>
+                    <div class="plat-grid" id="platGrid"></div>
+                </div>
+
+                <div class="admin-sec">
+                    <div class="admin-sec-title">5. 发布</div>
+                    <div id="pubStatus" class="admin-ok"></div>
+                    <div class="admin-actions">
+                        <button class="admin-btn primary" type="button" id="btnPublish" onclick="publishApp()">发布到网站</button>
+                        <button class="admin-btn" type="button" onclick="saveLocalApp()">保存到本机预览</button>
+                        <button class="admin-btn" type="button" onclick="exportApps()">导出 apps.json</button>
+                        <button class="admin-btn" type="button" onclick="resetForm()">清空表单</button>
+                    </div>
+                    <p class="admin-hint" style="margin:10px 0 0;">“发布到网站”需要下方 GitHub 设置中的 Token；“保存到本机预览”只对当前浏览器可见。</p>
+                </div>
+
+                <div class="admin-sec">
+                    <div class="admin-sec-title">GitHub 发布设置</div>
+                    <div class="admin-row">
+                        <div class="admin-field"><label>仓库所有者</label><input id="ghOwner" class="admin-input" type="text" value="kangba1376"></div>
+                        <div class="admin-field"><label>仓库名</label><input id="ghRepo" class="admin-input" type="text" value="KHAMPA"></div>
+                        <div class="admin-field"><label>分支</label><input id="ghBranch" class="admin-input" type="text" value="main"></div>
+                        <div class="admin-field"><label>Personal Access Token（repo 权限）</label><input id="ghToken" class="admin-input" type="password" placeholder="ghp_... 仅保存在本机浏览器"></div>
+                    </div>
+                    <div class="admin-actions">
+                        <button class="admin-btn" type="button" onclick="saveGhCfg(true)">保存设置</button>
+                        <button class="admin-btn" type="button" onclick="testGh()">测试连接</button>
+                    </div>
+                    <div id="ghStatus" class="admin-err"></div>
+                    <p class="admin-token-note">Token 生成路径：GitHub → Settings → Developer settings → Personal access tokens → Generate new token（勾选 repo 权限）。Token 只保存在本机浏览器，不会上传到任何第三方服务器。</p>
+                </div>
+
+                <div class="admin-sec">
+                    <div class="admin-sec-title">已发布的软件</div>
+                    <div id="pubList" class="app-list"><p class="admin-hint">加载中…</p></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <script>
         function navigateTo(platform, appId) {
             var link = document.querySelector('.nav-link[data-platform="' + platform + '"]');
@@ -600,6 +801,558 @@
                 }
             });
         })();
+
+        /* ===================== 动态软件展示 & 后台上传 ===================== */
+        var ADMIN_PASSWORD = '08Maoniuxz##';
+        var ADMIN_FLAG = 'KHAMPA_ADMIN_OK';
+        var GH_KEY = 'KHAMPA_GH_CFG';
+        var LOCAL_KEY = 'KHAMPA_LOCAL_APPS';
+
+        var PLATFORM_META = {
+            win:     { zh: 'Windows',     tb: 'Windows པར་གཞི།',   btn: 'btn-win' },
+            android: { zh: '安卓 Android', tb: 'ཨན་དྲོལ་པར་གཞི།',  btn: 'btn-android' },
+            mac:     { zh: 'macOS',       tb: 'ཀུ་ཤུའི་གློག་ཀླད།', btn: 'btn-mac' }
+        };
+        var PLATFORM_ORDER = ['win', 'android', 'mac'];
+        var draft = { logo: null, screens: [] };
+
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+
+        function lockBody(on) {
+            try { document.body.style.overflow = on ? 'hidden' : ''; } catch (e) {}
+        }
+
+        /* ---------- 首页 / 分类页渲染 ---------- */
+        function loadApps() {
+            fetch('data/apps.json?t=' + Date.now(), { cache: 'no-store' })
+                .then(function (r) { return r.ok ? r.json() : null; })
+                .catch(function () { return null; })
+                .then(function (remote) {
+                    var apps = (remote && Array.isArray(remote.apps)) ? remote.apps.slice() : [];
+                    readLocalApps().forEach(function (a) {
+                        var dup = false;
+                        apps.forEach(function (x) { if (x && x.id === a.id) dup = true; });
+                        if (!dup) apps.push(a);
+                    });
+                    renderApps(apps);
+                });
+        }
+
+        function readLocalApps() {
+            try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]') || []; } catch (e) { return []; }
+        }
+        function writeLocalApps(list) {
+            try { localStorage.setItem(LOCAL_KEY, JSON.stringify(list)); } catch (e) {}
+        }
+
+        function renderApps(apps) {
+            var home = document.getElementById('homeApps');
+            var dl = document.getElementById('download-content');
+            if (!home || !dl) return;
+
+            var old = document.querySelectorAll('[data-dynamic="1"]');
+            for (var i = 0; i < old.length; i++) { old[i].parentNode.removeChild(old[i]); }
+            var globalCard = dl.querySelector('[data-global]');
+
+            (apps || []).forEach(function (app) {
+                if (!app) return;
+                var plats = (app.platforms || []).filter(function (p) { return p && PLATFORM_META[p.platform]; });
+                if (!plats.length) return;
+
+                var logo = app.logo || 'favicon.ico';
+                var nameTb = app.name_tb || app.name_zh || app.id || '';
+                var nameZh = app.name_zh || '';
+
+                /* 首页软件卡片 */
+                var btns = plats.map(function (p) {
+                    var m = PLATFORM_META[p.platform] || { tb: 'ཕབ་ལེན།', btn: 'btn-win' };
+                    return '<a href="javascript:void(0)" class="btn ' + m.btn + '" onclick="navigateTo(\'' + p.platform + '\', \'' + esc(app.id) + '\'); return false;"><span>' + esc(m.tb) + '</span></a>';
+                }).join('');
+
+                var d = document.createElement('details');
+                d.className = 'home-app';
+                d.setAttribute('data-dynamic', '1');
+                d.innerHTML =
+                    '<summary><span class="home-app-summary">' +
+                    '<img class="home-app-icon" src="' + esc(logo) + '" alt="' + esc(nameTb) + '">' +
+                    '<span class="home-app-titles"><span class="home-app-title-tb">' + esc(nameTb) + '</span>' +
+                    (nameZh ? '<span class="home-app-title-zh">' + esc(nameZh) + '</span>' : '') +
+                    '</span></span></summary>' +
+                    '<div class="home-app-versions"><div class="btn-group">' + btns + '</div></div>';
+                home.appendChild(d);
+
+                /* 各平台详情卡片 */
+                plats.forEach(function (p) {
+                    var m = PLATFORM_META[p.platform] || { zh: p.platform, tb: p.platform, btn: 'btn-win' };
+                    var shots = (app.screens || []).map(function (src) {
+                        return '<img src="' + esc(src) + '" alt="界面截图" onclick="showShot(this.src)">';
+                    }).join('');
+
+                    var desc = '';
+                    if (app.desc_tb) desc += '<span class="tb">' + esc(app.desc_tb).replace(/\n/g, '<br>') + '</span>';
+                    if (app.desc_zh) desc += '<span>' + esc(app.desc_zh).replace(/\n/g, '<br>') + '</span>';
+
+                    var card = document.createElement('div');
+                    card.className = 'card platform-card filter-' + p.platform;
+                    card.setAttribute('data-dynamic', '1');
+                    card.setAttribute('data-app', app.id);
+                    card.innerHTML =
+                        '<div class="platform-top-icon"><img src="' + esc(logo) + '" alt="' + esc(nameTb) + '"></div>' +
+                        '<span class="tibet-header">' + esc(nameTb) + '　' + esc(m.tb) + '</span>' +
+                        (nameZh || p.version ? '<div class="dyn-name-zh">' + esc(nameZh) + (p.version ? '　·　' + esc(p.version) : '') + '</div>' : '') +
+                        (desc ? '<div class="dyn-desc">' + desc + '</div>' : '') +
+                        (shots ? '<div class="dyn-shots">' + shots + '</div>' : '') +
+                        '<div class="btn-group"><a class="btn ' + m.btn + '" href="' + esc(p.url || '#') + '" target="_blank" rel="noopener"><span>ཕབ་ལེན། 下载' + (p.version ? ' ' + esc(p.version) : '') + '</span></a></div>';
+
+                    if (globalCard) dl.insertBefore(card, globalCard); else dl.appendChild(card);
+                });
+            });
+        }
+
+        function showShot(src) {
+            document.getElementById('shotLightboxImg').src = src;
+            document.getElementById('shotLightbox').style.display = 'flex';
+        }
+
+        /* ---------- 后台：登录 ---------- */
+        function adminOpen() {
+            try {
+                if (sessionStorage.getItem(ADMIN_FLAG) === '1') { adminPanelOpen(); return; }
+            } catch (e) {}
+            document.getElementById('adminPassErr').textContent = '';
+            var p = document.getElementById('adminPass');
+            p.value = '';
+            document.getElementById('adminGate').style.display = 'flex';
+            lockBody(true);
+            setTimeout(function () { try { p.focus(); } catch (e) {} }, 60);
+        }
+
+        function adminLogin() {
+            var val = document.getElementById('adminPass').value;
+            if (val === ADMIN_PASSWORD) {
+                try { sessionStorage.setItem(ADMIN_FLAG, '1'); } catch (e) {}
+                document.getElementById('adminGate').style.display = 'none';
+                adminPanelOpen();
+            } else {
+                document.getElementById('adminPassErr').textContent = '密码错误，请重新输入。';
+            }
+        }
+
+        function adminCloseGate() {
+            document.getElementById('adminGate').style.display = 'none';
+            lockBody(false);
+        }
+
+        function adminPanelOpen() {
+            document.getElementById('adminPanel').style.display = 'flex';
+            lockBody(true);
+            fillGhForm();
+            renderPlatGrid();
+            renderThumbs();
+            renderPublishedList();
+        }
+
+        function adminClosePanel() {
+            document.getElementById('adminPanel').style.display = 'none';
+            lockBody(false);
+        }
+
+        /* ---------- 后台：表单 ---------- */
+        function renderPlatGrid() {
+            var grid = document.getElementById('platGrid');
+            if (!grid || grid.getAttribute('data-ready') === '1') return;
+            grid.innerHTML = PLATFORM_ORDER.map(function (k) {
+                var m = PLATFORM_META[k];
+                return '<div class="plat-item">' +
+                    '<label class="plat-head"><input type="checkbox" data-plat="' + k + '"> ' + esc(m.zh) + ' / ' + esc(m.tb) + '</label>' +
+                    '<input class="admin-input" type="text" data-ver="' + k + '" placeholder="版本号，如 v1.2.0">' +
+                    '<input class="admin-input" type="url" data-url="' + k + '" placeholder="下载链接 https://...">' +
+                    '</div>';
+            }).join('');
+            grid.setAttribute('data-ready', '1');
+        }
+
+        function renderThumbs() {
+            var logoBox = document.getElementById('logoThumb');
+            logoBox.innerHTML = draft.logo
+                ? '<div class="thumb"><img src="' + draft.logo.dataURL + '" alt="logo"><button type="button" onclick="removeLogo()">✕</button></div>'
+                : '';
+            var box = document.getElementById('screenThumbs');
+            box.innerHTML = draft.screens.map(function (s, i) {
+                return '<div class="thumb"><img src="' + s.dataURL + '" alt="截图"><button type="button" onclick="removeScreen(' + i + ')">✕</button></div>';
+            }).join('');
+        }
+
+        function removeLogo() { draft.logo = null; renderThumbs(); }
+        function removeScreen(i) { draft.screens.splice(i, 1); renderThumbs(); }
+
+        function readAsDataURL(file) {
+            return new Promise(function (resolve, reject) {
+                var fr = new FileReader();
+                fr.onload = function () { resolve(fr.result); };
+                fr.onerror = function () { reject(new Error('图片读取失败')); };
+                fr.readAsDataURL(file);
+            });
+        }
+
+        function loadImage(src) {
+            return new Promise(function (resolve, reject) {
+                var img = new Image();
+                img.onload = function () { resolve(img); };
+                img.onerror = function () { reject(new Error('图片格式不支持')); };
+                img.src = src;
+            });
+        }
+
+        async function compressImage(file, maxDim, quality, keepPng) {
+            var src = await readAsDataURL(file);
+            if (file.type === 'image/gif') {
+                return { dataURL: src, base64: src.split(',')[1], ext: 'gif' };
+            }
+            var img = await loadImage(src);
+            var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+            var w = Math.max(1, Math.round(img.width * scale));
+            var h = Math.max(1, Math.round(img.height * scale));
+            var cv = document.createElement('canvas');
+            cv.width = w;
+            cv.height = h;
+            var ctx = cv.getContext('2d');
+            if (!keepPng) { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h); }
+            ctx.drawImage(img, 0, 0, w, h);
+            var out = keepPng ? cv.toDataURL('image/png') : cv.toDataURL('image/jpeg', quality);
+            return { dataURL: out, base64: out.split(',')[1], ext: keepPng ? 'png' : 'jpg' };
+        }
+
+        async function onPickLogo(input) {
+            var file = input.files && input.files[0];
+            input.value = '';
+            if (!file) return;
+            try {
+                draft.logo = await compressImage(file, 400, 0.92, true);
+                renderThumbs();
+            } catch (e) { alert(e.message); }
+        }
+
+        async function onPickScreens(input) {
+            var files = Array.prototype.slice.call(input.files || []);
+            input.value = '';
+            if (!files.length) return;
+            var room = 8 - draft.screens.length;
+            if (room <= 0) { alert('最多上传 8 张界面截图'); return; }
+            files = files.slice(0, room);
+            for (var i = 0; i < files.length; i++) {
+                try { draft.screens.push(await compressImage(files[i], 1200, 0.82, false)); }
+                catch (e) { alert(e.message); }
+            }
+            renderThumbs();
+        }
+
+        function collectApp() {
+            var nameTb = document.getElementById('fNameTb').value.trim();
+            var nameZh = document.getElementById('fNameZh').value.trim();
+            if (!nameTb && !nameZh) throw new Error('请填写软件名称（藏文或中文至少一项）。');
+
+            var id = document.getElementById('fId').value.trim().replace(/[^A-Za-z0-9_-]/g, '');
+            if (!id) id = 'app' + Date.now().toString(36);
+
+            var platforms = [];
+            var boxes = document.querySelectorAll('[data-plat]');
+            for (var i = 0; i < boxes.length; i++) {
+                if (!boxes[i].checked) continue;
+                var k = boxes[i].getAttribute('data-plat');
+                var ver = document.querySelector('[data-ver="' + k + '"]').value.trim();
+                var url = document.querySelector('[data-url="' + k + '"]').value.trim();
+                if (!url) throw new Error((PLATFORM_META[k] ? PLATFORM_META[k].zh : k) + ' 的下载链接不能为空。');
+                platforms.push({ platform: k, version: ver, url: url });
+            }
+            if (!platforms.length) throw new Error('请至少勾选一个平台。');
+
+            return {
+                id: id,
+                name_tb: nameTb,
+                name_zh: nameZh,
+                logo: '',
+                screens: [],
+                desc_tb: document.getElementById('fDescTb').value.trim(),
+                desc_zh: document.getElementById('fDescZh').value.trim(),
+                platforms: platforms,
+                updated: new Date().toISOString()
+            };
+        }
+
+        function resetForm() {
+            ['fNameTb', 'fNameZh', 'fId', 'fDescTb', 'fDescZh'].forEach(function (id) {
+                document.getElementById(id).value = '';
+            });
+            var boxes = document.querySelectorAll('[data-plat]');
+            for (var i = 0; i < boxes.length; i++) { boxes[i].checked = false; }
+            PLATFORM_ORDER.forEach(function (k) {
+                document.querySelector('[data-ver="' + k + '"]').value = '';
+                document.querySelector('[data-url="' + k + '"]').value = '';
+            });
+            draft = { logo: null, screens: [] };
+            renderThumbs();
+            setStatus('');
+        }
+
+        function setStatus(msg, isErr) {
+            var el = document.getElementById('pubStatus');
+            if (!el) return;
+            el.textContent = msg || '';
+            el.style.color = isErr ? '#c0392b' : '#1f7a4d';
+        }
+
+        function setGhStatus(msg, isErr) {
+            var el = document.getElementById('ghStatus');
+            if (!el) return;
+            el.textContent = msg || '';
+            el.style.color = isErr ? '#c0392b' : '#1f7a4d';
+        }
+
+        /* ---------- 后台：GitHub 接口 ---------- */
+        function getGhCfg() {
+            var cfg = { owner: 'kangba1376', repo: 'KHAMPA', branch: 'main', token: '' };
+            try {
+                var saved = JSON.parse(localStorage.getItem(GH_KEY) || '{}');
+                for (var k in cfg) {
+                    if (saved[k] !== undefined && saved[k] !== null && saved[k] !== '') cfg[k] = saved[k];
+                }
+            } catch (e) {}
+            return cfg;
+        }
+
+        function fillGhForm() {
+            var cfg = getGhCfg();
+            document.getElementById('ghOwner').value = cfg.owner;
+            document.getElementById('ghRepo').value = cfg.repo;
+            document.getElementById('ghBranch').value = cfg.branch;
+            document.getElementById('ghToken').value = cfg.token;
+        }
+
+        function saveGhCfg(showMsg) {
+            var cfg = {
+                owner: document.getElementById('ghOwner').value.trim(),
+                repo: document.getElementById('ghRepo').value.trim(),
+                branch: document.getElementById('ghBranch').value.trim() || 'main',
+                token: document.getElementById('ghToken').value.trim()
+            };
+            try { localStorage.setItem(GH_KEY, JSON.stringify(cfg)); } catch (e) {}
+            if (showMsg) setGhStatus('设置已保存在本机浏览器。', false);
+            return cfg;
+        }
+
+        function utf8ToB64(str) { return btoa(unescape(encodeURIComponent(str))); }
+        function b64ToUtf8(b64) { return decodeURIComponent(escape(atob(String(b64).replace(/\s/g, '')))); }
+
+        function ghHeaders() {
+            var cfg = getGhCfg();
+            var h = { 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' };
+            if (cfg.token) h['Authorization'] = 'Bearer ' + cfg.token;
+            return h;
+        }
+
+        function ghUrl(path) {
+            var cfg = getGhCfg();
+            return 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + path;
+        }
+
+        async function ghGetFile(path) {
+            var cfg = getGhCfg();
+            var res = await fetch(ghUrl(path) + '?ref=' + encodeURIComponent(cfg.branch), { headers: ghHeaders(), cache: 'no-store' });
+            if (res.status === 404) return { json: null, sha: null };
+            if (!res.ok) throw new Error('读取 ' + path + ' 失败（' + res.status + '）');
+            var data = await res.json();
+            var json = null;
+            try { json = JSON.parse(b64ToUtf8(data.content)); } catch (e) { json = null; }
+            return { json: json, sha: data.sha };
+        }
+
+        async function ghGetSha(path) {
+            try {
+                var cfg = getGhCfg();
+                var res = await fetch(ghUrl(path) + '?ref=' + encodeURIComponent(cfg.branch), { headers: ghHeaders(), cache: 'no-store' });
+                if (!res.ok) return null;
+                var data = await res.json();
+                return data && data.sha ? data.sha : null;
+            } catch (e) { return null; }
+        }
+
+        async function ghPut(path, base64, message, knownSha) {
+            var cfg = getGhCfg();
+            var sha = (knownSha === undefined) ? await ghGetSha(path) : knownSha;
+            var body = { message: message, content: base64, branch: cfg.branch };
+            if (sha) body.sha = sha;
+            var res = await fetch(ghUrl(path), { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+            if (!res.ok) {
+                var detail = '';
+                try { detail = (await res.json()).message || ''; } catch (e) {}
+                throw new Error('上传 ' + path + ' 失败（' + res.status + '）' + (detail ? '：' + detail : ''));
+            }
+            return res.json();
+        }
+
+        /* ---------- 后台：发布 ---------- */
+        async function publishApp() {
+            var btn = document.getElementById('btnPublish');
+            try {
+                var cfg = saveGhCfg(false);
+                if (!cfg.token) {
+                    setStatus('请先在下方“GitHub 发布设置”填写 Token；或使用“保存到本机预览”。', true);
+                    return;
+                }
+                var app = collectApp();
+                if (!draft.logo) throw new Error('请上传软件 Logo。');
+
+                btn.disabled = true;
+                setStatus('正在上传 Logo 与截图…');
+
+                app.logo = 'data/uploads/' + app.id + '-logo.' + draft.logo.ext;
+                await ghPut(app.logo, draft.logo.base64, '上传 ' + app.id + ' Logo');
+
+                app.screens = [];
+                for (var i = 0; i < draft.screens.length; i++) {
+                    var s = draft.screens[i];
+                    var p = 'data/uploads/' + app.id + '-shot-' + (i + 1) + '.' + s.ext;
+                    await ghPut(p, s.base64, '上传 ' + app.id + ' 截图 ' + (i + 1));
+                    app.screens.push(p);
+                }
+
+                setStatus('正在写入软件列表…');
+                var file = await ghGetFile('data/apps.json');
+                var data = (file.json && Array.isArray(file.json.apps)) ? file.json : { apps: [] };
+                var idx = -1;
+                for (var j = 0; j < data.apps.length; j++) {
+                    if (data.apps[j] && data.apps[j].id === app.id) idx = j;
+                }
+                if (idx >= 0) data.apps[idx] = app; else data.apps.push(app);
+                data.updated = new Date().toISOString();
+
+                await ghPut('data/apps.json', utf8ToB64(JSON.stringify(data, null, 2)),
+                    '发布软件：' + (app.name_zh || app.name_tb || app.id), file.sha);
+
+                renderApps(data.apps);
+                resetForm();
+                renderPublishedList();
+                setStatus('发布成功！GitHub Pages 约 1 分钟后更新，届时全站可见。', false);
+            } catch (e) {
+                setStatus(e.message || '发布失败，请检查网络或 Token 权限。', true);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function buildLocalApp() {
+            var app = collectApp();
+            if (!draft.logo) throw new Error('请上传软件 Logo。');
+            app.logo = draft.logo.dataURL;
+            app.screens = draft.screens.map(function (s) { return s.dataURL; });
+            return app;
+        }
+
+        function saveLocalApp() {
+            try {
+                var app = buildLocalApp();
+                var list = readLocalApps();
+                var idx = -1;
+                for (var i = 0; i < list.length; i++) { if (list[i].id === app.id) idx = i; }
+                if (idx >= 0) list[idx] = app; else list.push(app);
+                writeLocalApps(list);
+                loadApps();
+                setStatus('已保存到本机预览（仅当前浏览器可见）。', false);
+            } catch (e) {
+                setStatus(e.message, true);
+            }
+        }
+
+        function exportApps() {
+            try {
+                var app = buildLocalApp();
+                var local = readLocalApps();
+                var idx = -1;
+                for (var i = 0; i < local.length; i++) { if (local[i].id === app.id) idx = i; }
+                if (idx >= 0) local[idx] = app; else local.push(app);
+
+                var blob = new Blob([JSON.stringify({ updated: new Date().toISOString(), apps: local }, null, 2)], { type: 'application/json' });
+                var a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'apps.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setStatus('已导出 apps.json（图片已内嵌），放到仓库 data/ 目录即可全站生效。', false);
+            } catch (e) {
+                setStatus(e.message, true);
+            }
+        }
+
+        async function testGh() {
+            try {
+                setGhStatus('正在测试连接…', false);
+                saveGhCfg(false);
+                var cfg = getGhCfg();
+                if (!cfg.token) throw new Error('请先填写 Token。');
+                var file = await ghGetFile('data/apps.json');
+                setGhStatus('连接成功：' + cfg.owner + '/' + cfg.repo + ' @ ' + cfg.branch +
+                    '，已有 ' + ((file.json && file.json.apps) ? file.json.apps.length : 0) + ' 个后台上传的软件。', false);
+            } catch (e) {
+                setGhStatus(e.message || '连接失败，请检查 Token 权限（需 repo）。', true);
+            }
+        }
+
+        async function renderPublishedList() {
+            var box = document.getElementById('pubList');
+            if (!box) return;
+            var data = null;
+            try {
+                data = (await ghGetFile('data/apps.json')).json;
+            } catch (e) {
+                try {
+                    var r = await fetch('data/apps.json?t=' + Date.now(), { cache: 'no-store' });
+                    data = r.ok ? await r.json() : null;
+                } catch (e2) { data = null; }
+            }
+            var apps = (data && Array.isArray(data.apps)) ? data.apps : [];
+            if (!apps.length) {
+                box.innerHTML = '<p class="admin-hint">还没有通过后台上传的软件。</p>';
+                return;
+            }
+            box.innerHTML = apps.map(function (a) {
+                var plats = (a.platforms || []).map(function (p) {
+                    var m = PLATFORM_META[p.platform];
+                    return (m ? m.zh : p.platform) + (p.version ? ' ' + p.version : '');
+                }).join(' / ');
+                return '<div class="app-list-item">' +
+                    '<img src="' + esc(a.logo || 'favicon.ico') + '" alt="">' +
+                    '<div class="meta"><b>' + esc(a.name_zh || a.name_tb || a.id) + '</b><small>' + esc(plats) + '</small></div>' +
+                    '<button class="del" type="button" onclick="deleteApp(\'' + esc(a.id) + '\')">删除</button>' +
+                    '</div>';
+            }).join('');
+        }
+
+        async function deleteApp(id) {
+            if (!confirm('确定要从网站删除这个软件吗？')) return;
+            try {
+                var cfg = getGhCfg();
+                if (!cfg.token) throw new Error('删除需要先填写 GitHub Token。');
+                var file = await ghGetFile('data/apps.json');
+                var data = (file.json && Array.isArray(file.json.apps)) ? file.json : { apps: [] };
+                data.apps = data.apps.filter(function (a) { return a && a.id !== id; });
+                data.updated = new Date().toISOString();
+                await ghPut('data/apps.json', utf8ToB64(JSON.stringify(data, null, 2)),
+                    '删除软件：' + id, file.sha);
+                setStatus('已删除，约 1 分钟后全站生效。', false);
+                renderApps(data.apps);
+                renderPublishedList();
+            } catch (e) {
+                setStatus(e.message, true);
+            }
+        }
+
+        loadApps();
     </script>
 </body>
 </html>
