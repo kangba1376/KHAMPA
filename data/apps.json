@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T10:53:44.718Z",
+  "updated": "2026-11-21T10:54:35.322Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -149,7 +149,7 @@
       }
     },
     "soulday": {
-      "name_tb": "Soul Day བླ་གཟའ།",
+      "name_tb": "བླ་གཟའ་བལྟ་བྱེད།",
       "name_zh": "提取码：8888",
       "platforms": {
         "android": {
