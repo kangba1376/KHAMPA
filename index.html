@@ -134,6 +134,7 @@
         .home-app-versions .btn-group { margin-top: 10px; gap: 22px; }
         .home-apps-wrapper { position: relative; padding-bottom: 54px; }
         .home-apps.is-collapsed .home-app:nth-child(n+7) { display: none !important; }
+        .home-apps .is-page-hidden, .resource-list .is-page-hidden { display: none !important; }
         .software-more { position: absolute; right: 0; bottom: 10px; }
         @media (max-width: 820px) { .home-apps { grid-template-columns: 1fr; } }
 
@@ -1072,42 +1073,70 @@
             }).join('');
         }
 
+        function updateResourceGroup(group) {
+            var ul = group.querySelector('.resource-list');
+            var btn = group.querySelector('.resource-more');
+            if (!ul || !btn) return;
+            var items = ul.querySelectorAll('li:not(.res-empty)');
+            var limit = parseInt(ul.getAttribute('data-visible-count') || '3', 10);
+            if (limit < 3) limit = 3;
+            ul.classList.remove('is-collapsed');
+            for (var i = 0; i < items.length; i++) {
+                items[i].classList.toggle('is-page-hidden', i >= limit);
+            }
+            btn.classList.toggle('has-more', items.length > 3);
+            btn.textContent = items.length > 3 && limit >= items.length ? 'ཡར་སྐུམ།' : 'དེ་ལས་མང་།';
+        }
+
         function refreshResourceMore() {
             var groups = document.querySelectorAll('.home-resource-group');
-            for (var i = 0; i < groups.length; i++) {
-                var ul = groups[i].querySelector('.resource-list');
-                var btn = groups[i].querySelector('.resource-more');
-                if (!ul || !btn) continue;
-                var count = ul.querySelectorAll('li:not(.res-empty)').length;
-                btn.classList.toggle('has-more', count > 3);
-                ul.classList.add('is-collapsed');
-            }
+            for (var i = 0; i < groups.length; i++) updateResourceGroup(groups[i]);
         }
 
         function toggleResourceMore(type) {
             var group = document.querySelector('.home-resource-group[data-resource="' + type + '"]');
             var ul = group ? group.querySelector('.resource-list') : null;
             if (!ul) return;
-            ul.classList.toggle('is-collapsed');
+            var count = ul.querySelectorAll('li:not(.res-empty)').length;
+            var limit = parseInt(ul.getAttribute('data-visible-count') || '3', 10);
+            ul.setAttribute('data-visible-count', limit >= count ? '3' : String(limit + 3));
+            updateResourceGroup(group);
         }
 
-        function refreshSoftwareMore() {
+        function updateSoftwareMore() {
             var home = document.getElementById('homeApps');
             var btn = document.querySelector('.software-more');
             if (!home || !btn) return;
-            var items = home.querySelectorAll('.home-app');
-            var visible = 0;
-            for (var i = 0; i < items.length; i++) {
-                if (items[i].getAttribute('data-hidden') !== '1') visible++;
+            var all = home.querySelectorAll('.home-app');
+            var items = [];
+            for (var i = 0; i < all.length; i++) {
+                if (all[i].getAttribute('data-hidden') !== '1') items.push(all[i]);
             }
-            btn.classList.toggle('has-more', visible > 6);
-            home.classList.add('is-collapsed');
+            var limit = parseInt(home.getAttribute('data-visible-count') || '6', 10);
+            if (limit < 6) limit = 6;
+            home.classList.remove('is-collapsed');
+            for (var j = 0; j < items.length; j++) {
+                items[j].classList.toggle('is-page-hidden', j >= limit);
+            }
+            btn.classList.toggle('has-more', items.length > 6);
+            btn.textContent = items.length > 6 && limit >= items.length ? 'ཡར་སྐུམ།' : 'དེ་ལས་མང་།';
+        }
+
+        function refreshSoftwareMore() {
+            updateSoftwareMore();
         }
 
         function toggleSoftwareMore() {
             var home = document.getElementById('homeApps');
             if (!home) return;
-            home.classList.toggle('is-collapsed');
+            var count = 0;
+            var items = home.querySelectorAll('.home-app');
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].getAttribute('data-hidden') !== '1') count++;
+            }
+            var limit = parseInt(home.getAttribute('data-visible-count') || '6', 10);
+            home.setAttribute('data-visible-count', limit >= count ? '6' : String(limit + 6));
+            updateSoftwareMore();
         }
 
         function readLocalApps() {
