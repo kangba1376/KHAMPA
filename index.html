@@ -211,11 +211,9 @@
         .resource-list .sub { display: none; }
         @media (max-width: 760px) { .resource-list { grid-template-columns: 1fr; } }
 
-        .about-content { display: none; max-width: 900px; margin: 0 auto; padding: 24px 16px; color: #444; line-height: 1.95; }
-        .about-content .about-tb { color: #2980b9; font-family: 'TibetWildYak', sans-serif; }
-        .about-content .about-zh { margin-top: 12px; }
-        .site-footer { background: transparent; color: #9e9e9e; font-size: 0.62em; line-height: 1.7; margin: 0 auto; text-align: center; max-width: 900px; }
-        .site-footer .copyright { padding: 14px 16px; border-top: 1px solid #eee; cursor: default; }
+        #home-disclaimer { background: transparent; color: #9e9e9e; font-size: 0.62em; line-height: 1.7; padding: 14px 16px; border-top: 1px solid #eee; margin: 0 auto; text-align: left; max-width: 900px; }
+        #home-disclaimer strong { color: #9e9e9e; font-weight: bold; }
+        #home-disclaimer .copyright { margin-top: 10px; text-align: center; }
 
         /* ================= 后台管理 & 动态软件 ================= */
         .admin-fab {
@@ -314,7 +312,6 @@
             <a href="javascript:void(0)" class="nav-link" data-platform="win" onclick="filterContent('win', this); return false;">Windowsཔར་གཞི།</a>
             <a href="javascript:void(0)" class="nav-link" data-platform="android" onclick="filterContent('android', this); return false;">ཨན་དྲོལ་པར་གཞི།</a>
             <a href="javascript:void(0)" class="nav-link" data-platform="mac" onclick="filterContent('mac', this); return false;">ཀུ་ཤུའི་པར་གཞི།</a>
-            <a href="javascript:void(0)" class="nav-link" data-platform="about" onclick="filterContent('about', this); return false;">ངེད་ཀྱི་སྐོར།</a>
         </div>
     </nav>
 
@@ -550,12 +547,10 @@
             </div>
     </div>
     </div>
-    <div id="about-content" class="about-content">
-        <div class="about-tb"><strong>འགན་སེལ་གསལ་བཤད།：</strong>དྲ་ཚིགས་འདིས་མཉེན་ཆས་ཀྱི་ཆ་འཕྲིན་དང་ཕབ་ལེན་ལམ་སྟོན་ཁོ་ན་མཁོ་འདོན་ཞུ་བ་དང་། མཉེན་ཆས་དང་ཆ་འཕྲིན་སོགས་ནི་ (AS IS) “ད་ཡོད་གནས་བབས་ཇི་བཞིན་” དུ་མཁོ་འདོན་ཞུས་པ་ལགས་པས། (ཁྲིམས་ལུགས་ཀྱི་ཆོག་མཆན་ཁྱབ་ཁོངས་ནང་ཚུད།) དྲ་ཚིགས་འདི་ནས་ཕབ་ལེན་དང་སྒྲིག་འཇུག དེ་བཞིན་བེད་སྤྱོད་བྱས་པ་ལས་བྱུང་བའི་གྱོང་གུན་སོགས་ཀྱི་ཐད་ངེད་དྲ་ཚིགས་སམ་དྲ་བདག་གིས་འགན་འཁྲི་གང་ཡང་མི་ཁུར། མཉེན་ཆས་སོ་སོའི་བདག་དབང་དང་འགན་འཁྲི་ནི་མཉེན་ཆས་གསར་སྤེལ་བར་ཡོད་པ་ཡིན།།</div>
-        <div class="about-zh"><strong>免责声明：</strong>本网站仅提供软件信息与下载引导；软件版权与责任归原作者/权利人所有。如有侵权或合规问题请联系下架处理。所提供内容按“现状”(AS IS)呈现；在法律允许范围内，本网站不承担因下载、安装或使用产生的任何损失与责任。下载或使用即视为您已阅读并同意本声明，并承诺依法合规使用。</div>
-    </div>
-    <div id="home-disclaimer" class="site-footer">
-        <div class="copyright" title="双击进入后台" ondblclick="adminOpen()">© ༢༠༢༦ ཁམས་པ་ཚང་། KHAM PA TSANG 406015530@qq.com</div>
+    <div id="home-disclaimer">
+        <strong>འགན་སེལ་གསལ་བཤད།：</strong>དྲ་ཚིགས་འདིས་མཉེན་ཆས་ཀྱི་ཆ་འཕྲིན་དང་ཕབ་ལེན་ལམ་སྟོན་ཁོ་ན་མཁོ་འདོན་ཞུ་བ་དང་། མཉེན་ཆས་དང་ཆ་འཕྲིན་སོགས་ནི་ (AS IS) “ད་ཡོད་གནས་བབས་ཇི་བཞིན་” དུ་མཁོ་འདོན་ཞུས་པ་ལགས་པས། (ཁྲིམས་ལུགས་ཀྱི་ཆོག་མཆན་ཁྱབ་ཁོངས་ནང་ཚུད།) དྲ་ཚིགས་འདི་ནས་ཕབ་ལེན་དང་སྒྲིག་འཇུག དེ་བཞིན་བེད་སྤྱོད་བྱས་པ་ལས་བྱུང་བའི་གྱོང་གུན་སོགས་ཀྱི་ཐད་ངེད་དྲ་ཚིགས་སམ་དྲ་བདག་གིས་འགན་འཁྲི་གང་ཡང་མི་ཁུར། མཉེན་ཆས་སོ་སོའི་བདག་དབང་དང་འགན་འཁྲི་ནི་མཉེན་ཆས་གསར་སྤེལ་བར་ཡོད་པ་ཡིན།།<br>
+        <strong>免责声明：</strong>本网站仅提供软件信息与下载引导；软件版权与责任归原作者/权利人所有。如有侵权或合规问题请联系下架处理。所提供内容按“现状”(AS IS)呈现；在法律允许范围内，本网站不承担因下载、安装或使用产生的任何损失与责任。下载或使用即视为您已阅读并同意本声明，并承诺依法合规使用。
+        <div class="copyright">© ༢༠༢༦ ཁམས་པ་ཚང་། KHAM PA TSANG 406015530@qq.com</div>
     </div>
 
     <div id="resourceModal" class="modal-backdrop" role="dialog" aria-modal="true">
@@ -595,6 +590,8 @@
             </div>
         </div>
     </div>
+
+    <button id="adminFab" class="admin-fab" type="button" title="后台上传" onclick="adminOpen()">⚙ 后台上传</button>
 
     <div id="shotLightbox" class="shot-lightbox" onclick="this.style.display='none'">
         <img id="shotLightboxImg" alt="界面截图">
@@ -788,17 +785,15 @@
             }
 
             var homeContent = document.getElementById('home-content');
-            var aboutContent = document.getElementById('about-content');
             var homeDisclaimer = document.getElementById('home-disclaimer');
 
             if (platform === 'all') {
                 homeContent.style.display = 'block';
-                aboutContent.style.display = 'none';
+                homeDisclaimer.style.display = 'block';
             } else {
                 homeContent.style.display = 'none';
-                aboutContent.style.display = (platform === 'about') ? 'block' : 'none';
+                homeDisclaimer.style.display = 'none';
             }
-            homeDisclaimer.style.display = 'block';
 
             var downloadContent = document.getElementById('download-content');
             if (platform === 'all') {
@@ -2054,13 +2049,6 @@
                 btn.disabled = false;
             }
         }
-
-        document.addEventListener('keydown', function (e) {
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-                e.preventDefault();
-                adminOpen();
-            }
-        });
 
         loadApps();
     </script>
