@@ -1,209 +1,211 @@
 {
-  "updated": "2026-11-22T23:29:49.829Z",
-  "apps": [
-    {
-      "id": "appmwn1zluk",
-      "name_tb": "བོད་ཡིག་ཨང་བསྒྱུར་ཆེན་མོ།",
-      "name_zh": "藏文转换大师",
-      "logo": "data/uploads/appmwn1zluk-logo.png",
-      "screens": [
-        "data/uploads/appmwn1zluk-shot-1.jpg",
-        "data/uploads/appmwn1zluk-shot-2.jpg"
-      ],
-      "desc_tb": "ཕབ་ལེན་གསང་ཨང་། 8888",
-      "desc_zh": "提取密码：8888",
-      "platforms": [
-        {
-          "platform": "win",
-          "version": "",
-          "url": "https://khampa.lanzoue.com/iGKZW4gkbori"
-        }
-      ],
-      "updated": "2026-11-19T04:31:47.804Z"
-    }
-  ],
-  "hidden": [],
-  "fonts": [
-    {
-      "id": "f1",
-      "name_tb": "ཧི་མ་ལ་ཡའི་ཡིག་གཟུགས།",
-      "name_zh": "喜马拉雅藏文字体",
-      "url": "https://www.123684.com/s/wu2Kvd-KUaoH"
-    },
-    {
-      "id": "f2",
-      "name_tb": "སྨོན་ལམ་ཡིག་གཟུགས།",
-      "name_zh": "莫兰藏文字体",
-      "url": "https://www.123684.com/s/wu2Kvd-UUaoH"
-    },
-    {
-      "id": "f3",
-      "name_tb": "པཎྜི་ཏའི་ཡིག་གཟུགས།",
-      "name_zh": "班智达藏文字体",
-      "url": "https://www.123684.com/s/wu2Kvd-5UaoH"
-    },
-    {
-      "id": "f4",
-      "name_tb": "དོན་ཡོད་ཡིག་གཟུགས།",
-      "name_zh": "同元藏文字体",
-      "url": "https://www.123684.com/s/wu2Kvd-7UaoH"
-    },
-    {
-      "id": "f5",
-      "name_tb": "སཾ་བྷོ་ཊའི་ཡིག་གཟུགས།",
-      "name_zh": "桑布扎藏文字体",
-      "url": "https://www.123684.com/s/wu2Kvd-bUaoH"
-    },
-    {
-      "id": "f6",
-      "name_tb": "དབྱངས་ཅན་ཡིག་གཟུགས།",
-      "name_zh": "央金藏文字体",
-      "url": "https://www.123684.com/s/wu2Kvd-qUaoH"
-    },
-    {
-      "id": "f7",
-      "name_tb": "ཧྥང་ཀྲིན་ཡིག་གཟུགས།",
-      "name_zh": "方正藏文字体",
-      "url": "https://www.123684.com/s/wu2Kvd-cUaoH"
-    },
-    {
-      "id": "f8",
-      "name_tb": "རྨི་ལམ་ཡིག་གཟུགས།",
-      "name_zh": "米兰藏文字体",
-      "url": "https://www.123684.com/s/wu2Kvd-tUaoH"
-    },
-    {
-      "id": "f9",
-      "name_tb": "ཡིག་གཟུགས་སྣ་འཛོམས།",
-      "name_zh": "各种藏文字体合集",
-      "url": "https://www.123684.com/s/wu2Kvd-LUaoH"
-    }
-  ],
-  "ebooks": [
-    {
-      "id": "e1",
-      "name_tb": "གདོང་ཀོང་སྤྲུལ་སྐུའི་རང་རྣམ།",
-      "name_zh": "",
-      "url": "https://khampa.lanzoue.com/iMgJa4glyh8b"
-    },
-    {
-      "id": "e2",
-      "name_tb": "སྡོམ་གསུམ་རྣམ་བཞག་མདོར་བསྡུས།",
-      "name_zh": "",
-      "url": "https://khampa.lanzoue.com/ixbdT4glyi8h"
-    },
-    {
-      "id": "e3",
-      "name_tb": "བོད་ཀྱི་གསོ་བ་རིག་པའི་བྱུང་བ་མདོར་བསྡུས།",
-      "name_zh": "",
-      "url": "https://khampa.lanzoue.com/iTfe04glyi0j"
-    },
-    {
-      "id": "e4",
-      "name_tb": "དར་བཤད་འབེལ་གཏམ་པད་དཀར་ཕྲེང་བ།",
-      "name_zh": "",
-      "url": "https://khampa.lanzoue.com/iJqQu4glyhtc"
-    },
-    {
-      "id": "e5",
-      "name_tb": "ཆོས་ལུགས་ནས་བཤད་པའི་དུས་ཆེན་ནམ་དུས་བཟང་ངོས་འཛིན།",
-      "name_zh": "",
-      "url": "https://khampa.lanzoue.com/iCMLe4glyhmf"
-    },
-    {
-      "id": "e6",
-      "name_tb": "གསོ་སྦྱོང་དང་དབྱར་ཁས་ལེན་དགག་དབྱེ་བཅས་ཀྱི་དགོས་པ་དང་བྱ་ཚུལ།",
-      "name_zh": "",
-      "url": "https://khampa.lanzoue.com/ii2GB4glyhfi"
-    },
-    {
-      "id": "e8",
-      "name_tb": "སུམ་ཅུ་པའི་བརྗོད་བྱའི་ཚིག་ཕྲད་ནང་གསེས་དང་བཅས་པ་དཔེ་གཞི་གཅིག་ཐོག་གི་དཔེར་བརྗོད།",
-      "name_zh": "",
-      "url": "https://khampa.lanzoue.com/iKmSh4glzjri"
-    },
-    {
-      "id": "rmwn25adl",
-      "name_tb": "བྲག་གཡབ་གདོང་ཀོང་སྤྲུལ་སྐུ་སྐུ་ཕྲེང་རིམ་བྱོན་གྱི་མཚན་ཐོ་དང་མཛད་རྣམ་མདོར་བསྡུས།",
-      "name_zh": "",
-      "url": "https://khampa.lanzoue.com/i7wgp4gkuhbe"
-    },
-    {
-      "id": "rmwr4djxj",
-      "name_tb": "སྔགས་ཀྱི་བཀླག་ཐབས་བསྡུས་པ།",
-      "name_zh": "",
-      "url": "https://khampa.lanzoue.com/ipCnP4gxuzqf"
-    }
-  ],
-  "overrides": {
-    "khamvert": {
-      "name_tb": "ཧི་མ་ལ་ཡ། ⇆ པཎྚི་ཏ།",
-      "name_zh": "喜马拉雅 ⇆ 班智达",
-      "platforms": {
-        "win": {
-          "enabled": true,
-          "version": "",
-          "url": "https://khampa.lanzoue.com/iCz5y4gm1vni",
-          "label": "ཕབ་ལེན། / 下载"
-        },
-        "android": {
-          "enabled": true,
-          "version": "",
-          "url": "https://khampa.lanzoue.com/i0fTZ4caq4wj",
-          "label": "ཕབ་ལེན། / 下载"
-        },
-        "mac": {
-          "enabled": true,
-          "version": "",
-          "url": "https://khampa.lanzoue.com/iyz6w4gm1vza",
-          "label": "ཕབ་ལེན། / 下载"
-        }
-      },
-      "desc_tb": "ཕབ་ལེན་གསང་ཨང་། 8888",
-      "desc_zh": "提取码：8888",
-      "logo": "KHAMvert.PNG",
-      "screens": [
-        "data/uploads/khamvert-shot-mwrpm8mb-1.jpg",
-        "data/uploads/khamvert-shot-mwrpm8mb-2.jpg"
-      ]
-    },
-    "soulday": {
-      "name_tb": "བླ་གཟའ་བལྟ་བྱེད།",
-      "name_zh": "查看五行、星耀",
-      "platforms": {
-        "win": {
-          "enabled": false,
-          "version": "",
-          "url": "",
-          "label": ""
-        },
-        "android": {
-          "enabled": true,
-          "version": "",
-          "url": "https://khampa.lanzoue.com/iDHv64caq5ib",
-          "label": "ཕབ་ལེན། / 下载"
-        },
-        "mac": {
-          "enabled": false,
-          "version": "",
-          "url": "",
-          "label": ""
-        }
-      },
-      "desc_tb": "ཕབ་ལེན་གསང་ཨང་། 8888",
-      "desc_zh": "提取码：8888",
-      "logo": "Soul Day.PNG",
-      "screens": [
-        "data/uploads/soulday-shot-mwrppfwy-1.jpg",
-        "data/uploads/soulday-shot-mwrppfwy-2.jpg",
-        "data/uploads/soulday-shot-mwrppfwy-3.jpg"
-      ]
-    }
-  },
-  "about": {
-    "body_tb": "དྲ་ཚིགས་འདི་ནས་མཁོ་སྤྲོད་ཞུས་པའི་མཉེན་ཆས་( ཧི་མ་ལ་ཡ། ⇆ པཎྚི་ཏ། ) ཡིག་ཨང་བརྗེ་སྒྱུར་དང་། ( བླ་གཟའ་བལྟ་བྱེད། ) མཉེན་ཆས་གཉིས་ནི་iOS ཀུ་ཤུ་ཁ་པར་དང་འཆང་བཟུང་གི་པར་གཞི་ཁག་རྒྱལ་སྤྱིའི་ཀུ་ཤུའི་མཉེན་སྒྲོམ་ App Store ནང་དངོས་སུ་འགྲེམས་སྤེལ་ཟིན་པས། ཐད་ཀར་མཉེན་ཆས་ཕབ་ལེན་ཁུལ་ནས་（ཁམས་པ་ཚང་།，བོད་ཡིག，康巴仓，藏文）མིང་འདི་དག་བཤེར་འཚོལ་བྱས་ཏེ་ཕབ་ལེན་གནང་ཆོག གཞན་ཡང་ MacOS (M རིམ་པ་དང་ Intel རིམ་པ་རིགས་གཉིས་ཀར་) པར་གཞིའི་མིང་རྟགས་བཤེར་དཔང་ (Signature Verification) ལེགས་གྲུབ་བྱུང་ཡོད་པས། དྲ་ཚིགས་འདི་ནས་པར་གཞི་རིམ་པ་གསར་ཤོས་དག་ཕབ་ལེན་བྱོས་དང་འཐུས།",
-    "body_zh": "此网站提供的（喜马拉雅 ⇆ 班智达）编码转换软件和 （查看五行、星耀）两个软件的iOS (iPhone/iPad) 版本现已在国际 App Store 正式发布。您可以直接在苹果应用商店搜索（ཁམས་པ་ཚང་།，བོད་ཡིག，康巴仓，藏文）关键词进行下载安装。此外，MacOS 通用版本（包括M1-M4及Intel系列）也已通过签名验证。您可以直接在本网站下载最新版本的安装包。",
-    "disclaimer_tb": "འགན་སེལ་གསལ་བཤད།：དྲ་ཚིགས་འདིས་མཉེན་ཆས་ཀྱི་ཆ་འཕྲིན་དང་ཕབ་ལེན་ལམ་སྟོན་ཁོ་ན་མཁོ་འདོན་ཞུ་བ་དང་། མཉེན་ཆས་དང་ཆ་འཕྲིན་སོགས་ནི་ (AS IS) “ད་ཡོད་གནས་བབས་ཇི་བཞིན་” དུ་མཁོ་འདོན་ཞུས་པ་ལགས་པས། (ཁྲིམས་ལུགས་ཀྱི་ཆོག་མཆན་ཁྱབ་ཁོངས་ནང་ཚུད།) དྲ་ཚིགས་འདི་ནས་ཕབ་ལེན་དང་སྒྲིག་འཇུག དེ་བཞིན་བེད་སྤྱོད་བྱས་པ་ལས་བྱུང་བའི་གྱོང་གུན་སོགས་ཀྱི་ཐད་ངེད་དྲ་ཚིགས་སམ་དྲ་བདག་གིས་འགན་འཁྲི་གང་ཡང་མི་ཁུར། མཉེན་ཆས་སོ་སོའི་བདག་དབང་དང་འགན་འཁྲི་ནི་མཉེན་ཆས་གསར་སྤེལ་བར་ཡོད་པ་ཡིན།།",
-    "disclaimer_zh": "免责声明：本网站仅提供软件信息与下载引导；软件版权与责任归原作者/权利人所有。如有侵权或合规问题请联系下架处理。所提供内容按“现状”(AS IS)呈现；在法律允许范围内，本网站不承担因下载、安装或使用产生的任何损失与责任。下载或使用即视为您已阅读并同意本声明，并承诺依法合规使用。"
-  }
+    "updated":  "2026-11-22T23:31:49.9813875Z",
+    "apps":  [
+                 {
+                     "id":  "appmwn1zluk",
+                     "name_tb":  "བོད་ཡིག་ཨང་བསྒྱུར་ཆེན་མོ།",
+                     "name_zh":  "藏文转换大师",
+                     "logo":  "data/uploads/appmwn1zluk-logo.png",
+                     "screens":  [
+                                     "data/uploads/appmwn1zluk-shot-1.jpg",
+                                     "data/uploads/appmwn1zluk-shot-2.jpg"
+                                 ],
+                     "desc_tb":  "ཕབ་ལེན་གསང་ཨང་། 8888",
+                     "desc_zh":  "提取密码：8888",
+                     "platforms":  [
+                                       {
+                                           "platform":  "win",
+                                           "version":  "",
+                                           "url":  "https://khampa.lanzoue.com/iGKZW4gkbori"
+                                       }
+                                   ],
+                     "updated":  "2026-11-19T04:31:47.804Z"
+                 }
+             ],
+    "hidden":  [
+
+               ],
+    "fonts":  [
+                  {
+                      "id":  "f1",
+                      "name_tb":  "ཧི་མ་ལ་ཡའི་ཡིག་གཟུགས།",
+                      "name_zh":  "喜马拉雅藏文字体",
+                      "url":  "https://www.123684.com/s/wu2Kvd-KUaoH"
+                  },
+                  {
+                      "id":  "f2",
+                      "name_tb":  "སྨོན་ལམ་ཡིག་གཟུགས།",
+                      "name_zh":  "莫兰藏文字体",
+                      "url":  "https://www.123684.com/s/wu2Kvd-UUaoH"
+                  },
+                  {
+                      "id":  "f3",
+                      "name_tb":  "པཎྜི་ཏའི་ཡིག་གཟུགས།",
+                      "name_zh":  "班智达藏文字体",
+                      "url":  "https://www.123684.com/s/wu2Kvd-5UaoH"
+                  },
+                  {
+                      "id":  "f4",
+                      "name_tb":  "དོན་ཡོད་ཡིག་གཟུགས།",
+                      "name_zh":  "同元藏文字体",
+                      "url":  "https://www.123684.com/s/wu2Kvd-7UaoH"
+                  },
+                  {
+                      "id":  "f5",
+                      "name_tb":  "སཾ་བྷོ་ཊའི་ཡིག་གཟུགས།",
+                      "name_zh":  "桑布扎藏文字体",
+                      "url":  "https://www.123684.com/s/wu2Kvd-bUaoH"
+                  },
+                  {
+                      "id":  "f6",
+                      "name_tb":  "དབྱངས་ཅན་ཡིག་གཟུགས།",
+                      "name_zh":  "央金藏文字体",
+                      "url":  "https://www.123684.com/s/wu2Kvd-qUaoH"
+                  },
+                  {
+                      "id":  "f7",
+                      "name_tb":  "ཧྥང་ཀྲིན་ཡིག་གཟུགས།",
+                      "name_zh":  "方正藏文字体",
+                      "url":  "https://www.123684.com/s/wu2Kvd-cUaoH"
+                  },
+                  {
+                      "id":  "f8",
+                      "name_tb":  "རྨི་ལམ་ཡིག་གཟུགས།",
+                      "name_zh":  "米兰藏文字体",
+                      "url":  "https://www.123684.com/s/wu2Kvd-tUaoH"
+                  },
+                  {
+                      "id":  "f9",
+                      "name_tb":  "ཡིག་གཟུགས་སྣ་འཛོམས།",
+                      "name_zh":  "各种藏文字体合集",
+                      "url":  "https://www.123684.com/s/wu2Kvd-LUaoH"
+                  }
+              ],
+    "ebooks":  [
+                   {
+                       "id":  "e1",
+                       "name_tb":  "གདོང་ཀོང་སྤྲུལ་སྐུའི་རང་རྣམ།",
+                       "name_zh":  "",
+                       "url":  "https://khampa.lanzoue.com/iMgJa4glyh8b"
+                   },
+                   {
+                       "id":  "e2",
+                       "name_tb":  "སྡོམ་གསུམ་རྣམ་བཞག་མདོར་བསྡུས།",
+                       "name_zh":  "",
+                       "url":  "https://khampa.lanzoue.com/ixbdT4glyi8h"
+                   },
+                   {
+                       "id":  "e3",
+                       "name_tb":  "བོད་ཀྱི་གསོ་བ་རིག་པའི་བྱུང་བ་མདོར་བསྡུས།",
+                       "name_zh":  "",
+                       "url":  "https://khampa.lanzoue.com/iTfe04glyi0j"
+                   },
+                   {
+                       "id":  "e4",
+                       "name_tb":  "དར་བཤད་འབེལ་གཏམ་པད་དཀར་ཕྲེང་བ།",
+                       "name_zh":  "",
+                       "url":  "https://khampa.lanzoue.com/iJqQu4glyhtc"
+                   },
+                   {
+                       "id":  "e5",
+                       "name_tb":  "ཆོས་ལུགས་ནས་བཤད་པའི་དུས་ཆེན་ནམ་དུས་བཟང་ངོས་འཛིན།",
+                       "name_zh":  "",
+                       "url":  "https://khampa.lanzoue.com/iCMLe4glyhmf"
+                   },
+                   {
+                       "id":  "e6",
+                       "name_tb":  "གསོ་སྦྱོང་དང་དབྱར་ཁས་ལེན་དགག་དབྱེ་བཅས་ཀྱི་དགོས་པ་དང་བྱ་ཚུལ།",
+                       "name_zh":  "",
+                       "url":  "https://khampa.lanzoue.com/ii2GB4glyhfi"
+                   },
+                   {
+                       "id":  "e8",
+                       "name_tb":  "སུམ་ཅུ་པའི་བརྗོད་བྱའི་ཚིག་ཕྲད་ནང་གསེས་དང་བཅས་པ་དཔེ་གཞི་གཅིག་ཐོག་གི་དཔེར་བརྗོད།",
+                       "name_zh":  "",
+                       "url":  "https://khampa.lanzoue.com/iKmSh4glzjri"
+                   },
+                   {
+                       "id":  "rmwn25adl",
+                       "name_tb":  "བྲག་གཡབ་གདོང་ཀོང་སྤྲུལ་སྐུ་སྐུ་ཕྲེང་རིམ་བྱོན་གྱི་མཚན་ཐོ་དང་མཛད་རྣམ་མདོར་བསྡུས།",
+                       "name_zh":  "",
+                       "url":  "https://khampa.lanzoue.com/i7wgp4gkuhbe"
+                   },
+                   {
+                       "id":  "rmwr4djxj",
+                       "name_tb":  "སྔགས་ཀྱི་བཀླག་ཐབས་བསྡུས་པ།",
+                       "name_zh":  "",
+                       "url":  "https://khampa.lanzoue.com/ipCnP4gxuzqf"
+                   }
+               ],
+    "overrides":  {
+                      "khamvert":  {
+                                       "name_tb":  "ཧི་མ་ལ་ཡ། ⇆ པཎྚི་ཏ།",
+                                       "name_zh":  "喜马拉雅 ⇆ 班智达",
+                                       "platforms":  {
+                                                         "win":  {
+                                                                     "enabled":  true,
+                                                                     "version":  "",
+                                                                     "url":  "https://khampa.lanzoue.com/iCz5y4gm1vni",
+                                                                     "label":  "ཕབ་ལེན། / 下载"
+                                                                 },
+                                                         "android":  {
+                                                                         "enabled":  true,
+                                                                         "version":  "",
+                                                                         "url":  "https://khampa.lanzoue.com/i0fTZ4caq4wj",
+                                                                         "label":  "ཕབ་ལེན། / 下载"
+                                                                     },
+                                                         "mac":  {
+                                                                     "enabled":  true,
+                                                                     "version":  "",
+                                                                     "url":  "https://khampa.lanzoue.com/iyz6w4gm1vza",
+                                                                     "label":  "ཕབ་ལེན། / 下载"
+                                                                 }
+                                                     },
+                                       "desc_tb":  "ཕབ་ལེན་གསང་ཨང་། 8888",
+                                       "desc_zh":  "提取码：8888",
+                                       "logo":  "KHAMvert.PNG",
+                                       "screens":  [
+                                                       "data/uploads/khamvert-shot-mwrpm8mb-1.jpg",
+                                                       "data/uploads/khamvert-shot-mwrpm8mb-2.jpg"
+                                                   ]
+                                   },
+                      "soulday":  {
+                                      "name_tb":  "བླ་གཟའ་བལྟ་བྱེད།",
+                                      "name_zh":  "查看五行、星耀",
+                                      "platforms":  {
+                                                        "win":  {
+                                                                    "enabled":  false,
+                                                                    "version":  "",
+                                                                    "url":  "",
+                                                                    "label":  ""
+                                                                },
+                                                        "android":  {
+                                                                        "enabled":  true,
+                                                                        "version":  "",
+                                                                        "url":  "https://khampa.lanzoue.com/iDHv64caq5ib",
+                                                                        "label":  "ཕབ་ལེན། / 下载"
+                                                                    },
+                                                        "mac":  {
+                                                                    "enabled":  false,
+                                                                    "version":  "",
+                                                                    "url":  "",
+                                                                    "label":  ""
+                                                                }
+                                                    },
+                                      "desc_tb":  "ཕབ་ལེན་གསང་ཨང་། 8888",
+                                      "desc_zh":  "提取码：8888",
+                                      "logo":  "Soul Day.PNG",
+                                      "screens":  [
+                                                      "data/uploads/soulday-shot-mwrppfwy-1.jpg",
+                                                      "data/uploads/soulday-shot-mwrppfwy-2.jpg",
+                                                      "data/uploads/soulday-shot-mwrppfwy-3.jpg"
+                                                  ]
+                                  }
+                  },
+    "about":  {
+                  "body_tb":  "དྲ་ཚིགས་འདི་ནས་མཁོ་སྤྲོད་ཞུས་པའི་མཉེན་ཆས་( ཧི་མ་ལ་ཡ། ⇆ པཎྚི་ཏ། ) ཡིག་ཨང་བརྗེ་སྒྱུར་དང་། ( བླ་གཟའ་བལྟ་བྱེད། ) མཉེན་ཆས་གཉིས་ནི་iOS ཀུ་ཤུ་ཁ་པར་དང་འཆང་བཟུང་གི་པར་གཞི་ཁག་རྒྱལ་སྤྱིའི་ཀུ་ཤུའི་མཉེན་སྒྲོམ་ App Store ནང་དངོས་སུ་འགྲེམས་སྤེལ་ཟིན་པས། ཐད་ཀར་མཉེན་ཆས་ཕབ་ལེན་ཁུལ་ནས་（ཁམས་པ་ཚང་།，བོད་ཡིག，康巴仓，藏文）མིང་འདི་དག་བཤེར་འཚོལ་བྱས་ཏེ་ཕབ་ལེན་གནང་ཆོག གཞན་ཡང་ MacOS (M རིམ་པ་དང་ Intel རིམ་པ་རིགས་གཉིས་ཀར་) པར་གཞིའི་མིང་རྟགས་བཤེར་དཔང་ (Signature Verification) ལེགས་གྲུབ་བྱུང་ཡོད་པས། དྲ་ཚིགས་འདི་ནས་པར་གཞི་རིམ་པ་གསར་ཤོས་དག་ཕབ་ལེན་བྱོས་དང་འཐུས།",
+                  "body_zh":  "此网站提供的（喜马拉雅 ⇆ 班智达）编码转换软件和 （查看五行、星耀）两个软件的iOS (iPhone/iPad) 版本现已在国际 App Store 正式发布。您可以直接在苹果应用商店搜索（ཁམས་པ་ཚང་།，བོད་ཡིག，康巴仓，藏文）关键词进行下载安装。此外，MacOS 通用版本（包括M1-M4及Intel系列）也已通过签名验证。您可以直接在本网站下载最新版本的安装包。",
+                  "disclaimer_tb":  "འགན་སེལ་གསལ་བཤད།：དྲ་ཚིགས་འདིས་མཉེན་ཆས་ཀྱི་ཆ་འཕྲིན་དང་ཕབ་ལེན་ལམ་སྟོན་ཁོ་ན་མཁོ་འདོན་ཞུ་བ་དང་། མཉེན་ཆས་དང་ཆ་འཕྲིན་སོགས་ནི་ (AS IS) “ད་ཡོད་གནས་བབས་ཇི་བཞིན་” དུ་མཁོ་འདོན་ཞུས་པ་ལགས་པས། (ཁྲིམས་ལུགས་ཀྱི་ཆོག་མཆན་ཁྱབ་ཁོངས་ནང་ཚུད།) དྲ་ཚིགས་འདི་ནས་ཕབ་ལེན་དང་སྒྲིག་འཇུག དེ་བཞིན་བེད་སྤྱོད་བྱས་པ་ལས་བྱུང་བའི་གྱོང་གུན་སོགས་ཀྱི་ཐད་ངེད་དྲ་ཚིགས་སམ་དྲ་བདག་གིས་འགན་འཁྲི་གང་ཡང་མི་ཁུར། མཉེན་ཆས་སོ་སོའི་བདག་དབང་དང་འགན་འཁྲི་ནི་མཉེན་ཆས་གསར་སྤེལ་བར་ཡོད་པ་ཡིན།།",
+                  "disclaimer_zh":  "免责声明：本网站仅提供软件信息与下载引导；软件版权与责任归原作者/权利人所有。如有侵权或合规问题请联系下架处理。所提供内容按“现状”(AS IS)呈现；在法律允许范围内，本网站不承担因下载、安装或使用产生的任何损失与责任。下载或使用即视为您已阅读并同意本声明，并承诺依法合规使用。"
+              }
 }
