@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T10:54:35.322Z",
+  "updated": "2026-11-22T00:49:42.439Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -127,6 +127,12 @@
       "name_tb": "བྲག་གཡབ་གདོང་ཀོང་སྤྲུལ་སྐུ་སྐུ་ཕྲེང་རིམ་བྱོན་གྱི་མཚན་ཐོ་དང་མཛད་རྣམ་མདོར་བསྡུས།",
       "name_zh": "",
       "url": "https://khampa.lanzoue.com/i7wgp4gkuhbe"
+    },
+    {
+      "id": "rmwr4djxj",
+      "name_tb": "སྔགས་ཀྱི་བཀླག་ཐབས་བསྡུས་པ།",
+      "name_zh": "",
+      "url": "https://khampa.lanzoue.com/ipCnP4gxuzqf"
     }
   ],
   "overrides": {
