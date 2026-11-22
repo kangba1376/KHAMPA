@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-22T10:44:24.912Z",
+  "updated": "2026-11-22T10:46:56.872Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -169,13 +169,35 @@
     },
     "soulday": {
       "name_tb": "བླ་གཟའ་བལྟ་བྱེད།",
-      "name_zh": "提取码：8888",
+      "name_zh": "查看五行、星耀",
       "platforms": {
+        "win": {
+          "enabled": false,
+          "version": "",
+          "url": "",
+          "label": ""
+        },
         "android": {
-          "label": "ཕབ་ལེན། / 下载",
-          "url": "https://khampa.lanzoue.com/iDHv64caq5ib"
+          "enabled": true,
+          "version": "",
+          "url": "https://khampa.lanzoue.com/iDHv64caq5ib",
+          "label": "ཕབ་ལེན། / 下载"
+        },
+        "mac": {
+          "enabled": false,
+          "version": "",
+          "url": "",
+          "label": ""
         }
-      }
+      },
+      "desc_tb": "ཕབ་ལེན་གསང་ཨང་། 8888",
+      "desc_zh": "提取码：8888",
+      "logo": "Soul Day.PNG",
+      "screens": [
+        "data/uploads/soulday-shot-mwrppfwy-1.jpg",
+        "data/uploads/soulday-shot-mwrppfwy-2.jpg",
+        "data/uploads/soulday-shot-mwrppfwy-3.jpg"
+      ]
     }
   }
 }
