@@ -914,11 +914,74 @@
             renderResources(SITE_DATA);
         }
 
+        var BUILTIN_PLATFORMS = {
+            khamvert: ['android', 'win', 'mac'],
+            soulday: ['android']
+        };
+
+        function overrideExtrasHtml(o, cfg) {
+            var html = '';
+            if (o.name_zh || cfg.version) {
+                html += '<div class="dyn-name-zh override-info">' + esc(o.name_zh || '') +
+                    (cfg.version ? '　·　' + esc(cfg.version) : '') + '</div>';
+            }
+            var desc = '';
+            if (o.desc_tb) desc += '<span class="tb">' + esc(o.desc_tb).replace(/\n/g, '<br>') + '</span>';
+            if (o.desc_zh) desc += '<span>' + esc(o.desc_zh).replace(/\n/g, '<br>') + '</span>';
+            if (desc) html += '<div class="dyn-desc override-desc">' + desc + '</div>';
+            var shots = (Array.isArray(o.screens) ? o.screens : []).map(function (src) {
+                return '<img src="' + esc(src) + '" alt="界面截图" onclick="showShot(this.src)">';
+            }).join('');
+            if (shots) html += '<div class="dyn-shots override-shots">' + shots + '</div>';
+            return html;
+        }
+
+        function createBuiltinOverrideCard(id, p, o, cfg) {
+            var m = PLATFORM_META[p];
+            var b = BUILTIN_APPS.filter(function (x) { return x.id === id; })[0];
+            if (!m || !b) return null;
+            var card = document.createElement('div');
+            card.className = 'card platform-card filter-' + p;
+            card.setAttribute('data-app', id);
+            card.setAttribute('data-platform', p);
+            card.setAttribute('data-override-created', '1');
+            card.innerHTML =
+                '<div class="platform-top-icon"><img src="' + esc(o.logo || b.logo) + '" alt="' + esc(o.name_tb || b.name) + '" width="62" height="62"></div>' +
+                '<span class="tibet-header">' + esc(o.name_tb || b.name) + '　' + esc(m.tb) + '</span>' +
+                overrideExtrasHtml(o, cfg) +
+                '<div class="btn-group"><a class="btn ' + m.btn + '" href="' + esc(cfg.url || '#') + '" target="_blank" rel="noopener"><span>' +
+                esc(cfg.label || 'ཕབ་ལེན། 下载') + (cfg.version ? ' ' + esc(cfg.version) : '') + '</span></a></div>';
+            var dl = document.getElementById('download-content');
+            var globalCard = dl ? dl.querySelector('[data-global]') : null;
+            if (globalCard) dl.insertBefore(card, globalCard); else if (dl) dl.appendChild(card);
+            return card;
+        }
+
+        function syncBuiltinHome(id, o) {
+            var home = document.querySelector('.home-app[data-app="' + id + '"]');
+            var group = home ? home.querySelector('.btn-group') : null;
+            if (!group) return;
+            var plats = o.platforms || {};
+            var enabled = [];
+            PLATFORM_ORDER.forEach(function (p) {
+                var cfg = plats[p];
+                var isBuiltin = (BUILTIN_PLATFORMS[id] || []).indexOf(p) >= 0;
+                if (cfg ? (cfg.enabled !== false && (isBuiltin || cfg.url)) : isBuiltin) enabled.push(p);
+            });
+            group.innerHTML = enabled.map(function (p) {
+                var m = PLATFORM_META[p];
+                return '<a href="javascript:void(0)" class="btn ' + m.btn + '" onclick="navigateTo(\'' + p + '\', \'' + id + '\'); return false;"><span>' + esc(m.tb) + '</span></a>';
+            }).join('');
+        }
+
         function applyOverrides(ov) {
             if (!ov || typeof ov !== 'object') return;
-            Object.keys(ov).forEach(function (id) {
+            BUILTIN_APPS.forEach(function (b) {
+                var id = b.id;
                 var o = ov[id];
                 if (!o) return;
+                var created = document.querySelectorAll('.platform-card[data-override-created="1"][data-app="' + id + '"]');
+                for (var c = 0; c < created.length; c++) created[c].parentNode.removeChild(created[c]);
 
                 var home = document.querySelector('.home-app[data-app="' + id + '"]');
                 if (home) {
@@ -933,23 +996,41 @@
                             if (titles) titles.appendChild(zh);
                         }
                         zh.textContent = o.name_zh;
-                    } else if (zh) {
-                        zh.textContent = '';
-                    }
+                    } else if (zh) zh.textContent = '';
+                    var homeLogo = home.querySelector('.home-app-icon');
+                    if (homeLogo) homeLogo.src = o.logo || b.logo;
                 }
+                syncBuiltinHome(id, o);
 
-                var plats = o.platforms || {};
-                Object.keys(plats).forEach(function (p) {
+                var globallyHidden = (Array.isArray(SITE_DATA.hidden) ? SITE_DATA.hidden : []).indexOf(id) >= 0;
+                PLATFORM_ORDER.forEach(function (p) {
+                    var plats = o.platforms || {};
                     var cfg = plats[p] || {};
-                    var card = document.querySelector('.platform-card[data-app="' + id + '"][data-platform="' + p + '"]');
+                    var isBuiltin = (BUILTIN_PLATFORMS[id] || []).indexOf(p) >= 0;
+                    var enabled = plats[p] ? (cfg.enabled !== false && (isBuiltin || cfg.url)) : isBuiltin;
+                    var card = document.querySelector('.platform-card[data-app="' + id + '"][data-platform="' + p + '"]:not([data-override-created="1"])');
+                    if (!card && enabled && cfg.url) card = createBuiltinOverrideCard(id, p, o, cfg);
                     if (!card) return;
-                    var a = card.querySelector('a.btn');
-                    if (!a) return;
-                    if (cfg.url) a.setAttribute('href', cfg.url);
-                    if (cfg.label) {
-                        var span = a.querySelector('span');
-                        if (span) span.textContent = cfg.label;
+                    if (!enabled || globallyHidden) {
+                        card.setAttribute('data-hidden', '1');
+                        card.style.display = 'none';
+                        return;
                     }
+                    card.removeAttribute('data-hidden');
+                    var a = card.querySelector('a.btn');
+                    if (a) {
+                        if (cfg.url) a.setAttribute('href', cfg.url);
+                        var span = a.querySelector('span');
+                        if (span && Object.prototype.hasOwnProperty.call(cfg, 'label')) {
+                            span.textContent = (cfg.label || 'ཕབ་ལེན། 下载') + (cfg.version ? ' ' + cfg.version : '');
+                        }
+                    }
+                    var logo = card.querySelector('.platform-top-icon img');
+                    if (logo) logo.src = o.logo || b.logo;
+                    var oldExtras = card.querySelectorAll('.override-info, .override-desc, .override-shots');
+                    for (var x = 0; x < oldExtras.length; x++) oldExtras[x].parentNode.removeChild(oldExtras[x]);
+                    var group = card.querySelector('.btn-group');
+                    if (group) group.insertAdjacentHTML('beforebegin', overrideExtrasHtml(o, cfg));
                 });
             });
         }
@@ -1683,60 +1764,206 @@
             setEditStatus('');
         }
 
+        function editMediaHtml() {
+            return '<div class="admin-sec"><div class="admin-sec-title">软件 Logo 与功能截图</div>' +
+                '<div class="admin-field"><label>软件 Logo（更换后立即预览，删除则使用默认图标）</label>' +
+                '<div><label class="upload-trigger" for="eLogo">＋ 更换 Logo</label></div>' +
+                '<input id="eLogo" type="file" accept="image/*" style="display:none" onchange="onEditPickLogo(this)">' +
+                '<div class="thumb-grid" id="eLogoThumb"></div></div>' +
+                '<div class="admin-field" style="margin-top:14px;"><label>功能界面截图（最多 8 张，可删除旧截图或添加新截图）</label>' +
+                '<div><label class="upload-trigger" for="eScreens">＋ 添加功能截图</label></div>' +
+                '<input id="eScreens" type="file" accept="image/*" multiple style="display:none" onchange="onEditPickScreens(this)">' +
+                '<div class="thumb-grid" id="eScreenThumbs"></div></div></div>';
+        }
+
+        function initEditMedia(logo, screens) {
+            EDITING.logo = logo ? { dataURL: logo, path: logo, isNew: false } : null;
+            EDITING.screens = (Array.isArray(screens) ? screens : []).map(function (src) {
+                return { dataURL: src, path: src, isNew: false };
+            });
+        }
+
+        function renderEditMedia() {
+            if (!EDITING) return;
+            var logoBox = document.getElementById('eLogoThumb');
+            if (logoBox) logoBox.innerHTML = EDITING.logo
+                ? '<div class="thumb"><img src="' + esc(EDITING.logo.dataURL) + '" alt="Logo"><button type="button" title="删除 Logo" onclick="removeEditLogo()">✕</button></div>'
+                : '<p class="admin-hint">当前未设置自定义 Logo。</p>';
+            var screenBox = document.getElementById('eScreenThumbs');
+            if (screenBox) screenBox.innerHTML = EDITING.screens.length ? EDITING.screens.map(function (s, i) {
+                return '<div class="thumb"><img src="' + esc(s.dataURL) + '" alt="截图 ' + (i + 1) + '"><button type="button" title="删除截图" onclick="removeEditScreen(' + i + ')">✕</button></div>';
+            }).join('') : '<p class="admin-hint">暂无功能截图，可点击上方按钮添加。</p>';
+        }
+
+        function removeEditLogo() { if (EDITING) { EDITING.logo = null; renderEditMedia(); } }
+        function removeEditScreen(i) {
+            if (!EDITING) return;
+            EDITING.screens.splice(i, 1);
+            renderEditMedia();
+        }
+
+        async function onEditPickLogo(input) {
+            var file = input.files && input.files[0];
+            input.value = '';
+            if (!file || !EDITING) return;
+            try {
+                var image = await compressImage(file, 400, 0.92, true);
+                image.path = '';
+                image.isNew = true;
+                EDITING.logo = image;
+                renderEditMedia();
+            } catch (e) { setEditStatus(e.message, true); }
+        }
+
+        async function onEditPickScreens(input) {
+            var files = Array.prototype.slice.call(input.files || []);
+            input.value = '';
+            if (!files.length || !EDITING) return;
+            var room = 8 - EDITING.screens.length;
+            if (room <= 0) { setEditStatus('最多保留 8 张功能截图。', true); return; }
+            files = files.slice(0, room);
+            setEditStatus('正在处理图片…');
+            for (var i = 0; i < files.length; i++) {
+                try {
+                    var image = await compressImage(files[i], 1200, 0.82, false);
+                    image.path = '';
+                    image.isNew = true;
+                    EDITING.screens.push(image);
+                } catch (e) { setEditStatus(e.message, true); }
+            }
+            renderEditMedia();
+            setEditStatus('图片已添加，点击“保存修改”后上传。');
+        }
+
+        function editPlatformsHtml(platforms, builtin) {
+            var map = {};
+            (platforms || []).forEach(function (p) { if (p && p.platform) map[p.platform] = p; });
+            var html = '<div class="admin-sec"><div class="admin-sec-title">平台、版本与下载地址</div>' +
+                '<p class="admin-hint">勾选需要展示的平台；取消勾选会从网站移除该平台。勾选后必须填写下载地址。</p><div class="plat-grid">';
+            PLATFORM_ORDER.forEach(function (p) {
+                var m = PLATFORM_META[p];
+                var cfg = map[p] || {};
+                html += '<div class="plat-item"><label class="plat-head"><input id="ePlat_' + p + '" type="checkbox"' + (cfg.enabled ? ' checked' : '') + '> ' + esc(m.zh) + ' / ' + esc(m.tb) + '</label>' +
+                    '<input id="eVer_' + p + '" class="admin-input" type="text" value="' + esc(cfg.version || '') + '" placeholder="版本号，如 v1.2.0">' +
+                    '<input id="eUrl_' + p + '" class="admin-input" type="url" value="' + esc(cfg.url || '') + '" placeholder="下载地址 https://...">' +
+                    (builtin ? '<input id="eLabel_' + p + '" class="admin-input" type="text" value="' + esc(cfg.label || '') + '" placeholder="下载按钮文字（可选）">' : '') + '</div>';
+            });
+            return html + '</div></div>';
+        }
+
         async function openEdit(kind, type, id) {
-            var data = SITE_DATA || await fetchSiteData();
+            var data = await fetchSiteData();
             var fields = document.getElementById('editFields');
             var title = document.getElementById('editTitle');
             var html = '';
             setEditStatus('');
-            EDITING = { kind: kind, type: type, id: id };
+            EDITING = { kind: kind, type: type, id: id, logo: null, screens: [] };
+            document.querySelector('#editDlg .modal').style.maxWidth = kind === 'res' ? '560px' : '900px';
 
             if (kind === 'res') {
                 var item = (Array.isArray(data[type]) ? data[type] : []).filter(function (x) { return x && x.id === id; })[0];
-                if (!item) { setEditStatus('没有找到这个资源。', true); return; }
+                if (!item) { EDITING = null; alert('没有找到这个资源。'); return; }
                 title.textContent = (type === 'fonts' ? '编辑字体' : '编辑电子书');
                 html += editField('名称（藏文）', 'eNameTb', item.name_tb, 'text');
                 html += editField('中文名称（可选）', 'eNameZh', item.name_zh, 'text');
                 html += editField('下载链接', 'eUrl', item.url, 'url');
             } else if (kind === 'app') {
                 var app = (Array.isArray(data.apps) ? data.apps : []).filter(function (x) { return x && x.id === id; })[0];
-                if (!app) { setEditStatus('没有找到这个软件。', true); return; }
-                title.textContent = '编辑软件';
-                html += editField('藏文名称', 'eNameTb', app.name_tb, 'text');
-                html += editField('中文 / 英文名称', 'eNameZh', app.name_zh, 'text');
-                html += editField('藏文说明', 'eDescTb', app.desc_tb, 'textarea');
-                html += editField('中文说明', 'eDescZh', app.desc_zh, 'textarea');
-                (app.platforms || []).forEach(function (p) {
-                    if (!p || !p.platform) return;
-                    var m = PLATFORM_META[p.platform] || { zh: p.platform };
-                    html += '<div class="edit-sub">' + esc(m.zh) + '</div>';
-                    html += editField(m.zh + ' 版本号', 'eVer_' + p.platform, p.version, 'text');
-                    html += editField(m.zh + ' 下载链接', 'eUrl_' + p.platform, p.url, 'url');
-                });
+                if (!app) { EDITING = null; alert('没有找到这个软件。'); return; }
+                title.textContent = '编辑软件：' + (app.name_zh || app.name_tb || app.id);
+                html += '<div class="admin-sec"><div class="admin-sec-title">基本信息</div><div class="admin-row">' +
+                    '<div>' + editField('藏文名称', 'eNameTb', app.name_tb, 'text') + '</div>' +
+                    '<div>' + editField('中文 / 英文名称', 'eNameZh', app.name_zh, 'text') + '</div></div>' +
+                    editField('软件 ID（英文、数字、横线或下划线）', 'eId', app.id, 'text') + '</div>';
+                html += editMediaHtml();
+                html += '<div class="admin-sec"><div class="admin-sec-title">软件说明</div><div class="admin-row">' +
+                    '<div>' + editField('藏文说明', 'eDescTb', app.desc_tb, 'textarea') + '</div>' +
+                    '<div>' + editField('中文说明', 'eDescZh', app.desc_zh, 'textarea') + '</div></div></div>';
+                initEditMedia(app.logo, app.screens);
+                html += editPlatformsHtml((app.platforms || []).map(function (p) {
+                    return { platform: p.platform, version: p.version, url: p.url, enabled: true };
+                }), false);
             } else {
                 title.textContent = '编辑内置软件';
                 var ov = (data.overrides && data.overrides[id]) || {};
                 var home = document.querySelector('.home-app[data-app="' + id + '"]');
                 var tbEl = home ? home.querySelector('.home-app-title-tb') : null;
                 var zhEl = home ? home.querySelector('.home-app-title-zh') : null;
-                html += editField('藏文名称', 'eNameTb', ov.name_tb || (tbEl ? tbEl.textContent : ''), 'text');
-                html += editField('中文名称', 'eNameZh', ov.name_zh || (zhEl ? zhEl.textContent : ''), 'text');
-                var cards = document.querySelectorAll('.platform-card[data-app="' + id + '"][data-platform]');
-                for (var i = 0; i < cards.length; i++) {
-                    var card = cards[i];
-                    var p = card.getAttribute('data-platform');
-                    var m2 = PLATFORM_META[p] || { zh: p };
-                    var a = card.querySelector('a.btn');
+                var builtin = BUILTIN_APPS.filter(function (x) { return x.id === id; })[0];
+                html += '<div class="admin-sec"><div class="admin-sec-title">基本信息</div><div class="admin-row">' +
+                    '<div>' + editField('藏文名称', 'eNameTb', ov.name_tb || (tbEl ? tbEl.textContent : ''), 'text') + '</div>' +
+                    '<div>' + editField('中文名称', 'eNameZh', ov.name_zh || (zhEl ? zhEl.textContent : ''), 'text') + '</div></div>' +
+                    '<p class="admin-hint">软件 ID：' + esc(id) + '（内置软件 ID 固定）</p></div>';
+                html += editMediaHtml();
+                html += '<div class="admin-sec"><div class="admin-sec-title">软件说明</div><div class="admin-row">' +
+                    '<div>' + editField('藏文说明', 'eDescTb', ov.desc_tb, 'textarea') + '</div>' +
+                    '<div>' + editField('中文说明', 'eDescZh', ov.desc_zh, 'textarea') + '</div></div></div>';
+                initEditMedia(ov.logo || (builtin ? builtin.logo : ''), ov.screens);
+                var configs = [];
+                PLATFORM_ORDER.forEach(function (p) {
+                    var card = document.querySelector('.platform-card[data-app="' + id + '"][data-platform="' + p + '"]');
+                    var a = card ? card.querySelector('a.btn') : null;
                     var span = a ? a.querySelector('span') : null;
                     var cur = (ov.platforms && ov.platforms[p]) || {};
-                    html += '<div class="edit-sub">' + esc(m2.zh) + '</div>';
-                    html += editField(m2.zh + ' 按钮文字', 'eLabel_' + p, cur.label || (span ? span.textContent : ''), 'text');
-                    html += editField(m2.zh + ' 下载链接', 'eUrl_' + p, cur.url || (a ? a.getAttribute('href') : ''), 'url');
-                }
+                    var isBuiltin = (BUILTIN_PLATFORMS[id] || []).indexOf(p) >= 0;
+                    configs.push({
+                        platform: p,
+                        version: cur.version || '',
+                        url: cur.url || (a ? a.getAttribute('href') : ''),
+                        label: cur.label || (span ? span.textContent : ''),
+                        enabled: cur.enabled !== false && (isBuiltin || !!cur.url)
+                    });
+                });
+                html += editPlatformsHtml(configs, true);
             }
 
             fields.innerHTML = html;
+            renderEditMedia();
             document.getElementById('editDlg').style.display = 'flex';
+        }
+
+        function collectEditPlatforms(builtin) {
+            var list = [], map = {}, enabledCount = 0;
+            PLATFORM_ORDER.forEach(function (p) {
+                var enabled = document.getElementById('ePlat_' + p).checked;
+                var version = document.getElementById('eVer_' + p).value.trim();
+                var url = document.getElementById('eUrl_' + p).value.trim();
+                if (enabled && !url) throw new Error(PLATFORM_META[p].zh + ' 已勾选，请填写下载地址或取消勾选。');
+                if (enabled) enabledCount++;
+                if (builtin) {
+                    var label = document.getElementById('eLabel_' + p);
+                    map[p] = { enabled: enabled, version: version, url: url, label: label ? label.value.trim() : '' };
+                } else if (enabled) list.push({ platform: p, version: version, url: url });
+            });
+            if (!enabledCount) throw new Error('请至少保留一个平台。');
+            return builtin ? map : list;
+        }
+
+        async function uploadEditMedia(id) {
+            var result = { logo: '', screens: [] };
+            if (EDITING.logo) {
+                if (EDITING.logo.isNew) {
+                    setEditStatus('正在上传新 Logo…');
+                    result.logo = 'data/uploads/' + id + '-logo.' + EDITING.logo.ext;
+                    await ghPut(result.logo, EDITING.logo.base64, '更新 ' + id + ' Logo');
+                    EDITING.logo.path = result.logo;
+                    EDITING.logo.isNew = false;
+                } else result.logo = EDITING.logo.path || EDITING.logo.dataURL;
+            }
+            var stamp = Date.now().toString(36);
+            for (var i = 0; i < EDITING.screens.length; i++) {
+                var screen = EDITING.screens[i];
+                if (screen.isNew) {
+                    setEditStatus('正在上传第 ' + (i + 1) + ' 张功能截图…');
+                    var path = 'data/uploads/' + id + '-shot-' + stamp + '-' + (i + 1) + '.' + screen.ext;
+                    await ghPut(path, screen.base64, '更新 ' + id + ' 功能截图 ' + (i + 1));
+                    screen.path = path;
+                    screen.isNew = false;
+                    result.screens.push(path);
+                } else result.screens.push(screen.path || screen.dataURL);
+            }
+            renderEditMedia();
+            return result;
         }
 
         async function saveEdit() {
@@ -1745,12 +1972,21 @@
                 if (!EDITING) throw new Error('没有正在编辑的项目。');
                 var cfg = getGhCfg();
                 if (!cfg.token) throw new Error('保存修改需要先在“GitHub 发布设置”填写 Token。');
+                var val = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+                var platforms = null, newId = EDITING.id;
+                if (EDITING.kind !== 'res') {
+                    if (!val('eNameTb') && !val('eNameZh')) throw new Error('藏文名称或中文名称至少填写一项。');
+                    platforms = collectEditPlatforms(EDITING.kind === 'builtin');
+                    if (EDITING.kind === 'app') {
+                        var rawId = val('eId');
+                        newId = rawId.replace(/[^A-Za-z0-9_-]/g, '');
+                        if (!newId || newId !== rawId) throw new Error('软件 ID 只能包含英文、数字、横线和下划线。');
+                    }
+                }
                 btn.disabled = true;
-                setEditStatus('正在保存…');
-
+                setEditStatus('正在读取最新网站数据…');
                 var file = await ghGetFile('data/apps.json');
                 var data = (file.json && typeof file.json === 'object') ? file.json : {};
-                var val = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; };
 
                 if (EDITING.kind === 'res') {
                     if (!Array.isArray(data[EDITING.type])) throw new Error('没有找到这类资源。');
@@ -1759,45 +1995,46 @@
                     it.name_tb = val('eNameTb');
                     it.name_zh = val('eNameZh');
                     it.url = val('eUrl');
+                    if (!it.name_tb && !it.name_zh) throw new Error('资源名称不能为空。');
                     if (!it.url) throw new Error('下载链接不能为空。');
                 } else if (EDITING.kind === 'app') {
-                    var app = (Array.isArray(data.apps) ? data.apps : []).filter(function (x) { return x && x.id === EDITING.id; })[0];
+                    if (!Array.isArray(data.apps)) data.apps = [];
+                    var app = data.apps.filter(function (x) { return x && x.id === EDITING.id; })[0];
                     if (!app) throw new Error('没有找到这个软件。');
+                    var duplicate = data.apps.filter(function (x) { return x && x.id === newId && x !== app; })[0];
+                    if (duplicate) throw new Error('软件 ID 已被其他软件使用，请更换。');
                     app.name_tb = val('eNameTb');
                     app.name_zh = val('eNameZh');
                     app.desc_tb = val('eDescTb');
                     app.desc_zh = val('eDescZh');
-                    (app.platforms || []).forEach(function (p) {
-                        if (!p || !p.platform) return;
-                        var v = val('eVer_' + p.platform);
-                        var u = val('eUrl_' + p.platform);
-                        if (v) p.version = v;
-                        if (u) p.url = u;
-                    });
+                    app.platforms = platforms;
+                    var media = await uploadEditMedia(newId);
+                    app.id = newId;
+                    app.logo = media.logo;
+                    app.screens = media.screens;
+                    app.updated = new Date().toISOString();
+                    EDITING.id = newId;
                 } else {
                     data.overrides = data.overrides || {};
                     var ov = data.overrides[EDITING.id] || {};
                     ov.name_tb = val('eNameTb');
                     ov.name_zh = val('eNameZh');
-                    ov.platforms = ov.platforms || {};
-                    var cards = document.querySelectorAll('.platform-card[data-app="' + EDITING.id + '"][data-platform]');
-                    for (var i = 0; i < cards.length; i++) {
-                        var p = cards[i].getAttribute('data-platform');
-                        var o = ov.platforms[p] || {};
-                        var lb = val('eLabel_' + p);
-                        var u = val('eUrl_' + p);
-                        if (lb) o.label = lb;
-                        if (u) o.url = u;
-                        ov.platforms[p] = o;
-                    }
+                    ov.desc_tb = val('eDescTb');
+                    ov.desc_zh = val('eDescZh');
+                    ov.platforms = platforms;
+                    var builtinMedia = await uploadEditMedia(EDITING.id);
+                    ov.logo = builtinMedia.logo;
+                    ov.screens = builtinMedia.screens;
                     data.overrides[EDITING.id] = ov;
                     for (var k = 0; k < BUILTIN_APPS.length; k++) {
                         if (BUILTIN_APPS[k].id === EDITING.id) {
                             BUILTIN_APPS[k].name = ov.name_zh || ov.name_tb || BUILTIN_APPS[k].name;
+                            if (ov.logo) BUILTIN_APPS[k].logo = ov.logo;
                         }
                     }
                 }
 
+                setEditStatus('正在保存软件信息…');
                 data.updated = new Date().toISOString();
                 await ghPut('data/apps.json', utf8ToB64(JSON.stringify(data, null, 2)),
                     '编辑：' + (EDITING.id || EDITING.type || ''), file.sha);
@@ -1807,7 +2044,7 @@
                 renderResourceListFrom(data);
                 setEditStatus('已保存，约 1 分钟后全站生效。', false);
             } catch (e) {
-                setEditStatus(e.message, true);
+                setEditStatus(e.message || '保存失败，请检查网络或 Token 权限。', true);
             } finally {
                 btn.disabled = false;
             }
