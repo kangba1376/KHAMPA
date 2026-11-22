@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-22T00:54:19.782Z",
+  "updated": "2026-11-22T10:44:24.912Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -138,21 +138,34 @@
   "overrides": {
     "khamvert": {
       "name_tb": "ཧི་མ་ལ་ཡ། ⇆ པཎྚི་ཏ།",
-      "name_zh": "提取码：8888",
+      "name_zh": "喜马拉雅 ⇆ 班智达",
       "platforms": {
+        "win": {
+          "enabled": true,
+          "version": "",
+          "url": "https://khampa.lanzoue.com/iCz5y4gm1vni",
+          "label": "ཕབ་ལེན། / 下载"
+        },
         "android": {
-          "label": "ཕབ་ལེན། / 下载",
-          "url": "https://khampa.lanzoue.com/i0fTZ4caq4wj"
+          "enabled": true,
+          "version": "",
+          "url": "https://khampa.lanzoue.com/i0fTZ4caq4wj",
+          "label": "ཕབ་ལེན། / 下载"
         },
         "mac": {
-          "label": "ཕབ་ལེན། / 下载",
-          "url": "https://khampa.lanzoue.com/iyz6w4gm1vza"
-        },
-        "win": {
-          "label": "ཕབ་ལེན། / 下载",
-          "url": "https://khampa.lanzoue.com/iCz5y4gm1vni"
+          "enabled": true,
+          "version": "",
+          "url": "https://khampa.lanzoue.com/iyz6w4gm1vza",
+          "label": "ཕབ་ལེན། / 下载"
         }
-      }
+      },
+      "desc_tb": "ཕབ་ལེན་གསང་ཨང་། 8888",
+      "desc_zh": "提取码：8888",
+      "logo": "KHAMvert.PNG",
+      "screens": [
+        "data/uploads/khamvert-shot-mwrpm8mb-1.jpg",
+        "data/uploads/khamvert-shot-mwrpm8mb-2.jpg"
+      ]
     },
     "soulday": {
       "name_tb": "བླ་གཟའ་བལྟ་བྱེད།",
