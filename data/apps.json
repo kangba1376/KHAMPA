@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-23T00:14:51.678Z",
+  "updated": "2026-11-23T09:30:02.124Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -172,10 +172,10 @@
       "name_zh": "查看五行、星耀",
       "platforms": {
         "win": {
-          "enabled": false,
+          "enabled": true,
           "version": "",
-          "url": "",
-          "label": ""
+          "url": "https://khampa.lanzoue.com/iwsmD4h3wdje",
+          "label": "ཕབ་ལེན། / 下载"
         },
         "android": {
           "enabled": true,
@@ -184,10 +184,10 @@
           "label": "ཕབ་ལེན། / 下载"
         },
         "mac": {
-          "enabled": false,
+          "enabled": true,
           "version": "",
-          "url": "",
-          "label": ""
+          "url": "https://khampa.lanzoue.com/ivWCn4h3wbsb",
+          "label": "ཕབ་ལེན། / 下载"
         }
       },
       "desc_tb": "ཕབ་ལེན་གསང་ཨང་། 8888",
