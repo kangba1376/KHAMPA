@@ -608,6 +608,19 @@
         <img id="shotLightboxImg" alt="界面截图">
     </div>
 
+    <div id="resourceModal" class="modal-backdrop" role="dialog" aria-modal="true">
+        <div class="modal admin-modal" style="max-width:560px;">
+            <div class="modal-header">
+                <div class="modal-title" id="resourceModalTitle"></div>
+                <button class="modal-close" type="button" onclick="closeResource()">✕</button>
+            </div>
+            <div class="modal-body">
+                <ul class="resource-list res-fonts" id="modalFonts" style="display:none;padding-bottom:14px;"></ul>
+                <ul class="resource-list res-ebooks" id="modalEbooks" style="display:none;padding-bottom:14px;"></ul>
+            </div>
+        </div>
+    </div>
+
     <div id="adminGate" class="modal-backdrop" role="dialog" aria-modal="true">
         <div class="modal admin-modal" style="max-width:440px;">
             <div class="modal-header">
@@ -890,7 +903,7 @@
             document.getElementById('about-content').style.display = showAbout ? 'block' : 'none';
             document.getElementById('download-content').style.display = (!showHome && !showAbout) ? 'grid' : 'none';
             var resContent = document.getElementById('resource-content');
-            if (resContent) resContent.style.display = showAbout ? 'none' : 'grid';
+            if (resContent) resContent.style.display = showHome ? 'grid' : 'none';
 
             var allCards = document.querySelectorAll('.platform-card');
             for (var j = 0; j < allCards.length; j++) {
@@ -912,16 +925,25 @@
         }
 
         function openResource(type) {
-            var group = document.querySelector('.home-resource-group[data-resource="' + type + '"]');
-            if (!group) return;
-            var ul = group.querySelector('.resource-list');
-            if (ul) {
-                var items = ul.querySelectorAll('li:not(.res-empty)');
-                if (items.length > 3) ul.setAttribute('data-visible-count', String(items.length));
-                updateResourceGroup(group);
+            var modal = document.getElementById('resourceModal');
+            var title = document.getElementById('resourceModalTitle');
+            var fUl = document.getElementById('modalFonts');
+            var eUl = document.getElementById('modalEbooks');
+            if (!modal || !title || !fUl || !eUl) return;
+            var data = SITE_DATA || {};
+            if (type === 'fonts') {
+                fUl.innerHTML = buildResItems(data.fonts, '暂无字体');
+                fUl.style.display = 'grid';
+                eUl.style.display = 'none';
+                title.textContent = 'བོད་ཡིག་ཡིག་གཟུགས།';
+            } else {
+                eUl.innerHTML = buildResItems(data.ebooks, '暂无电子书');
+                eUl.style.display = 'grid';
+                fUl.style.display = 'none';
+                title.textContent = 'བོད་ཡིག་འཕྲུལ་དེབ།';
             }
-            try { group.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
-            pushUiState();
+            modal.style.display = 'flex';
+            try { document.body.style.overflow = 'hidden'; } catch (e) {}
         }
 
         function closeResource() {
