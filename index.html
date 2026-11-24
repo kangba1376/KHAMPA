@@ -801,7 +801,81 @@
             }
         }
 
-        function filterContent(platform, element, appId) {
+        var CURRENT_APP_FILTER = '';
+        var KHAM_UI_APPLYING = false;
+        var KHAM_LAST_STATE = '';
+
+        function getUiSnapshot() {
+            var active = document.querySelector('.nav-link.active');
+            var home = document.getElementById('homeApps');
+            var fontList = document.querySelector('.home-resource-group[data-resource="fonts"] .resource-list');
+            var bookList = document.querySelector('.home-resource-group[data-resource="ebooks"] .resource-list');
+            var openApps = [];
+            var details = document.querySelectorAll('#homeApps .home-app[open]');
+            for (var i = 0; i < details.length; i++) {
+                openApps.push(details[i].getAttribute('data-app') || '');
+            }
+            return {
+                kham: 1,
+                platform: active ? (active.getAttribute('data-platform') || 'all') : 'all',
+                appId: CURRENT_APP_FILTER || '',
+                sw: parseInt((home && home.getAttribute('data-visible-count')) || '6', 10),
+                fonts: parseInt((fontList && fontList.getAttribute('data-visible-count')) || '3', 10),
+                ebooks: parseInt((bookList && bookList.getAttribute('data-visible-count')) || '3', 10),
+                openApps: openApps
+            };
+        }
+
+        function pushUiState(replace) {
+            var state = getUiSnapshot();
+            var key = JSON.stringify(state);
+            if (!replace && key === KHAM_LAST_STATE) return;
+            KHAM_LAST_STATE = key;
+            try {
+                if (replace) history.replaceState(state, '');
+                else history.pushState(state, '');
+            } catch (e) {}
+        }
+
+        function applyUiState(state) {
+            KHAM_UI_APPLYING = true;
+            try {
+                var home = document.getElementById('homeApps');
+                if (home) home.setAttribute('data-visible-count', String(state.sw || 6));
+                var fontList = document.querySelector('.home-resource-group[data-resource="fonts"] .resource-list');
+                if (fontList) fontList.setAttribute('data-visible-count', String(state.fonts || 3));
+                var bookList = document.querySelector('.home-resource-group[data-resource="ebooks"] .resource-list');
+                if (bookList) bookList.setAttribute('data-visible-count', String(state.ebooks || 3));
+
+                var openApps = Array.isArray(state.openApps) ? state.openApps : [];
+                var details = document.querySelectorAll('#homeApps .home-app');
+                for (var i = 0; i < details.length; i++) {
+                    details[i].open = openApps.indexOf(details[i].getAttribute('data-app') || '') !== -1;
+                }
+
+                var link = document.querySelector('.nav-link[data-platform="' + (state.platform || 'all') + '"]');
+                filterContent(state.platform || 'all', link, state.appId || '', true);
+                updateSoftwareMore();
+                refreshResourceMore();
+            } finally {
+                KHAM_UI_APPLYING = false;
+            }
+            KHAM_LAST_STATE = JSON.stringify(getUiSnapshot());
+        }
+
+        function resetExpandedContent() {
+            var home = document.getElementById('homeApps');
+            if (home) home.setAttribute('data-visible-count', '6');
+            var lists = document.querySelectorAll('.home-resource-group .resource-list');
+            for (var i = 0; i < lists.length; i++) lists[i].setAttribute('data-visible-count', '3');
+            var details = document.querySelectorAll('#homeApps .home-app[open]');
+            for (var k = 0; k < details.length; k++) details[k].open = false;
+            updateSoftwareMore();
+            refreshResourceMore();
+        }
+
+        function filterContent(platform, element, appId, skipHistory) {
+            CURRENT_APP_FILTER = appId || '';
             var navLinks = document.querySelectorAll('.nav-link');
             for (var i = 0; i < navLinks.length; i++) {
                 navLinks[i].classList.remove('active');
@@ -831,6 +905,8 @@
                     card.style.display = (matchPlatform && matchApp) ? 'flex' : 'none';
                 }
             }
+            if (platform === 'all' && !skipHistory) resetExpandedContent();
+            if (!skipHistory) pushUiState();
         }
 
         function openResource(type) {
@@ -1114,6 +1190,7 @@
             var limit = parseInt(ul.getAttribute('data-visible-count') || '3', 10);
             ul.setAttribute('data-visible-count', limit >= count ? '3' : String(limit + 3));
             updateResourceGroup(group);
+            pushUiState();
         }
 
         function updateSoftwareMore() {
@@ -1151,6 +1228,7 @@
             var limit = parseInt(home.getAttribute('data-visible-count') || '6', 10);
             home.setAttribute('data-visible-count', limit >= count ? '6' : String(limit + 6));
             updateSoftwareMore();
+            pushUiState();
         }
 
         function readLocalApps() {
@@ -2212,9 +2290,25 @@
             }
         }
 
+        document.addEventListener('toggle', function (e) {
+            var t = e.target;
+            if (!t || !t.classList || !t.classList.contains('home-app')) return;
+            if (KHAM_UI_APPLYING) return;
+            pushUiState();
+        }, true);
+
+        window.addEventListener('popstate', function (e) {
+            if (e.state && e.state.kham) {
+                applyUiState(e.state);
+            } else {
+                applyUiState({ kham: 1, platform: 'all', appId: '', sw: 6, fonts: 3, ebooks: 3, openApps: [] });
+            }
+        });
+
         refreshResourceMore();
         refreshSoftwareMore();
         loadApps();
+        pushUiState(true);
     </script>
 </body>
 </html>
