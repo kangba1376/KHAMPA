@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-23T09:54:08.414Z",
+  "updated": "2026-11-24T01:38:41.230Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -20,6 +20,27 @@
         }
       ],
       "updated": "2026-11-19T04:31:47.804Z"
+    },
+    {
+      "id": "httpskhampalanzouecomiGKZW4gkbori",
+      "name_tb": "བོད་ཡིག་ཨང་བསྒྱུར་ཆེན་མོ།",
+      "name_zh": "藏文转换大师",
+      "logo": "data/uploads/httpskhampalanzouecomiGKZW4gkbori-logo.png",
+      "screens": [
+        "data/uploads/httpskhampalanzouecomiGKZW4gkbori-shot-1.jpg",
+        "data/uploads/httpskhampalanzouecomiGKZW4gkbori-shot-2.jpg",
+        "data/uploads/httpskhampalanzouecomiGKZW4gkbori-shot-3.jpg"
+      ],
+      "desc_tb": "ཕབ་ལེན་གསང་ཨང་།：8888",
+      "desc_zh": "提取码：8888",
+      "platforms": [
+        {
+          "platform": "win",
+          "version": "",
+          "url": "https://khampa.lanzoue.com/iGKZW4gkbori"
+        }
+      ],
+      "updated": "2026-11-24T01:38:28.398Z"
     }
   ],
   "hidden": [],
