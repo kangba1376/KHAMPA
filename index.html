@@ -259,6 +259,32 @@
         }
         .admin-fab:hover { background: #660000; transform: translateY(-2px); }
 
+        /* ================= 分享 ================= */
+        .share-fab {
+            position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 9000;
+            writing-mode: vertical-rl; text-orientation: upright;
+            background: #8B0000; color: #FFD700; border: 1px solid #660000; border-left: none;
+            border-radius: 0 10px 10px 0; padding: 16px 8px; cursor: pointer;
+            font-family: 'TibetWildYak', inherit; font-size: 15px; font-weight: bold; letter-spacing: 2px;
+            box-shadow: 2px 0 12px rgba(0,0,0,.25); transition: background .2s;
+        }
+        .share-fab:hover { background: #660000; }
+        .share-modal { width: min(360px, 100%); }
+        .share-header { background: #8B0000; border-bottom: 1px solid #660000; }
+        .share-header .modal-title { color: #ffffff; }
+        .share-list { list-style: none; margin: 0; padding: 0; }
+        .share-item { display: flex; align-items: center; gap: 12px; padding: 11px 6px; cursor: pointer; border-radius: 8px; border-bottom: 1px solid #f3f3f3; }
+        .share-item:last-child { border-bottom: none; }
+        .share-item:hover { background: #faf3f3; }
+        .share-item .share-ico { width: 30px; height: 30px; flex: 0 0 30px; display: flex; align-items: center; justify-content: center; }
+        .share-item .share-name { font-size: 15px; color: #333; }
+        .share-wechat { text-align: center; }
+        .share-wechat img { width: 220px; height: 220px; display: block; margin: 6px auto 10px; background: #f6f6f6; border-radius: 8px; }
+        .share-wechat .share-tip { color: #666; font-size: 13px; margin-bottom: 12px; }
+        .share-back { background: none; border: none; color: #8B0000; cursor: pointer; font-size: 13px; text-decoration: underline; margin-top: 10px; }
+        .share-copy-tip { color: #2a7d2a; font-size: 13px; min-height: 18px; text-align: center; margin-top: 8px; }
+        @media (max-width: 600px) { .share-fab { font-size: 13px; padding: 12px 6px; letter-spacing: 1px; } }
+
         .admin-modal { width: min(1000px, 100%); max-height: min(92vh, 920px); }
         .admin-body { padding: 16px 18px 22px; }
         .admin-sec { border: 1px solid #eee; border-radius: 12px; padding: 14px; margin-bottom: 16px; background: #fcfcfc; }
@@ -616,6 +642,56 @@
 
     <div id="shotLightbox" class="shot-lightbox" onclick="this.style.display='none'">
         <img id="shotLightboxImg" alt="界面截图">
+    </div>
+
+    <button class="share-fab" type="button" onclick="shareOpen()" aria-label="མཉམ་སྤྱོད། 分享">མཉམ་སྤྱོད། 分享</button>
+
+    <div id="shareModal" class="modal-backdrop" role="dialog" aria-modal="true">
+        <div class="modal share-modal">
+            <div class="modal-header share-header">
+                <div class="modal-title">མཉམ་སྤྱོད། 分享</div>
+                <button class="modal-close" type="button" onclick="shareClose()">✕</button>
+            </div>
+            <div class="modal-body">
+                <ul class="share-list" id="shareList">
+                    <li class="share-item" onclick="shareWechat()">
+                        <span class="share-ico"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="12" fill="#07C160"/><rect x="4.5" y="5.5" width="11" height="8" rx="3.5" fill="#fff"/><rect x="10" y="11" width="9.5" height="7.5" rx="3.5" fill="#fff"/><circle cx="8.2" cy="9.3" r=".9" fill="#07C160"/><circle cx="11.8" cy="9.3" r=".9" fill="#07C160"/></svg></span>
+                        <span class="share-name">微信</span>
+                    </li>
+                    <li class="share-item" onclick="shareGo('weibo')">
+                        <span class="share-ico"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="12" fill="#E6162D"/><text x="12" y="16.5" font-size="12" fill="#fff" text-anchor="middle" font-family="sans-serif">博</text></svg></span>
+                        <span class="share-name">新浪微博</span>
+                    </li>
+                    <li class="share-item" onclick="shareGo('qq')">
+                        <span class="share-ico"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="12" fill="#12B7F5"/><text x="12" y="16.5" font-size="13" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="bold">Q</text></svg></span>
+                        <span class="share-name">QQ好友</span>
+                    </li>
+                    <li class="share-item" onclick="shareGo('qzone')">
+                        <span class="share-ico"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="12" fill="#F0B400"/><polygon points="12,6 13.8,10.2 18.4,10.4 14.7,13.2 15.9,17.6 12,15.2 8.1,17.6 9.3,13.2 5.6,10.4 10.2,10.2" fill="#fff"/></svg></span>
+                        <span class="share-name">QQ空间</span>
+                    </li>
+                    <li class="share-item" onclick="shareGo('douban')">
+                        <span class="share-ico"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="12" fill="#2E963D"/><text x="12" y="16.5" font-size="12" fill="#fff" text-anchor="middle" font-family="sans-serif">豆</text></svg></span>
+                        <span class="share-name">豆瓣网</span>
+                    </li>
+                    <li class="share-item" onclick="shareGo('tieba')">
+                        <span class="share-ico"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="12" fill="#3388FF"/><text x="12" y="16.5" font-size="12" fill="#fff" text-anchor="middle" font-family="sans-serif">贴</text></svg></span>
+                        <span class="share-name">百度贴吧</span>
+                    </li>
+                    <li class="share-item" onclick="shareCopy()">
+                        <span class="share-ico"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="12" fill="#4A90D9"/><rect x="7" y="5.5" width="8" height="10" rx="1.5" fill="none" stroke="#fff" stroke-width="1.6"/><rect x="10" y="9" width="8" height="10" rx="1.5" fill="#4A90D9" stroke="#fff" stroke-width="1.6"/></svg></span>
+                        <span class="share-name">复制网址</span>
+                    </li>
+                </ul>
+                <div class="share-wechat" id="shareWechatBox" style="display:none;">
+                    <img id="shareQr" alt="微信扫码分享">
+                    <div class="share-tip">使用微信"扫一扫"，分享给好友或朋友圈</div>
+                    <button class="admin-btn" type="button" onclick="shareCopy()">复制链接</button>
+                    <div><button class="share-back" type="button" onclick="shareShowList()">返回分享列表</button></div>
+                </div>
+                <div class="share-copy-tip" id="shareTip"></div>
+            </div>
+        </div>
     </div>
 
     <div id="resourceModal" class="modal-backdrop" role="dialog" aria-modal="true">
@@ -999,6 +1075,69 @@
 
         function lockBody(on) {
             try { document.body.style.overflow = on ? 'hidden' : ''; } catch (e) {}
+        }
+
+        /* ---------- 分享 ---------- */
+        function shareInfo() {
+            var active = document.querySelector('.nav-link.active');
+            var platform = active ? (active.getAttribute('data-platform') || 'all') : 'all';
+            var base = location.origin + location.pathname;
+            var url = (platform && platform !== 'all') ? base + '#' + platform : base;
+            var title = 'ཁམས་པ་ཚང་། KHAM PA TSANG 藏文软件下载';
+            var desc = '藏文软件、藏文字体、藏文电子书免费下载：编码转换、藏文输入法、藏历历算等，提供在线阅览与下载。';
+            var meta = (typeof PLATFORM_META !== 'undefined' && PLATFORM_META[platform]) ? PLATFORM_META[platform] : null;
+            if (meta && meta.zh) title = meta.zh + ' - ' + title;
+            return { url: url, title: title, desc: desc };
+        }
+        function shareOpen() {
+            shareShowList();
+            document.getElementById('shareTip').textContent = '';
+            document.getElementById('shareModal').style.display = 'flex';
+            lockBody(true);
+        }
+        function shareClose() {
+            document.getElementById('shareModal').style.display = 'none';
+            lockBody(false);
+        }
+        function shareShowList() {
+            document.getElementById('shareList').style.display = '';
+            document.getElementById('shareWechatBox').style.display = 'none';
+        }
+        function shareGo(p) {
+            var s = shareInfo();
+            var u = encodeURIComponent(s.url), t = encodeURIComponent(s.title), d = encodeURIComponent(s.desc);
+            var map = {
+                weibo: 'https://service.weibo.com/share/share.php?url=' + u + '&title=' + t,
+                qq: 'https://connect.qq.com/widget/shareqq/index.html?url=' + u + '&title=' + t + '&summary=' + d,
+                qzone: 'https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + u + '&title=' + t + '&summary=' + d,
+                douban: 'https://www.douban.com/recommend/?url=' + u + '&title=' + t,
+                tieba: 'https://tieba.baidu.com/f/commit/share/openShareApi?url=' + u + '&title=' + t
+            };
+            if (map[p]) window.open(map[p], '_blank', 'noopener');
+        }
+        function shareWechat() {
+            var s = shareInfo();
+            document.getElementById('shareList').style.display = 'none';
+            document.getElementById('shareWechatBox').style.display = 'block';
+            document.getElementById('shareQr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=' + encodeURIComponent(s.url);
+        }
+        function shareCopy() {
+            var s = shareInfo();
+            var done = function () { document.getElementById('shareTip').textContent = '链接已复制，去粘贴分享吧'; };
+            var fail = function () { document.getElementById('shareTip').textContent = '复制失败，请手动复制：' + s.url; };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(s.url).then(done).catch(function () { legacyCopy(s.url) ? done() : fail(); });
+            } else { legacyCopy(s.url) ? done() : fail(); }
+        }
+        function legacyCopy(text) {
+            try {
+                var ta = document.createElement('textarea');
+                ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select();
+                var ok = document.execCommand('copy');
+                document.body.removeChild(ta);
+                return ok;
+            } catch (e) { return false; }
         }
 
         /* ---------- 首页 / 分类页渲染 ---------- */
@@ -2449,6 +2588,14 @@
         refreshResourceMore();
         refreshSoftwareMore();
         loadApps();
+        /* 支持通过 #平台 分享链接直达对应页面 */
+        try {
+            var hp = (location.hash || '').replace('#', '');
+            if (hp && hp !== 'all') {
+                var hlink = document.querySelector('.nav-link[data-platform="' + hp + '"]');
+                if (hlink) filterContent(hp, hlink, '', true);
+            }
+        } catch (e) {}
         pushUiState(true);
     </script>
 </body>
