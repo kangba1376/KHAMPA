@@ -91,11 +91,13 @@
             flex: 0 0 auto;
         }
 
-        .nav-link:hover {
-            background-color: #660000;
+        @media (hover: hover) and (pointer: fine) {
+            .nav-link:hover {
+                background-color: #660000;
+            }
         }
 
-        .active {
+        .nav-link.active {
             background-color: #4d0000;
             font-weight: bold;
         }
