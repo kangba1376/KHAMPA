@@ -1,15 +1,13 @@
 {
-  "updated": "2026-11-24T06:03:15.026Z",
+  "updated": "2026-11-25T15:58:40.635Z",
   "apps": [
     {
       "id": "httpskhampalanzouecomiGKZW4gkbori",
-      "name_tb": "བོད་ཡིག་ཨང་བསྒྱུར་ཆེན་མོ།",
-      "name_zh": "藏文转换大师",
+      "name_tb": "པཎྚི་ཏ་བོད་ཡིག་གཏག་ཆས།",
+      "name_zh": "班智达藏文输入法",
       "logo": "data/uploads/httpskhampalanzouecomiGKZW4gkbori-logo.png",
       "screens": [
-        "data/uploads/httpskhampalanzouecomiGKZW4gkbori-shot-1.jpg",
-        "data/uploads/httpskhampalanzouecomiGKZW4gkbori-shot-2.jpg",
-        "data/uploads/httpskhampalanzouecomiGKZW4gkbori-shot-3.jpg"
+        "data/uploads/httpskhampalanzouecomiGKZW4gkbori-shot-1.jpg"
       ],
       "desc_tb": "ཕབ་ལེན་གསང་ཨང་།：8888",
       "desc_zh": "提取码：8888",
@@ -17,10 +15,10 @@
         {
           "platform": "win",
           "version": "",
-          "url": "https://khampa.lanzoue.com/iGKZW4gkbori"
+          "url": "https://khampa.lanzoue.com/iqg874hatdod"
         }
       ],
-      "updated": "2026-11-24T01:38:28.398Z"
+      "updated": "2026-11-25T15:58:32.958Z"
     }
   ],
   "hidden": [],
