@@ -137,12 +137,11 @@
         .home-app-versions { padding: 16px; background: #f4f7f6; border-top: 1px solid #eee; position: relative; z-index: 2; }
         .home-app-versions .btn-group { margin-top: 10px; gap: 22px; }
         .home-apps-wrapper { position: relative; padding-bottom: 12px; }
-        .home-apps-col > .home-resource-group { flex: 0 0 auto; margin-top: 12px; }
-        .home-apps-col > .software-more.in-col { position: static; align-self: flex-end; margin: 0; }
+        .home-apps-wrapper.has-more { padding-bottom: 50px; }
         .home-apps.is-collapsed > .home-app:nth-child(n+7) { display: none !important; }
         .home-apps .is-page-hidden, .resource-list .is-page-hidden { display: none !important; }
         .software-more { position: absolute; right: 0; bottom: 10px; }
-        @media (max-width: 820px) { .home-apps { display: block; } .home-apps > .home-app + .home-app { margin-top: 12px; } .home-apps > .home-resource-group { margin-top: 40px; } .home-apps-wrapper.has-more { padding-bottom: 50px; } }
+        @media (max-width: 820px) { .home-apps { display: block; } .home-apps > .home-app:not(:last-child) { margin-bottom: 12px; } }
 
         .home-quick-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin: 22px 0 22px 0; }
         .home-quick-links .btn { flex: 1 1 320px; max-width: 420px; min-width: 220px; }
@@ -569,7 +568,7 @@
             </div>
     </div>
 
-    <div id="resource-content" style="display:none;">
+    <div id="resource-content" class="home-resource-groups">
             <div class="home-resource-group" data-resource="fonts">
                 <div class="btn btn-win"><span>བོད་ཡིག་ཡིག་གཟུགས།</span></div>
                 <div class="resource-block">
@@ -907,6 +906,8 @@
             document.getElementById('home-content').style.display = showHome ? 'block' : 'none';
             document.getElementById('about-content').style.display = showAbout ? 'block' : 'none';
             document.getElementById('download-content').style.display = (!showHome && !showAbout) ? 'grid' : 'none';
+            var resContent = document.getElementById('resource-content');
+            if (resContent) resContent.style.display = showHome ? 'grid' : 'none';
 
             var allCards = document.querySelectorAll('.platform-card');
             for (var j = 0; j < allCards.length; j++) {
@@ -1260,19 +1261,10 @@
             });
             var colA = home.querySelector('.home-apps-col[data-col="0"]');
             var colB = home.querySelector('.home-apps-col[data-col="1"]');
-            var fontsGroup = document.querySelector('.home-resource-group[data-resource="fonts"]');
-            var ebooksGroup = document.querySelector('.home-resource-group[data-resource="ebooks"]');
-            var moreBtn = document.querySelector('.software-more');
             var mobile = false;
             try { mobile = window.matchMedia('(max-width: 820px)').matches; } catch (e) {}
             if (mobile) {
                 items.forEach(function (el) { home.appendChild(el); });
-                if (fontsGroup) home.appendChild(fontsGroup);
-                if (ebooksGroup) home.appendChild(ebooksGroup);
-                if (moreBtn) {
-                    moreBtn.classList.remove('in-col');
-                    if (home.parentElement) home.parentElement.appendChild(moreBtn);
-                }
                 if (colA && colA.parentNode) colA.parentNode.removeChild(colA);
                 if (colB && colB.parentNode) colB.parentNode.removeChild(colB);
                 return;
@@ -1290,12 +1282,6 @@
             items.forEach(function (el, i) {
                 (i % 2 === 0 ? colA : colB).appendChild(el);
             });
-            if (fontsGroup) colA.appendChild(fontsGroup);
-            if (ebooksGroup) colB.appendChild(ebooksGroup);
-            if (moreBtn) {
-                colB.insertBefore(moreBtn, ebooksGroup || null);
-                moreBtn.classList.add('in-col');
-            }
         }
 
         function refreshSoftwareMore() {
