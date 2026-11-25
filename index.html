@@ -123,7 +123,8 @@
         .update-simple-tibet { color: #8b0000; font-family: 'TibetWildYak'; display: block; }
         .update-simple-zh { color: #8b0000; display: block; margin-top: 8px; }
 
-        .home-apps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 4px 0 0 0; align-items: start; }
+        .home-apps { display: flex; align-items: flex-start; gap: 12px; margin: 4px 0 0 0; }
+        .home-apps-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
         .home-app { margin-top: 0; border: 1px solid #eee; border-radius: 14px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.06); overflow: hidden; position: relative; }
         .home-app > summary { padding: 14px; background: #ffffff; color: #0b3b8a; list-style: none; cursor: pointer; }
         .home-app > summary::-webkit-details-marker { display: none; }
@@ -137,10 +138,10 @@
         .home-app-versions .btn-group { margin-top: 10px; gap: 22px; }
         .home-apps-wrapper { position: relative; padding-bottom: 12px; }
         .home-apps-wrapper.has-more { padding-bottom: 50px; }
-        .home-apps.is-collapsed .home-app:nth-child(n+7) { display: none !important; }
+        .home-apps.is-collapsed > .home-app:nth-child(n+7) { display: none !important; }
         .home-apps .is-page-hidden, .resource-list .is-page-hidden { display: none !important; }
         .software-more { position: absolute; right: 0; bottom: 10px; }
-        @media (max-width: 820px) { .home-apps { grid-template-columns: 1fr; } }
+        @media (max-width: 820px) { .home-apps { display: block; } .home-apps > .home-app:not(:last-child) { margin-bottom: 12px; } }
 
         .home-quick-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin: 22px 0 22px 0; }
         .home-quick-links .btn { flex: 1 1 320px; max-width: 420px; min-width: 220px; }
@@ -1239,8 +1240,53 @@
             btn.textContent = items.length > 6 && limit >= items.length ? 'ཡར་སྐུམ།' : 'དེ་ལས་མང་།';
         }
 
+        function layoutHomeApps() {
+            var home = document.getElementById('homeApps');
+            if (!home) return;
+            var items = Array.prototype.slice.call(home.querySelectorAll('.home-app'));
+            if (!items.length) return;
+            var maxOrder = -1;
+            items.forEach(function (el) {
+                var o = parseInt(el.getAttribute('data-order'), 10);
+                if (!isNaN(o) && o > maxOrder) maxOrder = o;
+            });
+            items.forEach(function (el) {
+                if (el.getAttribute('data-order') === null) {
+                    maxOrder++;
+                    el.setAttribute('data-order', String(maxOrder));
+                }
+            });
+            items.sort(function (a, b) {
+                return (parseInt(a.getAttribute('data-order'), 10) || 0) - (parseInt(b.getAttribute('data-order'), 10) || 0);
+            });
+            var colA = home.querySelector('.home-apps-col[data-col="0"]');
+            var colB = home.querySelector('.home-apps-col[data-col="1"]');
+            var mobile = false;
+            try { mobile = window.matchMedia('(max-width: 820px)').matches; } catch (e) {}
+            if (mobile) {
+                items.forEach(function (el) { home.appendChild(el); });
+                if (colA && colA.parentNode) colA.parentNode.removeChild(colA);
+                if (colB && colB.parentNode) colB.parentNode.removeChild(colB);
+                return;
+            }
+            if (!colA || !colB) {
+                colA = document.createElement('div');
+                colA.className = 'home-apps-col';
+                colA.setAttribute('data-col', '0');
+                colB = document.createElement('div');
+                colB.className = 'home-apps-col';
+                colB.setAttribute('data-col', '1');
+                home.appendChild(colA);
+                home.appendChild(colB);
+            }
+            items.forEach(function (el, i) {
+                (i % 2 === 0 ? colA : colB).appendChild(el);
+            });
+        }
+
         function refreshSoftwareMore() {
             updateSoftwareMore();
+            layoutHomeApps();
         }
 
         function toggleSoftwareMore() {
@@ -2330,6 +2376,13 @@
                 applyUiState({ kham: 1, platform: 'all', appId: '', sw: 6, fonts: 3, ebooks: 3, openApps: [] });
             }
         });
+
+        try {
+            var khamMq = window.matchMedia('(max-width: 820px)');
+            var khamMqHandler = function () { layoutHomeApps(); };
+            if (khamMq.addEventListener) khamMq.addEventListener('change', khamMqHandler);
+            else if (khamMq.addListener) khamMq.addListener(khamMqHandler);
+        } catch (e) {}
 
         refreshResourceMore();
         refreshSoftwareMore();
