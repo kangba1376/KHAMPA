@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25T23:13:36.160Z",
+  "updated": "2026-11-25T23:29:36.747Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -58,6 +58,25 @@
         }
       ],
       "updated": "2026-11-25T23:13:28.226Z"
+    },
+    {
+      "id": "appmwwr9t62",
+      "name_tb": "དོན་ཡོད་བོད་ཡིག་གཏག་ཆས།",
+      "name_zh": "同元藏文输入法",
+      "logo": "data/uploads/appmwwr9t62-logo.png",
+      "screens": [
+        "data/uploads/appmwwr9t62-shot-1.jpg"
+      ],
+      "desc_tb": "ཕབ་ལེན་གསང་ཨང་།：8888",
+      "desc_zh": "提取码：8888",
+      "platforms": [
+        {
+          "platform": "win",
+          "version": "",
+          "url": "https://khampa.lanzoue.com/ixuXy4hbbtgj"
+        }
+      ],
+      "updated": "2026-11-25T23:29:29.835Z"
     }
   ],
   "hidden": [],
