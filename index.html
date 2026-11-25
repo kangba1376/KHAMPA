@@ -1715,7 +1715,7 @@
                 await ghPut('data/apps.json', utf8ToB64(JSON.stringify(data, null, 2)),
                     '发布软件：' + (app.name_zh || app.name_tb || app.id), file.sha);
 
-                renderApps(data.apps);
+                applySiteData(data);
                 resetForm();
                 renderPublishedList();
                 setStatus('发布成功！GitHub Pages 约 1 分钟后更新，届时全站可见。', false);
