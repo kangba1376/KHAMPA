@@ -411,7 +411,7 @@
     <div id="download-content" class="card-container" style="display: none;">
             <div class="card platform-card filter-android" data-app="khamvert" data-platform="android">
                 <div class="platform-top-icon"><img src="KHAMvert.PNG" alt="KHAMvert" width="62" height="62"></div>
-        <span class="tibet-header">ཨན་དྲོལ་ཁ་པར་ནང་སྤྱོད་ཆོག་པའི་མཉེན་ཆས། (Android)</span>
+        <span class="tibet-header">ཨན་དྲོལ་པར་གཞི། Android </span>
         <div class="btn-group">
             <a href="https://www.123865.com/s/wu2Kvd-j8aoH" class="btn btn-android" target="_blank">
                 <span>པཎྜི་ཏ། ⇌ ཧི་མ་ལ་ཡ།</span>
@@ -448,7 +448,7 @@
 
     <div class="card platform-card filter-mac" data-app="khamvert" data-platform="mac">
         <div class="platform-top-icon"><img src="KHAMvert.PNG" alt="KHAMvert" width="62" height="62"></div>
-        <span class="tibet-header">Apple ཀུ་ཤུ་གློག་ཀླད་ནང་སྤྱོད་ཆོག་པའི་མཉེན་ཆས། (macOS)</span>
+        <span class="tibet-header">Apple ཀུ་ཤུ་གློག་ཀླད་པར་གཞི། macOS </span>
         <div class="btn-group">
             <a href="https://www.123865.com/s/wu2Kvd-V8aoH" class="btn btn-mac" target="_blank">
                 <span>པཎྜི་ཏ། ⇌ ཧི་མ་ལ་ཡ།</span>
@@ -488,7 +488,7 @@
 
     <div class="card platform-card filter-win" data-app="khamvert" data-platform="win">
         <div class="platform-top-icon"><img src="KHAMvert.PNG" alt="KHAMvert" width="62" height="62"></div>
-        <span class="tibet-header">Windows སྐར་ཁུང་མ་ལག་སྟེང་སྤྱོད་ཆོག་པའི་མཉེན་ཆས། </span>
+        <span class="tibet-header"> སྐར་ཁུང་གློག་ཀླད་པར་གཞི། Windows </span>
         <div class="btn-group">
             <a href="https://www.123865.com/s/wu2Kvd-68aoH" class="btn btn-win" target="_blank">
                 <span>པཎྜི་ཏ། ⇌ ཧི་མ་ལ་ཡ།</span>
@@ -520,7 +520,7 @@
     </div>
     <div class="card platform-card android-special filter-android" data-app="soulday" data-platform="android">
         <div class="platform-top-icon"><img src="Soul%20Day.PNG" alt="Soul Day" width="62" height="62"></div>
-        <span class="tibet-header">ཨན་དྲོལ་ཁ་པར་ནང་སྤྱོད་ཆོག་པའི་མཉེན་ཆས། (Android)</span></span>
+        <span class="tibet-header"> ཨན་དྲོལ་པར་གཞི། Android </span></span>
         <div class="btn-group">
             <a href="https://www.123684.com/s/wu2Kvd-BuaoH" class="btn btn-android" target="_blank">
                 <span>བླ་གཟའ་སོགས་བལྟ་བྱེད།</span>
@@ -627,7 +627,7 @@
     <div id="adminGate" class="modal-backdrop" role="dialog" aria-modal="true">
         <div class="modal admin-modal" style="max-width:440px;">
             <div class="modal-header">
-                <div class="modal-title">后台管理 / སྒྲིག་སྒྲིག་ཁུལ།</div>
+                <div class="modal-title">后台管理 / སྒྲིག་འཇུག་ཁུལ། </div>
                 <button class="modal-close" type="button" onclick="adminCloseGate()">✕</button>
             </div>
             <div class="modal-body admin-body">
@@ -1064,7 +1064,7 @@
                 '<span class="tibet-header">' + esc(o.name_tb || b.name) + '　' + esc(m.tb) + '</span>' +
                 overrideExtrasHtml(o, cfg) +
                 '<div class="btn-group"><a class="btn ' + m.btn + '" href="' + esc(cfg.url || '#') + '" target="_blank" rel="noopener"><span>' +
-                esc(cfg.label || 'ཕབ་ལེན། 下载') + (cfg.version ? ' ' + esc(cfg.version) : '') + '</span></a></div>';
+                esc(cfg.label || 'ཕབ་ལེན།/下载') + (cfg.version ? ' ' + esc(cfg.version) : '') + '</span></a></div>';
             var dl = document.getElementById('download-content');
             var globalCard = dl ? dl.querySelector('[data-global]') : null;
             if (globalCard) dl.insertBefore(card, globalCard); else if (dl) dl.appendChild(card);
@@ -1136,7 +1136,7 @@
                         if (cfg.url) a.setAttribute('href', cfg.url);
                         var span = a.querySelector('span');
                         if (span && Object.prototype.hasOwnProperty.call(cfg, 'label')) {
-                            span.textContent = (cfg.label || 'ཕབ་ལེན། 下载') + (cfg.version ? ' ' + cfg.version : '');
+                            span.textContent = (cfg.label || 'ཕབ་ལེན།/下载') + (cfg.version ? ' ' + cfg.version : '');
                         }
                     }
                     var logo = card.querySelector('.platform-top-icon img');
