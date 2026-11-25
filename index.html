@@ -907,7 +907,7 @@
             document.getElementById('about-content').style.display = showAbout ? 'block' : 'none';
             document.getElementById('download-content').style.display = (!showHome && !showAbout) ? 'grid' : 'none';
             var resContent = document.getElementById('resource-content');
-            if (resContent) resContent.style.display = showHome ? 'grid' : 'none';
+            if (resContent) resContent.style.display = showHome ? '' : 'none';
 
             var allCards = document.querySelectorAll('.platform-card');
             for (var j = 0; j < allCards.length; j++) {
