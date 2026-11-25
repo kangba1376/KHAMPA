@@ -1321,7 +1321,7 @@
                         (nameZh || p.version ? '<div class="dyn-name-zh">' + esc(nameZh) + (p.version ? '　·　' + esc(p.version) : '') + '</div>' : '') +
                         (desc ? '<div class="dyn-desc">' + desc + '</div>' : '') +
                         (shots ? '<div class="dyn-shots">' + shots + '</div>' : '') +
-                        '<div class="btn-group"><a class="btn ' + m.btn + '" href="' + esc(p.url || '#') + '" target="_blank" rel="noopener"><span>ཕབ་ལེན། 下载' + (p.version ? ' ' + esc(p.version) : '') + '</span></a></div>';
+                        '<div class="btn-group"><a class="btn ' + m.btn + '" href="' + esc(p.url || '#') + '" target="_blank" rel="noopener"><span>ཕབ་ལེན།/下载' + (p.version ? ' ' + esc(p.version) : '') + '</span></a></div>';
 
                     if (globalCard) dl.insertBefore(card, globalCard); else dl.appendChild(card);
                 });
