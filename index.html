@@ -647,7 +647,7 @@ window.addEventListener('message', function(e){
   if (!e.data || typeof e.data.khamCalendarHeight !== 'number') return;
   var f = document.getElementById('khamCalendarFrame');
   if (!f) return;
-  f.style.height = Math.max(380, Math.min(1100, e.data.khamCalendarHeight + 6)) + 'px';
+  f.style.height = Math.max(380, Math.min(1400, e.data.khamCalendarHeight)) + 'px';
 });
 </script>
     <div class="site-footer">
