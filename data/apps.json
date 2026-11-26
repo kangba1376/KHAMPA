@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-26T09:06:13.702Z",
+  "updated": "2026-11-26T09:19:55.269Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -77,6 +77,27 @@
         }
       ],
       "updated": "2026-11-25T23:29:29.835Z"
+    },
+    {
+      "id": "appmwxccthq",
+      "name_tb": "དུང་དཀར་བོད་ཡིག་གཏག་ཆས།",
+      "name_zh": "东噶藏文输入法",
+      "logo": "data/uploads/appmwxccthq-logo.png",
+      "screens": [
+        "data/uploads/appmwxccthq-shot-1.jpg",
+        "data/uploads/appmwxccthq-shot-2.jpg",
+        "data/uploads/appmwxccthq-shot-3.jpg"
+      ],
+      "desc_tb": "ཕབ་ལེན་གསང་ཨང་།：8888",
+      "desc_zh": "提取码：8888",
+      "platforms": [
+        {
+          "platform": "android",
+          "version": "",
+          "url": "https://khampa.lanzoue.com/iuszB4hdbwib"
+        }
+      ],
+      "updated": "2026-11-26T09:19:42.158Z"
     }
   ],
   "hidden": [],
