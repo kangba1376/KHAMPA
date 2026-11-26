@@ -134,19 +134,25 @@
         .home-app > summary { padding: 14px; background: #ffffff; color: #0b3b8a; list-style: none; cursor: pointer; }
         .home-app > summary::-webkit-details-marker { display: none; }
         .home-app > summary::after { display: none; }
-        .home-app-summary { display: flex; align-items: center; gap: 14px; width: 100%; }
-        .home-app-icon { width: 48px; height: 48px; border-radius: 12px; object-fit: contain; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.15); padding: 4px; }
-        .home-app-titles { display: flex; flex-direction: column; gap: 2px; text-align: left; }
-        .home-app-title-tb { font-family: 'TibetWildYak'; font-size: 0.98em; color: #0b3b8a; }
-        .home-app-title-zh { font-size: 0.88em; color: #0b3b8a; opacity: 0.95; }
+        .home-app-summary { display: flex; align-items: center; gap: 14px; width: 100%; min-width: 0; }
+        .home-app-icon { flex: 0 0 48px; width: 48px; height: 48px; border-radius: 12px; object-fit: contain; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.15); padding: 4px; }
+        .home-app-titles { display: flex; flex: 1 1 0; flex-direction: column; gap: 2px; min-width: 0; overflow: hidden; text-align: left; }
+        .home-app-title-viewport { display: block; width: 100%; overflow: hidden; white-space: nowrap; }
+        .home-app-title-track { display: inline-flex; align-items: baseline; width: max-content; min-width: 100%; white-space: nowrap; }
+        .home-app-title-tb { display: inline-block; flex: 0 0 auto; font-family: 'TibetWildYak'; font-size: 0.98em; color: #0b3b8a; white-space: nowrap; }
+        .home-app-title-zh { display: inline-block; flex: 0 0 auto; font-size: 0.88em; color: #0b3b8a; opacity: 0.95; white-space: nowrap; }
+        .home-app-title-clone { margin-left: 32px; }
+        .home-app-title-track.is-marquee { animation: homeAppTitleMarquee var(--home-app-marquee-duration, 10s) linear infinite; will-change: transform; }
+        @keyframes homeAppTitleMarquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(0px - var(--home-app-marquee-distance))); }
+        }
         .home-app-versions { padding: 16px; background: #f4f7f6; border-top: 1px solid #eee; position: relative; z-index: 2; }
         .home-app-versions .btn-group { margin-top: 10px; gap: 22px; }
         .home-apps-wrapper { position: relative; padding-bottom: 12px; }
         .home-apps-wrapper.has-more { padding-bottom: 50px; }
-        .home-apps.is-collapsed > .home-app:nth-child(n+7) { display: none !important; }
         .home-apps .is-page-hidden, .resource-list .is-page-hidden { display: none !important; }
         .software-more { position: absolute; right: 0; bottom: 10px; }
-        @media (max-width: 820px) { .home-apps { display: block; } .home-apps > .home-app:not(:last-child) { margin-bottom: 12px; } }
 
         .home-quick-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin: 22px 0 22px 0; }
         .home-quick-links .btn { flex: 1 1 320px; max-width: 420px; min-width: 220px; }
@@ -919,7 +925,7 @@
                 kham: 1,
                 platform: active ? (active.getAttribute('data-platform') || 'all') : 'all',
                 appId: CURRENT_APP_FILTER || '',
-                sw: parseInt((home && home.getAttribute('data-visible-count')) || '6', 10),
+                sw: parseInt((home && home.getAttribute('data-visible-count')) || getHomeAppsInitialLimit(), 10),
                 fonts: parseInt((fontList && fontList.getAttribute('data-visible-count')) || '3', 10),
                 ebooks: parseInt((bookList && bookList.getAttribute('data-visible-count')) || '3', 10),
                 openApps: openApps
@@ -941,7 +947,7 @@
             KHAM_UI_APPLYING = true;
             try {
                 var home = document.getElementById('homeApps');
-                if (home) home.setAttribute('data-visible-count', String(state.sw || 6));
+                if (home) home.setAttribute('data-visible-count', String(state.sw || getHomeAppsInitialLimit()));
                 var fontList = document.querySelector('.home-resource-group[data-resource="fonts"] .resource-list');
                 if (fontList) fontList.setAttribute('data-visible-count', String(state.fonts || 3));
                 var bookList = document.querySelector('.home-resource-group[data-resource="ebooks"] .resource-list');
@@ -955,7 +961,7 @@
 
                 var link = document.querySelector('.nav-link[data-platform="' + (state.platform || 'all') + '"]');
                 filterContent(state.platform || 'all', link, state.appId || '', true);
-                updateSoftwareMore();
+                refreshSoftwareMore();
                 refreshResourceMore();
             } finally {
                 KHAM_UI_APPLYING = false;
@@ -965,12 +971,12 @@
 
         function resetExpandedContent() {
             var home = document.getElementById('homeApps');
-            if (home) home.setAttribute('data-visible-count', '6');
+            if (home) home.setAttribute('data-visible-count', String(getHomeAppsInitialLimit()));
             var lists = document.querySelectorAll('.home-resource-group .resource-list');
             for (var i = 0; i < lists.length; i++) lists[i].setAttribute('data-visible-count', '3');
             var details = document.querySelectorAll('#homeApps .home-app[open]');
             for (var k = 0; k < details.length; k++) details[k].open = false;
-            updateSoftwareMore();
+            refreshSoftwareMore();
             refreshResourceMore();
         }
 
@@ -1366,6 +1372,15 @@
             pushUiState();
         }
 
+        function getHomeAppsColumnCount() {
+            try { return window.matchMedia('(max-width: 820px)').matches ? 2 : 3; }
+            catch (e) { return window.innerWidth <= 820 ? 2 : 3; }
+        }
+
+        function getHomeAppsInitialLimit() {
+            return getHomeAppsColumnCount() * 3;
+        }
+
         function updateSoftwareMore() {
             var home = document.getElementById('homeApps');
             var btn = document.querySelector('.software-more');
@@ -1375,15 +1390,33 @@
             for (var i = 0; i < all.length; i++) {
                 if (all[i].getAttribute('data-hidden') !== '1') items.push(all[i]);
             }
-            var limit = parseInt(home.getAttribute('data-visible-count') || '6', 10);
-            if (limit < 6) limit = 6;
+            items.sort(function (a, b) {
+                var aOrder = parseInt(a.getAttribute('data-order'), 10);
+                var bOrder = parseInt(b.getAttribute('data-order'), 10);
+                if (isNaN(aOrder)) aOrder = Infinity;
+                if (isNaN(bOrder)) bOrder = Infinity;
+                return aOrder === bOrder ? 0 : aOrder - bOrder;
+            });
+            var columnCount = getHomeAppsColumnCount();
+            var previousColumnCount = parseInt(home.getAttribute('data-column-count') || columnCount, 10);
+            if (previousColumnCount !== 2 && previousColumnCount !== 3) previousColumnCount = columnCount;
+            var initialLimit = getHomeAppsInitialLimit();
+            var limit = parseInt(home.getAttribute('data-visible-count') || (previousColumnCount * 3), 10);
+            if (previousColumnCount !== columnCount) {
+                var visibleRows = Math.max(3, Math.ceil(limit / previousColumnCount));
+                limit = visibleRows * columnCount;
+            }
+            if (limit < initialLimit) limit = initialLimit;
+            home.setAttribute('data-column-count', String(columnCount));
+            home.setAttribute('data-visible-count', String(limit));
             home.classList.remove('is-collapsed');
             for (var j = 0; j < items.length; j++) {
                 items[j].classList.toggle('is-page-hidden', j >= limit);
             }
-            btn.classList.toggle('has-more', items.length > 6);
-            if (home.parentElement) home.parentElement.classList.toggle('has-more', items.length > 6);
-            btn.textContent = items.length > 6 && limit >= items.length ? 'ཡར་སྐུམ།' : 'དེ་ལས་མང་།';
+            var hasMore = items.length > initialLimit;
+            btn.classList.toggle('has-more', hasMore);
+            if (home.parentElement) home.parentElement.classList.toggle('has-more', hasMore);
+            btn.textContent = hasMore && limit >= items.length ? 'ཡར་སྐུམ།' : 'དེ་ལས་མང་།';
         }
 
         function layoutHomeApps() {
@@ -1405,29 +1438,82 @@
             items.sort(function (a, b) {
                 return (parseInt(a.getAttribute('data-order'), 10) || 0) - (parseInt(b.getAttribute('data-order'), 10) || 0);
             });
-            var colA = home.querySelector('.home-apps-col[data-col="0"]');
-            var colB = home.querySelector('.home-apps-col[data-col="1"]');
-            var mobile = false;
-            try { mobile = window.matchMedia('(max-width: 820px)').matches; } catch (e) {}
-            if (mobile) {
-                items.forEach(function (el) { home.appendChild(el); });
-                if (colA && colA.parentNode) colA.parentNode.removeChild(colA);
-                if (colB && colB.parentNode) colB.parentNode.removeChild(colB);
-                return;
+            var columnCount = getHomeAppsColumnCount();
+            var columns = [];
+            for (var c = 0; c < columnCount; c++) {
+                var col = home.querySelector('.home-apps-col[data-col="' + c + '"]');
+                if (!col) {
+                    col = document.createElement('div');
+                    col.className = 'home-apps-col';
+                    col.setAttribute('data-col', String(c));
+                }
+                home.appendChild(col);
+                columns.push(col);
             }
-            if (!colA || !colB) {
-                colA = document.createElement('div');
-                colA.className = 'home-apps-col';
-                colA.setAttribute('data-col', '0');
-                colB = document.createElement('div');
-                colB.className = 'home-apps-col';
-                colB.setAttribute('data-col', '1');
-                home.appendChild(colA);
-                home.appendChild(colB);
-            }
-            items.forEach(function (el, i) {
-                (i % 2 === 0 ? colA : colB).appendChild(el);
+            var oldColumns = Array.prototype.slice.call(home.querySelectorAll('.home-apps-col'));
+            oldColumns.forEach(function (col) {
+                if (columns.indexOf(col) === -1 && col.parentNode) col.parentNode.removeChild(col);
             });
+            var visibleIndex = 0;
+            items.forEach(function (el) {
+                var isVisible = el.getAttribute('data-hidden') !== '1' && !el.classList.contains('is-page-hidden');
+                var target = columns[isVisible ? visibleIndex % columnCount : columnCount - 1];
+                target.appendChild(el);
+                if (isVisible) visibleIndex++;
+            });
+            scheduleHomeAppTitleMarquees();
+        }
+
+        var homeAppTitleFrame = 0;
+        function scheduleHomeAppTitleMarquees() {
+            if (homeAppTitleFrame) return;
+            var raf = window.requestAnimationFrame || function (fn) { return window.setTimeout(fn, 16); };
+            homeAppTitleFrame = raf(function () {
+                homeAppTitleFrame = 0;
+                refreshHomeAppTitleMarquees();
+            });
+        }
+
+        function refreshHomeAppTitleMarquees() {
+            var home = document.getElementById('homeApps');
+            if (!home || home.offsetParent === null) return;
+            var titles = home.querySelectorAll('.home-app-title-tb:not(.home-app-title-clone), .home-app-title-zh:not(.home-app-title-clone)');
+            for (var i = 0; i < titles.length; i++) {
+                var title = titles[i];
+                var parent = title.parentNode;
+                if (!parent) continue;
+                var track = parent.classList.contains('home-app-title-track') ? parent : null;
+                var viewport;
+                if (!track) {
+                    viewport = document.createElement('span');
+                    viewport.className = 'home-app-title-viewport';
+                    track = document.createElement('span');
+                    track.className = 'home-app-title-track';
+                    parent.insertBefore(viewport, title);
+                    viewport.appendChild(track);
+                    track.appendChild(title);
+                } else {
+                    viewport = track.parentNode;
+                }
+                var clones = track.querySelectorAll('.home-app-title-clone');
+                for (var j = 0; j < clones.length; j++) clones[j].parentNode.removeChild(clones[j]);
+                track.classList.remove('is-marquee');
+                track.style.removeProperty('--home-app-marquee-distance');
+                track.style.removeProperty('--home-app-marquee-duration');
+                if (!viewport || viewport.clientWidth < 1 || !title.textContent) continue;
+                var titleWidth = title.getBoundingClientRect().width;
+                if (titleWidth > viewport.clientWidth + 1) {
+                    var distance = titleWidth + 32;
+                    var clone = title.cloneNode(true);
+                    clone.classList.add('home-app-title-clone');
+                    clone.setAttribute('aria-hidden', 'true');
+                    clone.removeAttribute('id');
+                    track.appendChild(clone);
+                    track.style.setProperty('--home-app-marquee-distance', distance + 'px');
+                    track.style.setProperty('--home-app-marquee-duration', Math.max(6, distance / 36) + 's');
+                    track.classList.add('is-marquee');
+                }
+            }
         }
 
         function refreshSoftwareMore() {
@@ -1443,9 +1529,10 @@
             for (var i = 0; i < items.length; i++) {
                 if (items[i].getAttribute('data-hidden') !== '1') count++;
             }
-            var limit = parseInt(home.getAttribute('data-visible-count') || '6', 10);
-            home.setAttribute('data-visible-count', limit >= count ? '6' : String(limit + 6));
-            updateSoftwareMore();
+            var initialLimit = getHomeAppsInitialLimit();
+            var limit = parseInt(home.getAttribute('data-visible-count') || initialLimit, 10);
+            home.setAttribute('data-visible-count', limit >= count ? String(initialLimit) : String(limit + initialLimit));
+            refreshSoftwareMore();
             pushUiState();
         }
 
@@ -2575,16 +2662,20 @@
             if (e.state && e.state.kham) {
                 applyUiState(e.state);
             } else {
-                applyUiState({ kham: 1, platform: 'all', appId: '', sw: 6, fonts: 3, ebooks: 3, openApps: [] });
+                applyUiState({ kham: 1, platform: 'all', appId: '', sw: getHomeAppsInitialLimit(), fonts: 3, ebooks: 3, openApps: [] });
             }
         });
 
         try {
             var khamMq = window.matchMedia('(max-width: 820px)');
-            var khamMqHandler = function () { layoutHomeApps(); };
+            var khamMqHandler = function () { refreshSoftwareMore(); };
             if (khamMq.addEventListener) khamMq.addEventListener('change', khamMqHandler);
             else if (khamMq.addListener) khamMq.addListener(khamMqHandler);
         } catch (e) {}
+        window.addEventListener('resize', scheduleHomeAppTitleMarquees);
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () { scheduleHomeAppTitleMarquees(); });
+        }
 
         refreshResourceMore();
         refreshSoftwareMore();
