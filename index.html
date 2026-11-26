@@ -1275,7 +1275,7 @@ window.addEventListener('message', function(e){
             }
             var hasMore = items.length > initialLimit;
             btn.classList.toggle('has-more', hasMore);
-            btn.textContent = hasMore && limit >= items.length ? 'ཡར་སྐུམ།' : 'དེ་ལས་མང་།>>';
+            btn.textContent = hasMore && limit >= items.length ? '<<ཡར་སྐུམ།' : 'དེ་ལས་མང་།>>';
         }
 
         function refreshResourceMore() {
@@ -1339,7 +1339,7 @@ window.addEventListener('message', function(e){
             var hasMore = items.length > initialLimit;
             btn.classList.toggle('has-more', hasMore);
             if (home.parentElement) home.parentElement.classList.remove('has-more');
-            btn.textContent = hasMore && limit >= items.length ? 'ཡར་སྐུམ།' : 'དེ་ལས་མང་།>>';
+            btn.textContent = hasMore && limit >= items.length ? '<<ཡར་སྐུམ།' : 'དེ་ལས་མང་།>>';
         }
 
         function layoutHomeApps() {
