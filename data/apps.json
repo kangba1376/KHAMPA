@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-26T09:04:18.820Z",
+  "updated": "2026-11-26T09:04:46.575Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -42,7 +42,7 @@
     },
     {
       "id": "appmwwqp76q",
-      "name_tb": "ཧི་མ་ལ་ཡ་གཏག་ཆས།",
+      "name_tb": "ཧི་མ་ལ་ཡ་བོད་ཡིག་གཏག་ཆས།",
       "name_zh": "喜马拉雅藏文输入法",
       "logo": "data/uploads/appmwwqp76q-logo.png",
       "screens": [
@@ -57,7 +57,7 @@
           "url": "https://khampa.lanzoue.com/izH4d4hatdsh"
         }
       ],
-      "updated": "2026-11-25T23:13:28.226Z"
+      "updated": "2026-11-26T09:04:46.575Z"
     },
     {
       "id": "appmwwr9t62",
