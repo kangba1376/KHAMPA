@@ -950,6 +950,7 @@ window.addEventListener('message', function(e){
             var showHome = platform === 'all';
             var showAbout = platform === 'about';
             document.getElementById('home-content').style.display = showHome ? 'block' : 'none';
+      var khamCalEl = document.getElementById('kham-calendar-module'); if (khamCalEl) khamCalEl.style.display = showHome ? 'block' : 'none';
             document.getElementById('about-content').style.display = showAbout ? 'block' : 'none';
             document.getElementById('download-content').style.display = (!showHome && !showAbout) ? 'grid' : 'none';
             var resContent = document.getElementById('resource-content');
