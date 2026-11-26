@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25T23:29:36.747Z",
+  "updated": "2026-11-26T09:04:18.820Z",
   "apps": [
     {
       "id": "appmwn1zluk",
@@ -195,7 +195,7 @@
   "overrides": {
     "khamvert": {
       "name_tb": "ཧི་མ་ལ་ཡ། ⇆ པཎྚི་ཏ།",
-      "name_zh": "喜马拉雅 ⇆ 班智达",
+      "name_zh": "喜马拉雅 ⇆ 班智达（转换）",
       "platforms": {
         "win": {
           "enabled": true,
