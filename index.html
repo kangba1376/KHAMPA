@@ -139,7 +139,7 @@
         .home-app-titles { display: flex; flex: 1 1 0; flex-direction: column; gap: 2px; min-width: 0; overflow: hidden; text-align: left; }
         .home-app-title-viewport { display: block; width: 100%; overflow: hidden; white-space: nowrap; }
         .home-app-title-track { display: inline-flex; align-items: baseline; width: max-content; min-width: 100%; white-space: nowrap; }
-        .home-app-title-tb { display: inline-block; flex: 0 0 auto; font-family: 'TibetWildYak'; font-size: 0.98em; color: #0b3b8a; white-space: nowrap; }
+        .home-app-title-tb { display: inline-block; flex: 0 0 auto; font-family: 'TibetWildYak'; font-size: 0.88em; color: #0b3b8a; white-space: nowrap; }
         .home-app-title-zh { display: inline-block; flex: 0 0 auto; font-size: 0.88em; color: #0b3b8a; opacity: 0.95; white-space: nowrap; }
         .home-app-title-clone { margin-left: 32px; }
         .home-app-title-track.is-marquee { animation: homeAppTitleMarquee var(--home-app-marquee-duration, 10s) linear infinite; will-change: transform; }
@@ -1378,7 +1378,7 @@
         }
 
         function getHomeAppsInitialLimit() {
-            return getHomeAppsColumnCount() * 3;
+            return getHomeAppsColumnCount() * 2;
         }
 
         function updateSoftwareMore() {
@@ -1401,9 +1401,9 @@
             var previousColumnCount = parseInt(home.getAttribute('data-column-count') || columnCount, 10);
             if (previousColumnCount !== 2 && previousColumnCount !== 3) previousColumnCount = columnCount;
             var initialLimit = getHomeAppsInitialLimit();
-            var limit = parseInt(home.getAttribute('data-visible-count') || (previousColumnCount * 3), 10);
+            var limit = parseInt(home.getAttribute('data-visible-count') || (previousColumnCount * 2), 10);
             if (previousColumnCount !== columnCount) {
-                var visibleRows = Math.max(3, Math.ceil(limit / previousColumnCount));
+                var visibleRows = Math.max(2, Math.ceil(limit / previousColumnCount));
                 limit = visibleRows * columnCount;
             }
             if (limit < initialLimit) limit = initialLimit;
