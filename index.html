@@ -260,11 +260,11 @@
         .resource-list .sub { display: none; }
         .module-title-bar { position: relative; text-align: center; }
         .module-title-text { display: block; width: 100%; text-align: center; }
-        .resource-more { display: none; border: 1px solid rgba(255,255,255,.65); background: rgba(255,255,255,.12); color: #ffffff; border-radius: 999px; padding: 5px 10px; font-family: 'TibetWildYak', inherit; font-size: 0.68em; font-weight: normal; line-height: 1.2; white-space: nowrap; cursor: pointer; z-index: 2; }
+        .resource-more { display: none; appearance: none; -webkit-appearance: none; border: 0; background: transparent; box-shadow: none; color: inherit; border-radius: 0; padding: 0; font: inherit; white-space: nowrap; cursor: pointer; z-index: 2; }
         .module-more { position: absolute; right: 12px; top: 50%; bottom: auto; transform: translateY(-50%); }
         .resource-more.has-more { display: inline-block; }
-        .resource-more:hover { background: #660000; border-color: #ffffff; }
-        @media (max-width: 480px) { .module-more { right: 8px; padding: 4px 8px; font-size: 0.62em; } }
+        .resource-more:hover { background: transparent; color: inherit; }
+        @media (max-width: 480px) { .module-more { right: 8px; } }
         @media (max-width: 820px) and (orientation: portrait) {
             .home-resource-groups .resource-list { grid-template-columns: minmax(0, 1fr); }
             .resource-list.is-collapsed li:nth-child(n+3) { display: none; }
