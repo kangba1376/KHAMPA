@@ -24,6 +24,7 @@
             margin: 0; 
             padding: 0; 
             background-color: #ffffff; 
+            overflow-x: hidden;
         }
         
         .main-content {
@@ -48,13 +49,14 @@
 
         .brand-tibetan {
             font-family: 'TibetWildYak', serif;
-            font-size: clamp(18px, 6.5vw, 32px);
+            font-size: clamp(16px, 5.6vw, 32px);
             margin-bottom: 5px;
             font-weight: bold;
-            white-space: nowrap;
+            white-space: normal;
+            overflow-wrap: break-word;
             max-width: 100%;
             padding: 0 10px;
-            line-height: 1.15;
+            line-height: 1.25;
         }
 
         .brand-chinese {
@@ -107,12 +109,13 @@
 
         .card-container {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: minmax(0, 1fr);
             gap: 20px;
             margin-bottom: 20px;
         }
 
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 0; display: flex; flex-direction: column; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 0; display: flex; flex-direction: column; min-width: 0; overflow-wrap: break-word; }
+        .card > * { min-width: 0; max-width: 100%; }
         .platform-card { border: 1px solid #8b0000; border-top: 6px solid #8b0000; border-radius: 14px; }
         .disclaimer-card { border: 1px solid #8b0000; border-top: 6px solid #8b0000; border-radius: 14px; }
         h1, h2 { font-family: 'TibetWildYak', sans-serif; }
@@ -148,7 +151,13 @@
             to { transform: translateX(calc(0px - var(--home-app-marquee-distance))); }
         }
         .home-app-versions { padding: 16px; background: #f4f7f6; border-top: 1px solid #eee; position: relative; z-index: 2; }
-        .home-app-versions .btn-group { margin-top: 10px; gap: 22px; }
+        .home-app-versions .btn-group { margin-top: 10px; gap: 10px; }
+        .home-app-versions .btn-group > .btn { display: block; box-sizing: border-box; width: 100%; max-width: 100%; min-width: 0; text-align: left; padding: 9px 12px; font-size: 0.84em; }
+        .home-app-versions .btn-group > .btn span { font-size: 0.95em; margin-bottom: 0; white-space: normal; overflow-wrap: anywhere; word-break: break-word; line-height: 1.5; }
+        @media (max-width: 480px) {
+            .home-app-versions { padding: 12px; }
+            .home-app-versions .btn-group > .btn { font-size: 0.76em; padding: 8px 10px; }
+        }
         .home-apps-wrapper { position: relative; padding-bottom: 12px; }
         .home-apps-wrapper.has-more { padding-bottom: 50px; }
         .home-apps .is-page-hidden, .resource-list .is-page-hidden { display: none !important; }
@@ -166,8 +175,8 @@
         .platform-info { font-size: 0.9em; color: #7f8c8d; margin-top: 5px; margin-bottom: 10px; }
         .btn-group { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; }
         .btn-group.spacious { gap: 22px; margin-top: 22px; }
-        .btn { display: inline-block; padding: 10px 18px; background: #3498db; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; transition: background 0.3s; cursor: pointer; border:none; text-align: center; line-height: 1.4; min-width: 220px; }
-        .btn span { display: block; font-size: 1em; font-weight: normal; margin-bottom: 2px; font-family: 'TibetWildYak'; }
+        .btn { display: inline-block; padding: 10px 18px; background: #3498db; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; transition: background 0.3s; cursor: pointer; border:none; text-align: center; line-height: 1.4; min-width: 220px; max-width: 100%; box-sizing: border-box; }
+        .btn span { display: block; font-size: 1em; font-weight: normal; margin-bottom: 2px; font-family: 'TibetWildYak'; overflow-wrap: break-word; }
         .btn:hover { background: #2980b9; }
         .btn-android { background: #374151; }
         .btn-android:hover { background: #1f2937; }
@@ -185,9 +194,9 @@
         .android-special .android-subnote { color: #888; font-size: 0.82em; font-weight: normal; line-height: 1.4; }
         
         details { background: #f9f9f9; border-radius: 8px; margin-top: 20px; border: 1px solid #eee; }
-        summary { padding: 15px; cursor: pointer; font-weight: bold; color: #0b3b8a; list-style: none; display: flex; justify-content: space-between; align-items: center; font-family: 'TibetWildYak', sans-serif; }
+        summary { padding: 15px; cursor: pointer; font-weight: bold; color: #0b3b8a; list-style: none; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 12px; font-family: 'TibetWildYak', sans-serif; }
         summary::-webkit-details-marker { display: none; }
-        summary::after { content: "➕ ནང་འཇུག་བཟོ་སྟངས།"; font-size: 0.8em; background: #3498db; color: white; padding: 4px 10px; border-radius: 4px; }
+        summary::after { content: "➕ ནང་འཇུག་བཟོ་སྟངས།"; font-size: 0.8em; background: #3498db; color: white; padding: 4px 10px; border-radius: 4px; flex: 0 0 auto; }
         details[open] summary::after { content: "➖ ཡར་སྐུམས།"; background: #3498db; }
 
         .tutorial-container { display: flex; gap: 20px; padding: 15px; border-top: 1px solid #eee; background: white; border-radius: 0 0 8px 8px; }
@@ -204,7 +213,8 @@
             font-size: 0.6em; 
             letter-spacing: 0.5px; 
             font-family: 'TibetWildYak', sans-serif; 
-            white-space: nowrap;
+            white-space: normal;
+            overflow-wrap: break-word;
         }
 
         @media (max-width: 768px) {
