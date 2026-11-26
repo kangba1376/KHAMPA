@@ -158,6 +158,17 @@
             .home-app-versions { padding: 12px; }
             .home-app-versions .btn-group > .btn { font-size: 0.76em; padding: 8px 10px; }
         }
+        @media (max-width: 820px) {
+            .home-app > summary { padding: 11px; }
+            .home-app-summary { gap: 10px; }
+            .home-app-icon { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 10px; padding: 3px; }
+            .home-app-titles { overflow: visible; gap: 1px; }
+            .home-app-title-viewport { overflow: visible; white-space: normal; }
+            .home-app-title-track { display: block; width: auto; min-width: 0; white-space: normal; }
+            .home-app-title-tb, .home-app-title-zh { display: block; font-size: 0.72em; line-height: 1.35; white-space: normal; overflow-wrap: break-word; }
+            .home-app-title-clone { display: none !important; }
+            .home-app-title-track.is-marquee { animation: none !important; transform: none !important; }
+        }
         .home-apps-wrapper { position: relative; padding-bottom: 12px; }
         .home-apps-wrapper.has-more { padding-bottom: 50px; }
         .home-apps .is-page-hidden, .resource-list .is-page-hidden { display: none !important; }
@@ -1347,6 +1358,7 @@
         function refreshHomeAppTitleMarquees() {
             var home = document.getElementById('homeApps');
             if (!home || home.offsetParent === null) return;
+            var mobileLayout = getHomeAppsColumnCount() === 2;
             var titles = home.querySelectorAll('.home-app-title-tb:not(.home-app-title-clone), .home-app-title-zh:not(.home-app-title-clone)');
             for (var i = 0; i < titles.length; i++) {
                 var title = titles[i];
@@ -1371,6 +1383,7 @@
                 track.style.removeProperty('--home-app-marquee-distance');
                 track.style.removeProperty('--home-app-marquee-duration');
                 if (!viewport || viewport.clientWidth < 1 || !title.textContent) continue;
+                if (mobileLayout) continue;
                 var titleWidth = title.getBoundingClientRect().width;
                 if (titleWidth > viewport.clientWidth + 1) {
                     var distance = titleWidth + 32;
